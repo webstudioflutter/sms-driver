@@ -5,11 +5,41 @@ class BillMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Bill Upload"),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        body: Container(
+          color: const Color(0xffFAFAFA),
+          child: const TabBarView(
+            children: [
+              BillMethod(),
+              HistoryMethod(),
+            ],
+          ),
+        ),
       ),
-      body: Container(),
     );
+  }
+}
+
+class HistoryMethod extends StatelessWidget {
+  const HistoryMethod({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text("");
+  }
+}
+
+class BillMethod extends StatelessWidget {
+  const BillMethod({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text("");
   }
 }
