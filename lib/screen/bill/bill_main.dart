@@ -66,10 +66,10 @@ class BillMain extends StatelessWidget {
                 labelColor: Colors.green,
                 unselectedLabelColor: Colors.grey,
               ),
-              Expanded(
+              const Expanded(
                 child: TabBarView(
                   children: [
-                    const BillMethod(),
+                    BillMethod(),
                     HistoryMethod(),
                   ],
                 ),
