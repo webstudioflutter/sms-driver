@@ -1,6 +1,5 @@
-import 'package:hugeicons/hugeicons.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -156,19 +155,19 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              const Row(
                 children: [
-                  const Text(
+                  Text(
                     'Next Servicing Date',
                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                   ),
-                  SizedBox(width: MediaQuery.sizeOf(context).width * 0.04),
-                  const HugeIcon(
-                    icon: HugeIcons.strokeRoundedWrench02,
-                    color: Color(0xff686868),
-                    size: 30.0,
-                  ),
-                  const Icon(
+                  // SizedBox(width: MediaQuery.sizeOf(context).width * 0.04),
+                  // const HugeIcon(
+                  //   icon: HugeIcons.strokeRoundedWrench02,
+                  //   color: Color(0xff686868),
+                  //   size: 30.0,
+                  // ),
+                  Icon(
                     Icons.timer,
                     color: Color(0xff686868),
                     size: 20.0,
