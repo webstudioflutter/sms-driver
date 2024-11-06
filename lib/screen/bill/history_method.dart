@@ -35,23 +35,23 @@ class _HistoryMethodState extends State<HistoryMethod> {
   }
 
   String formatDate(DateTime date) {
-    return '${date.day.toString().padLeft(2, '0')} ${getMonthName(date.month)}, ${date.year}';
+    return '${date.day.toString().padLeft(1, '0')} ${getMonthName(date.month)}, ${date.year}';
   }
 
   String getMonthName(int month) {
     const monthNames = [
-      'January',
-      'February',
+      'Jan',
+      'Feb',
       'March',
       'April',
       'May',
       'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
+      'Jul',
+      'Aug',
+      'Sept',
+      'Oct',
+      'Nov',
+      'Dec'
     ];
     return monthNames[month - 1];
   }
@@ -103,11 +103,28 @@ class _HistoryMethodState extends State<HistoryMethod> {
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
-                    child: Text(
-                      selectedDate == null
-                          ? 'Choose Date'
-                          : formatDate(selectedDate!),
-                      style: const TextStyle(color: Colors.black),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          selectedDate == null
+                              ? 'Choose Date'
+                              : formatDate(selectedDate!),
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                        Visibility(
+                          visible: selectedDate != null,
+                          // replacement: const SizedBox(width: 48),
+                          child: IconButton(
+                            icon: const Icon(Icons.clear, color: Colors.grey),
+                            onPressed: () {
+                              setState(() {
+                                selectedDate = null;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../emergency/emergency_main.dart';
 import 'bill_method.dart';
 import 'history_method.dart';
 
@@ -13,7 +14,18 @@ class BillMain extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Bill Upload"),
+          title: const Text('Bill Details'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.emergency),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const EmergencyMain()));
+              },
+            ),
+          ],
         ),
         body: Container(
           color: const Color(0xffFAFAFA),
