@@ -168,6 +168,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      
       body: SingleChildScrollView(
         // Wrap the entire body with a SingleChildScrollView
         child: Padding(
