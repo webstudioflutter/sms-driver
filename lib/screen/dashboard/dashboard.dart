@@ -1,5 +1,6 @@
 import 'package:driver_app/core/color_constant.dart';
 import 'package:driver_app/screen/dashboard/home_page.dart';
+import 'package:driver_app/screen/dashboard/profile_page.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -18,7 +19,7 @@ class _DashboardPageState extends State<DashboardPage> {
     const Center(child: Text('Search Page')),
     const Center(child: Text('Add Page')),
     const Center(child: Text('Notifications Page')),
-    const Center(child: Text('Profile Page')),
+    const ProfilePage(),
   ];
 
   @override
