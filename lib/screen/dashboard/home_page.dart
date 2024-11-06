@@ -10,6 +10,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _routeController = TextEditingController();
 
   List<Map<String, dynamic>> items = [
     {'image': 'assets/svg_images/attendance.svg', 'text': 'Attendance'},
@@ -19,6 +21,262 @@ class _HomePageState extends State<HomePage> {
     {'image': 'assets/svg_images/bill-upload.svg', 'text': 'Bill Upload'},
     {'image': 'assets/svg_images/student-list.svg', 'text': 'Student List'},
   ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset:
+          true, // This ensures the UI resizes when the keyboard appears
+      key: _scaffoldKey, // Assign the key to the Scaffold
+      drawer: const HomePageDrawer(),
+
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(270),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // Background with a curved bottom
+            Container(
+              height: 190,
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(0xff6bccc1),
+                      Color(0xff6fcf99)
+                    ], // Gradient colors
+                    begin: Alignment.topLeft, // Start point of gradient
+                    end: Alignment.bottomRight, // End point of gradient
+                  ),
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(40),
+                      bottomRight: Radius.circular(40))),
+            ),
+            Positioned(
+              top: 20,
+              left: 10,
+              right: 10,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 50, // Height of the container
+                      decoration: const BoxDecoration(
+                          color: Color(0xffcdeede),
+                          borderRadius: BorderRadius.all(Radius.circular(25))),
+                      child: TextFormField(
+                        controller: _searchController,
+                        cursorColor: const Color(0xffcdeede),
+                        // cursorHeight: 16,
+                        decoration: InputDecoration(
+                          prefixIcon: GestureDetector(
+                              onTap: () {
+                                // Open the drawer when the menu icon is clicked
+                                _scaffoldKey.currentState?.openDrawer();
+                              },
+                              child: const Icon(Icons.menu)
+                              //     SvgPicture.asset(
+                              //   'assets/svg_images/menu.svg', // Load image from assets
+                              //   height: 20, // Adjust size for the menu icon
+                              //   width: 10, // Adjust size for the menu icon
+                              // ),
+                              ),
+                          suffixIcon: Icon(Icons.notifications_active_sharp,
+                              color: Colors.red.shade500),
+                          //     SvgPicture.asset(
+                          //   'assets/svg_images/notification.svg', // Load image from assets
+                          //   height: 20, // Adjust size for the notification icon
+                          //   width: 20, // Adjust size for the notification icon
+                          // ),
+                          // contentPadding: const EdgeInsets.symmetric(
+                          //   horizontal:
+                          //       15.0, // Adjust the left and right padding for better spacing
+                          //   vertical:
+                          //       10, // Adjust the vertical padding for better height alignment
+                          // ),
+                          border: InputBorder.none, // Remove the border
+                          focusedBorder:
+                              InputBorder.none, // Remove the focused border
+                          enabledBorder:
+                              InputBorder.none, // Remove the enabled border
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.sizeOf(context).height * 0.21,
+                    child: Card(
+                      color: const Color(0xffd8f3e1),
+                      // color: Colors.yellow,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ClipOval(
+                              child: Container(
+                                color: Colors.grey,
+                                child: const FlutterLogo(
+                                  size: 80,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                                width: MediaQuery.sizeOf(context).width * 0.06),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Lal Bahadur Ojha'),
+                                const SizedBox(height: 5),
+                                const Text('Bus No:Ba2 cha 9820'),
+                                const SizedBox(height: 5),
+                                GestureDetector(
+                                  onTap: () {
+                                    _openModalBottomSheetForStartRoute(context);
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 0.43,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xffff6448),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        'Start Route',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        // Wrap the entire body with a SingleChildScrollView
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: 15.0,
+              vertical: MediaQuery.of(context).size.height * 0.1),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Text(
+                    'Next Servicing Date',
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(width: 5),
+                  SvgPicture.asset(
+                    'assets/svg_images/scheduled-maintenance.svg', // Load image from assets (with fallback)
+                    height: 30, // Set a fixed size for the image
+                    width: 30,
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Icon(Icons.calendar_month),
+                  const Text('5th November'),
+                  SizedBox(width: MediaQuery.sizeOf(context).width * 0.04),
+                  Text(
+                    '13 days from today',
+                    style: TextStyle(color: Colors.grey.shade400),
+                  ),
+                ],
+              ),
+              SizedBox(height: MediaQuery.sizeOf(context).height * 0.04),
+              const Text(
+                'Quick Access',
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+              ),
+              GridView.builder(
+                shrinkWrap: true, // Ensure it doesn't take up infinite space
+                physics:
+                    const NeverScrollableScrollPhysics(), // Disable scrolling on the GridView itself
+                // Number of items in the cross-axis (2 items per row)
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8.0, // Space between columns
+                  mainAxisSpacing: 8.0, // Space between rows
+                  childAspectRatio: 1.4, // Aspect ratio of each grid item
+                ),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final item = items[index];
+                  return GestureDetector(
+                    onTap: () {
+                      ///Perform navigation for Quick Access Items like this
+                      if (index == 0) {
+                      } else if (index == 1) {
+                      } else if (index == 2) {
+                      } else if (index == 3) {
+                      } else if (index == 4) {
+                      } else if (index == 5) {}
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Card(
+                        elevation:
+                            2, // Card's elevation will still give it some internal shadow
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              12), // Rounded corners for the card
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                item['image'] ??
+                                    '', // Load image from assets (with fallback)
+                                height: 40, // Set a fixed size for the image
+                                width: 40,
+                              ),
+                              const SizedBox(height: 8.0),
+                              Text(
+                                item['text'] ??
+                                    '', // Text displayed in the card
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  color: Color(0xff60bf8f),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
   // This function opens the modal bottom sheet when called
 
   void _openModalBottomSheetForStartRoute(BuildContext context) {
@@ -48,9 +306,10 @@ class _HomePageState extends State<HomePage> {
                       const Text(
                         "Enter Today's Starting KM",
                         style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.green,
-                            fontWeight: FontWeight.w700),
+                          fontSize: 18,
+                          color: Color(0xff60bf8f),
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       SizedBox(
                           height: MediaQuery.sizeOf(context).height * 0.03),
@@ -63,6 +322,7 @@ class _HomePageState extends State<HomePage> {
                                 const BorderRadius.all(Radius.circular(15)),
                             border: Border.all(color: Colors.green)),
                         child: TextFormField(
+                          controller: _routeController,
                           textAlign: TextAlign
                               .center, // Aligns both hint text and user input to center
                           cursorColor: const Color(0xffcdeede),
@@ -95,7 +355,7 @@ class _HomePageState extends State<HomePage> {
                           height: 50,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(18),
-                            color: Colors.green,
+                            color: const Color(0xff60bf8f),
                           ),
                           child: const Center(
                             child: Text(
@@ -193,258 +453,6 @@ class _HomePageState extends State<HomePage> {
           ],
         );
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset:
-          true, // This ensures the UI resizes when the keyboard appears
-
-      key: _scaffoldKey, // Assign the key to the Scaffold
-      drawer: const HomePageDrawer(),
-
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(270),
-        child: Stack(
-          children: [
-            // Background with a curved bottom
-            ClipPath(
-              clipper: BottomCurveClipper(),
-              child: Container(
-                height: 245,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    // colors: [Colors.teal, Colors.greenAccent],
-                    colors: [Color(0xff6bccc1), Color(0xff6dc69f)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-                top: 20,
-                left: 10,
-                right: 10,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 50, // Height of the container
-                    decoration: const BoxDecoration(
-                        color: Color(0xffcdeede),
-                        borderRadius: BorderRadius.all(Radius.circular(25))),
-                    child: TextFormField(
-                      cursorColor: const Color(0xffcdeede),
-                      cursorHeight: 16,
-                      decoration: InputDecoration(
-                        prefixIcon: GestureDetector(
-                            onTap: () {
-                              // Open the drawer when the menu icon is clicked
-                              _scaffoldKey.currentState?.openDrawer();
-                            },
-                            child: const Icon(Icons.menu)
-                            //  SvgPicture.asset(
-                            //   'assets/svg_images/menu.svg', // Load image from assets
-                            //   height: 20, // Adjust size for the menu icon
-                            //   width: 20, // Adjust size for the menu icon
-                            // ),
-                            ),
-                        suffixIcon: Icon(Icons.notifications_active_sharp,
-                            color: Colors.red.shade500),
-                        // SvgPicture.asset(
-                        //   'assets/svg_images/notification.svg', // Load image from assets
-                        //   height: 20, // Adjust size for the notification icon
-                        //   width: 20, // Adjust size for the notification icon
-                        // ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal:
-                              15.0, // Adjust the left and right padding for better spacing
-                          vertical:
-                              10, // Adjust the vertical padding for better height alignment
-                        ),
-                        border: InputBorder.none, // Remove the border
-                        focusedBorder:
-                            InputBorder.none, // Remove the focused border
-                        enabledBorder:
-                            InputBorder.none, // Remove the enabled border
-                      ),
-                    ),
-                  ),
-                )),
-
-            Positioned(
-              top: 90,
-              left: 10,
-              right: 10,
-              child: SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.21,
-                child: Card(
-                  color: const Color(0xffd8f3e1),
-                  // color: Colors.yellow,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ClipOval(
-                          child: Container(
-                            color: Colors.grey,
-                            child: const FlutterLogo(
-                              size: 80,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                            width: MediaQuery.sizeOf(context).width * 0.06),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('Lal Bahadur Ojha'),
-                            const SizedBox(height: 5),
-                            const Text('Bus No:Ba2 cha 9820'),
-                            const SizedBox(height: 5),
-                            GestureDetector(
-                              onTap: () {
-                                _openModalBottomSheetForStartRoute(context);
-                              },
-                              child: Container(
-                                height: 35,
-                                width: MediaQuery.sizeOf(context).width * 0.43,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xffff6448),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    'Start Route',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        // Wrap the entire body with a SingleChildScrollView
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Text(
-                    'Next Servicing Date',
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(width: 5),
-                  SvgPicture.asset(
-                    'assets/svg_images/scheduled-maintenance.svg', // Load image from assets (with fallback)
-                    height: 30, // Set a fixed size for the image
-                    width: 30,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Icon(Icons.calendar_month),
-                  const Text('5th November'),
-                  SizedBox(width: MediaQuery.sizeOf(context).width * 0.04),
-                  Text(
-                    '13 days from today',
-                    style: TextStyle(color: Colors.grey.shade400),
-                  ),
-                ],
-              ),
-              SizedBox(height: MediaQuery.sizeOf(context).height * 0.04),
-              const Text(
-                'Quick Access',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-              ),
-              GridView.builder(
-                shrinkWrap: true, // Ensure it doesn't take up infinite space
-                physics:
-                    const NeverScrollableScrollPhysics(), // Disable scrolling on the GridView itself
-                // Number of items in the cross-axis (2 items per row)
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16.0, // Space between columns
-                  mainAxisSpacing: 16.0, // Space between rows
-                  childAspectRatio: 1.3, // Aspect ratio of each grid item
-                ),
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final item = items[index];
-                  return GestureDetector(
-                    onTap: () {
-                      ///Perform navigation for Quick Access Items like this
-                      if (index == 0) {
-                      } else if (index == 1) {
-                      } else if (index == 2) {
-                      } else if (index == 3) {
-                      } else if (index == 4) {
-                      } else if (index == 5) {}
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Card(
-                        elevation:
-                            2, // Card's elevation will still give it some internal shadow
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              12), // Rounded corners for the card
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                item['image'] ??
-                                    '', // Load image from assets (with fallback)
-                                height: 40, // Set a fixed size for the image
-                                width: 40,
-                              ),
-                              const SizedBox(height: 8.0),
-                              Text(
-                                item['text'] ??
-                                    '', // Text displayed in the card
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  color: Color(0xff60bf8f),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
@@ -668,45 +676,5 @@ class HomePageDrawer extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-// Custom Clipper for a subtle curved background with rounded corners on the bottom left and right
-// Custom Clipper for a path with steeper curves on the bottom left and right
-class BottomCurveClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-    // Start from the top left corner
-    path.lineTo(
-        0,
-        size.height -
-            80); // Move down to the left bottom with some height for the curve
-
-    // Create a steeper curve for the bottom left
-    var controlPoint1 = Offset(size.width * 0.25,
-        size.height + 30); // Adjust the control point for steepness
-    var endPoint1 = Offset(size.width * 0.5,
-        size.height - 20); // Midpoint stays lower for a straight line
-
-    path.quadraticBezierTo(
-        controlPoint1.dx, controlPoint1.dy, endPoint1.dx, endPoint1.dy);
-
-    // Create a steeper curve for the bottom right
-    var controlPoint2 = Offset(size.width * 0.75, size.height + 30);
-    var endPoint2 = Offset(size.width,
-        size.height - 80); // End at the right side, matching the left side
-
-    path.quadraticBezierTo(
-        controlPoint2.dx, controlPoint2.dy, endPoint2.dx, endPoint2.dy);
-
-    path.lineTo(size.width, 0); // Draw the top line to the right side
-    path.close(); // Close the path
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
   }
 }
