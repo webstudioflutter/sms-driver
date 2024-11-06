@@ -6,178 +6,94 @@ class Test extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Stack(
-          children: [
-            // Background with a curved bottom
-            ClipPath(
-              clipper: BottomCurveClipper(),
-              child: Container(
-                height: 330,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.teal, Colors.greenAccent],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+        appBar: AppBar(
+          title: const Text('Bottom Sheet Design'),
+        ),
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
-              ),
-            ),
-            // Profile Card
-            Positioned(
-              top: 50,
-              left: 10,
-              right: 10,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 50,
-                  decoration: const BoxDecoration(
-                      color: Color(0xffcdeede),
-                      borderRadius: BorderRadius.all(Radius.circular(15))),
-                  child: TextFormField(
-                    autofocus: true,
-                    cursorColor: const Color(0xffcdeede),
-                    cursorHeight: 16,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.menu),
-                      suffixIcon: Icon(Icons.notifications),
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 9), // Add padding here
-                      // Customize hint text color
-                      border: InputBorder.none, // Remove the border
-                      focusedBorder:
-                          InputBorder.none, // Remove the focused border
-                      enabledBorder:
-                          InputBorder.none, // Remove the enabled border
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 150,
-              left: 15,
-              right: 15,
-              child: Card(
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
+                isScrollControlled: true,
+                builder: (context) {
+                  return Stack(
+                    clipBehavior: Clip.none,
                     children: [
-                      ClipOval(
-                        child: Container(
-                          color: Colors.grey,
-                          child: const FlutterLogo(
-                            size: 60,
-                          ),
-                        ),
-                      ),
-                      // SvgPicture.asset(
-                      //   'assets/images/attendance.svg', // Load image from assets
-                      //   height: 40, // Set a fixed size for the image
-                      //   width: 40,
-                      // ),
-                      const SizedBox(width: 16),
-                      Expanded(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 30),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
+                            const SizedBox(
+                                height: 40), // Space for the icon overlay
                             const Text(
-                              'Lal Bahadur Ojha',
+                              "Enter Today's Starting KM",
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
+                                color: Colors.green,
                               ),
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Bus No.: Ba2 cha 9820',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey[700],
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            ElevatedButton(
-                              onPressed: () {
-                                // Add your onPressed logic here
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.orange,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                            const SizedBox(height: 20),
+                            TextField(
+                              decoration: InputDecoration(
+                                hintText: 'XXX-XXX-XX',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                              child: const Text(
-                                'Start Route',
-                                style: TextStyle(
-                                  color: Colors.white,
+                              keyboardType: TextInputType.number,
+                            ),
+                            const SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Handle button press
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 15),
+                                child: Text(
+                                  'Start Route',
+                                  style: TextStyle(fontSize: 18),
                                 ),
                               ),
                             ),
                           ],
                         ),
                       ),
+                      const Positioned(
+                        top: -30,
+                        left: 0,
+                        right: 0,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 30,
+                          child: Icon(
+                            Icons.notifications,
+                            size: 30,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ),
                     ],
-                  ),
-                ),
-              ),
-            ),
-          ],
+                  );
+                },
+              );
+           
+            },
+            child: const Text('Show Bottom Sheet'),
+          ),
         ),
       ),
     );
   }
 }
-
-// Custom Clipper for the more curved background
-class BottomCurveClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-    path.lineTo(
-        0, size.height - 70); // Move the line further down for a deeper curve
-
-    // Lower the control point's y-coordinate to create a more pronounced dip
-    var controlPoint = Offset(size.width / 2, size.height + 40);
-    var endPoint =
-        Offset(size.width, size.height - 70); // Adjust the end point as well
-
-    path.quadraticBezierTo(
-        controlPoint.dx, controlPoint.dy, endPoint.dx, endPoint.dy);
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
-  }
-}
-
-// Custom Clipper for the curved background
-// class BottomCurveClipper extends CustomClipper<Path> {
-//   @override
-//   Path getClip(Size size) {
-//     var path = Path();
-//     path.lineTo(0, size.height - 50);
-//     var controlPoint = Offset(size.width / 2, size.height);
-//     var endPoint = Offset(size.width, size.height - 50);
-//     path.quadraticBezierTo(
-//         controlPoint.dx, controlPoint.dy, endPoint.dx, endPoint.dy);
-//     path.lineTo(size.width, 0);
-//     path.close();
-//     return path;
-//   }
-
-//   @override
-//   bool shouldReclip(CustomClipper<Path> oldClipper) {
-//     return false;
-//   }
-// }
