@@ -1,5 +1,5 @@
 import 'package:driver_app/core/color_constant.dart';
-import 'package:driver_app/ui/home_page.dart';
+import 'package:driver_app/screen/dashboard/home_page.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {
