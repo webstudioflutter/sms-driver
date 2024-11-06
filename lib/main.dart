@@ -1,4 +1,5 @@
 import 'package:driver_app/core/color_constant.dart';
+import 'package:driver_app/test.dart';
 import 'package:driver_app/ui/dashboard.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const DashboardPage(),
+      // home: const Test(),
     );
   }
 }
