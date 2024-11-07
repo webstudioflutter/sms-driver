@@ -1,4 +1,5 @@
 import 'package:driver_app/screen/emergency/emergency_main.dart';
+import 'package:driver_app/screen/navbar/MainNavbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -35,7 +36,7 @@ class BillMain extends StatelessWidget {
                         bottomRight: Radius.circular(40))),
               ),
               Positioned(
-                top: 20,
+                top: 30,
                 left: 10,
                 right: 10,
                 child: Column(
@@ -58,29 +59,43 @@ class BillMain extends StatelessWidget {
                               icon: const Icon(Icons.arrow_back,
                                   color: Colors.black),
                               onPressed: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) =>
-                                //             const HomePage()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MainNavbar()));
                               },
                             ),
-
-                            suffixIcon: IconButton(
-                              icon: Icon(Icons.notifications_active_sharp,
-                                  color: Colors.red.shade500),
-                              onPressed: () {
+                            suffixIcon: GestureDetector(
+                              onTap: () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             const EmergencyMain()));
                               },
+                              child: SizedBox(
+                                height: 5,
+                                width: 5,
+                                child: SvgPicture.asset(
+                                  'assets/svg_images/notification.svg',
+                                ),
+                              ),
                             ),
+                            // suffixIcon: IconButton(
+                            //   icon: Icon(Icons.notifications_active_sharp,
+                            //       color: Colors.red.shade500),
+                            //   onPressed: () {
+                            //     Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(
+                            //             builder: (context) =>
+                            //                 const EmergencyMain()));
+                            //   },
+                            // ),
 
-                            border: InputBorder.none, // Remove the border
-                            focusedBorder:
-                                InputBorder.none, // Remove the focused border
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
                             enabledBorder:
                                 InputBorder.none, // Remove the enabled border
                           ),

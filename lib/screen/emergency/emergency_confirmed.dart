@@ -1,3 +1,4 @@
+import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:flutter/material.dart';
 
 class EmergencyConfirmedPage extends StatelessWidget {
@@ -8,7 +9,7 @@ class EmergencyConfirmedPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(120), // Custom height
+        preferredSize: const Size.fromHeight(150),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
@@ -34,7 +35,11 @@ class EmergencyConfirmedPage extends StatelessWidget {
                             icon: const Icon(Icons.arrow_back,
                                 color: Colors.black),
                             onPressed: () {
-                              // Handle back action if necessary
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const EmergencyMain()));
                             },
                           ),
                           border: InputBorder.none,
@@ -56,43 +61,46 @@ class EmergencyConfirmedPage extends StatelessWidget {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const EmergencyConfirmedPage()));
-            },
-            child: const CircleAvatar(
-              radius: 110,
-              backgroundColor: Color(0x33FF3333),
-              child: CircleAvatar(
-                radius: 90,
-                backgroundColor: Colors.red,
-                child: Text(
-                  'SOS',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const EmergencyConfirmedPage()));
+              },
+              child: const CircleAvatar(
+                radius: 110,
+                backgroundColor: Color(0x33FFFFFF),
+                child: CircleAvatar(
+                  radius: 90,
+                  backgroundColor: Colors.white,
+                  child: Text(
+                    'SOS',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          const Text(
-            'By clicking this red button, you\'re activating the SOS alert, sharing your live location, and placing an emergency call.',
-            softWrap: true,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
+            const SizedBox(height: 20),
+            const Text(
+              'SOS alert activated.Help is on the way.Stay calm and safe.',
+              softWrap: true,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 16,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

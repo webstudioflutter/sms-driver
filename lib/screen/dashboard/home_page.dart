@@ -26,11 +26,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      resizeToAvoidBottomInset:
-          true, // This ensures the UI resizes when the keyboard appears
-      key: _scaffoldKey, // Assign the key to the Scaffold
-      drawer: const HomePageDrawer(),
+      child: Scaffold(
+        resizeToAvoidBottomInset:
+            true, // This ensures the UI resizes when the keyboard appears
+        key: _scaffoldKey, // Assign the key to the Scaffold
+        drawer: const HomePageDrawer(),
 
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(270),

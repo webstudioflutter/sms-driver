@@ -15,12 +15,10 @@ class BillMethod extends StatefulWidget {
 
 class _BillMethodState extends State<BillMethod> {
   String _selectedDate = 'Select Date';
-  List<Map<String, dynamic>> files =
-      []; // To store file data with upload status
+  List<Map<String, dynamic>> files = [];
   File? _selectedImage;
   String? _fileName;
 
-  // Method to select a date
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -35,22 +33,68 @@ class _BillMethodState extends State<BillMethod> {
     }
   }
 
-  // Method to pick an image from the gallery
+  // Method to choose between taking a photo or selecting from the gallery
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-        _fileName = pickedFile.name;
-        _startUpload(_fileName!, _selectedImage!); // Start uploading
-      });
-    }
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        alignment: Alignment.center,
+        actionsAlignment: MainAxisAlignment.center,
+        actionsPadding:
+            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 50.0,
+            ),
+            child: TextButton(
+              onPressed: () async {
+                Navigator.pop(context);
+                final pickedFile =
+                    await ImagePicker().pickImage(source: ImageSource.camera);
+                if (pickedFile != null) {
+                  _startFileUpload(File(pickedFile.path), pickedFile.name);
+                }
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SvgPicture.asset('assets/svg_images/take_photo.svg'),
+                  const SizedBox(width: 8),
+                  const Text('Take Photograph'),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 50.0,
+            ),
+            child: TextButton(
+              onPressed: () async {
+                Navigator.pop(context);
+                final pickedFile =
+                    await ImagePicker().pickImage(source: ImageSource.gallery);
+                if (pickedFile != null) {
+                  _startFileUpload(File(pickedFile.path), pickedFile.name);
+                }
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SvgPicture.asset('assets/svg_images/select_album.svg'),
+                  const SizedBox(width: 8),
+                  const Text('Select from album'),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
-  // Simulate file upload with progress
-  void _startUpload(String fileName, File file) {
+  void _startFileUpload(File file, String fileName) {
     setState(() {
       files.add({
         'fileName': fileName,
@@ -102,7 +146,7 @@ class _BillMethodState extends State<BillMethod> {
           children: [
             OutlinedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Corrected this line
+                Navigator.of(context).pop();
               },
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.all(10),
@@ -124,12 +168,11 @@ class _BillMethodState extends State<BillMethod> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Replace with the appropriate functionality
                 _showSubmitDialog();
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(10),
-                backgroundColor: Colors.green,
+                backgroundColor: const Color(0xff60BF8F),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -152,7 +195,7 @@ class _BillMethodState extends State<BillMethod> {
     );
   }
 
-  // Bill Type section
+// Bill Type section
   Widget _buildBillTypeSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,11 +206,14 @@ class _BillMethodState extends State<BillMethod> {
               'Bill Type',
               style: TextStyle(
                   color: Colors.black,
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
             const SizedBox(width: 8),
-            SvgPicture.asset('assets/svg_images/bill_type.svg'),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: SvgPicture.asset('assets/svg_images/bill_type.svg'),
+            ),
           ],
         ),
         const SizedBox(height: 5),
@@ -196,7 +242,7 @@ class _BillMethodState extends State<BillMethod> {
               'Bill Date',
               style: TextStyle(
                   color: Colors.black,
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
             const SizedBox(width: 8),
@@ -231,11 +277,14 @@ class _BillMethodState extends State<BillMethod> {
               'Total Amount',
               style: TextStyle(
                   color: Colors.black,
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
             const SizedBox(width: 5),
-            SvgPicture.asset('assets/svg_images/total_amt.svg'),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: SvgPicture.asset('assets/svg_images/total_amt.svg'),
+            ),
           ],
         ),
         const SizedBox(height: 5),
@@ -252,7 +301,6 @@ class _BillMethodState extends State<BillMethod> {
     );
   }
 
-  // File Upload section
   Widget _buildFileUploadSection() {
     return DottedBorder(
       color: Theme.of(context).primaryColor,
@@ -295,7 +343,7 @@ class _BillMethodState extends State<BillMethod> {
         const Text(
           'Uploaded Files',
           style: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+              fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         const SizedBox(height: 10),
         ...files.map((file) => _buildFileItem(file)),
@@ -389,7 +437,7 @@ class _BillMethodState extends State<BillMethod> {
       },
     );
   }
- 
+
   // Show submit confirmation dialog
   void _showSubmitDialog() {
     showDialog(

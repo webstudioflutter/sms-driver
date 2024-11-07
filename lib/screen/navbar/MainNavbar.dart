@@ -1,6 +1,8 @@
 import 'package:driver_app/core/utils/asset_provider.dart';
+import 'package:driver_app/screen/bill/bill_main.dart';
 import 'package:driver_app/screen/dashboard/dashboard.dart';
 import 'package:driver_app/screen/dashboard/profile_page.dart';
+import 'package:driver_app/screen/servicing/log_servicing_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -16,9 +18,9 @@ class _MainNavbarState extends State<MainNavbar> {
 
   final List<Widget> _pages = [
     const DashboardPage(),
-    const Center(child: Text("Search Page")),
+    const BillMain(),
     const Center(child: Text("Location Page")),
-    const Center(child: Text("Notification Page")),
+    const LogServicingForm(),
     const ProfilePage(),
   ];
 
