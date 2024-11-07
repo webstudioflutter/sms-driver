@@ -1,3 +1,4 @@
+import 'package:driver_app/core/widgets/page_title_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -34,42 +35,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         bottomLeft: Radius.circular(40),
                         bottomRight: Radius.circular(40))),
               ),
-              Positioned(
+              const Positioned(
                 top: 20,
                 right: 10,
                 left: 10,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                      height: 50, // Height of the container
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      decoration: const BoxDecoration(
-                          color: Color(0xffcdeede),
-                          borderRadius: BorderRadius.all(Radius.circular(25))),
-                      child: Row(
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                // Navigator.pop(context);
-                              },
-                              icon: const Icon(Icons.arrow_back)),
-                          const Spacer(),
-                          const Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Profile',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              )),
-                          const Spacer(),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                  Icons.notifications_active_outlined)),
-                        ],
-                      )),
+                child: PageTitleBar(
+                  title: 'Profile',
+                  firstIcon: Icons.arrow_back,
+                  lastWidget: Icon(Icons.notifications_active_outlined),
                 ),
               ),
 
@@ -321,3 +294,4 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+
