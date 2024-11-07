@@ -1,5 +1,5 @@
 import 'package:driver_app/core/color_constant.dart';
-import 'package:driver_app/screen/dashboard/dashboard.dart';
+import 'package:driver_app/screen/navbar/MainNavbar.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
         useMaterial3: true,
       ),
-      home: const DashboardPage(),
+      home: const MainNavbar(),
       // home: const Test(),
     );
   }

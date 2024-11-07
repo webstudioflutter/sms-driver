@@ -1,3 +1,4 @@
+import 'package:driver_app/screen/bill/bill_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -168,6 +169,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+
       body: SingleChildScrollView(
         // Wrap the entire body with a SingleChildScrollView
         child: Padding(
@@ -610,7 +612,10 @@ class HomePageDrawer extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                     onTap: () {
-                      // Handle tap (navigate, etc.)
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const BillMain()));
                     },
                   ),
                   ListTile(
