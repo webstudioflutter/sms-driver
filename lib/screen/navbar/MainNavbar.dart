@@ -70,6 +70,12 @@ class _MainNavbarState extends State<MainNavbar> {
                 ),
               ),
             ),
+// <<<<<<< sahadev
+//             SvgPicture.asset(
+//               Assets.svgImages.location,
+//               height: 25,
+//               color: _selectedIndex == 2 ? Colors.green : Colors.white,
+//             ),
             // SvgPicture.asset(
             //   Assets.svgImages.notification2,
             //   height: 25,
@@ -86,7 +92,7 @@ class _MainNavbarState extends State<MainNavbar> {
     return GestureDetector(
       onTap: () => _onItemTapped(index),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

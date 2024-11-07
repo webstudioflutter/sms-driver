@@ -19,6 +19,8 @@ class _AssetsSvgImagesGen {
   String get Component4 => '$kSvgImagesPath/Component4.svg';
   String get notification => '$kSvgImagesPath/notification.svg';
   String get notification2 => '$kSvgImagesPath/notification2.svg';
+    String get location => '$kSvgImagesPath/location.svg';
+
   String get scheduledmaintenance =>
       '$kSvgImagesPath/scheduled-maintenance.svg';
   String get Component3 => '$kSvgImagesPath/Component3.svg';
