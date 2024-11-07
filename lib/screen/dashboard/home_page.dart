@@ -42,8 +42,8 @@ class _HomePageState extends State<HomePage> {
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Color(0xff6bccc1),
-                        Color(0xff6fcf99)
+                        Color(0xff59CDDA),
+                        Color(0xff60BF8F)
                       ], // Gradient colors
                       begin: Alignment.topLeft, // Start point of gradient
                       end: Alignment.bottomRight, // End point of gradient
@@ -111,58 +111,84 @@ class _HomePageState extends State<HomePage> {
                         color: const Color(0xffd8f3e1),
                         // color: Colors.yellow,
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 10),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 10),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ClipOval(
-                                child: Container(
-                                  color: Colors.grey,
-                                  child: const FlutterLogo(
-                                    size: 80,
+                            horizontal: 16, vertical: 16),
+                        child: Row(
+                          // crossAxisAlignment: CrossAxisAlignment.center,
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(
+                                  right: 22, left: 30, top: 20, bottom: 20),
+                              height: 80,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/fake_profile.jpg"),
+                                    fit: BoxFit.cover,
                                   ),
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(80),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color(0xffB4E6C8),
+                                      spreadRadius: 5,
+                                      blurRadius: 7,
+                                      offset: Offset(0, 3),
+                                    ),
+                                  ],
+                                  border: Border.all(
+                                      width: 1,
+                                      color: const Color(0xffB4E6C8))),
+                            ),
+                            SizedBox(
+                                width: MediaQuery.sizeOf(context).width * 0.06),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Lal Bahadur Ojha',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        color: Color(0xff221F1F))),
+                                const SizedBox(height: 13),
+                                const Text(
+                                  'Bus No:Ba2 cha 9820',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff221F1F)),
                                 ),
-                              ),
-                              SizedBox(
-                                  width:
-                                      MediaQuery.sizeOf(context).width * 0.06),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text('Lal Bahadur Ojha'),
-                                  const SizedBox(height: 5),
-                                  const Text('Bus No:Ba2 cha 9820'),
-                                  const SizedBox(height: 5),
-                                  GestureDetector(
-                                    onTap: () {
-                                      _openModalBottomSheetForStartRoute(
-                                          context);
-                                    },
-                                    child: Container(
-                                      height: 40,
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.43,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xffff6448),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          'Start Route',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
+                                const SizedBox(height: 10),
+                                GestureDetector(
+                                  onTap: () {
+                                    _openModalBottomSheetForStartRoute(context);
+                                  },
+                                  child: Container(
+                                    // height: 40,
+                                    // width:
+                                    //     MediaQuery.sizeOf(context).width * 0.43,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 12),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xffff6448),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        'Start Route',
+                                        style: TextStyle(
+                                            color: Color(0xffFEFEFE),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400),
                                       ),
                                     ),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
                         ),
                       ),
                     ),
@@ -213,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                 ),
                 GridView.builder(
-                  shrinkWrap: true, // Ensure it doesn't take up infinite space
+                  shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
