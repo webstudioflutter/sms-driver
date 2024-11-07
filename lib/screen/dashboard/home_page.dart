@@ -168,9 +168,8 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      
+
       body: SingleChildScrollView(
-        // Wrap the entire body with a SingleChildScrollView
         child: Padding(
           padding: EdgeInsets.symmetric(
               horizontal: 15.0,
@@ -210,9 +209,7 @@ class _HomePageState extends State<HomePage> {
               ),
               GridView.builder(
                 shrinkWrap: true, // Ensure it doesn't take up infinite space
-                physics:
-                    const NeverScrollableScrollPhysics(), // Disable scrolling on the GridView itself
-                // Number of items in the cross-axis (2 items per row)
+                physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 8.0, // Space between columns
@@ -278,7 +275,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  // This function opens the modal bottom sheet when called
 
   void _openModalBottomSheetForStartRoute(BuildContext context) {
     showModalBottomSheet(
