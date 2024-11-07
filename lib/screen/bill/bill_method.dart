@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
@@ -14,9 +15,12 @@ class BillMethod extends StatefulWidget {
 
 class _BillMethodState extends State<BillMethod> {
   String _selectedDate = 'Select Date';
+  List<Map<String, dynamic>> files =
+      []; // To store file data with upload status
   File? _selectedImage;
   String? _fileName;
 
+  // Method to select a date
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -31,6 +35,7 @@ class _BillMethodState extends State<BillMethod> {
     }
   }
 
+  // Method to pick an image from the gallery
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -39,14 +44,118 @@ class _BillMethodState extends State<BillMethod> {
       setState(() {
         _selectedImage = File(pickedFile.path);
         _fileName = pickedFile.name;
+        _startUpload(_fileName!, _selectedImage!); // Start uploading
       });
     }
+  }
+
+  // Simulate file upload with progress
+  void _startUpload(String fileName, File file) {
+    setState(() {
+      files.add({
+        'fileName': fileName,
+        'file': file,
+        'progress': 0.0,
+        'isUploaded': false,
+      });
+    });
+
+    Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      setState(() {
+        int index = files.indexWhere((f) => f['fileName'] == fileName);
+        if (index != -1) {
+          if (files[index]['progress'] < 1.0) {
+            files[index]['progress'] += 0.1;
+          } else {
+            files[index]['progress'] = 1.0;
+            files[index]['isUploaded'] = true;
+            timer.cancel();
+          }
+        }
+      });
+    });
+  }
+
+  // Method to delete a file from the list
+  void _deleteFile(String fileName) {
+    setState(() {
+      files.removeWhere((file) => file['fileName'] == fileName);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(16),
+      children: [
+        _buildBillTypeSection(),
+        const SizedBox(height: 10),
+        _buildBillDateSection(),
+        const SizedBox(height: 10),
+        _buildTotalAmountSection(),
+        const SizedBox(height: 15),
+        _buildFileUploadSection(),
+        const SizedBox(height: 20),
+        _buildUploadingSection(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            OutlinedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Corrected this line
+              },
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const SizedBox(
+                width: 150,
+                child: Text(
+                  textAlign: TextAlign.center,
+                  'Cancel',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Replace with the appropriate functionality
+                _showSubmitDialog();
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const SizedBox(
+                width: 150,
+                child: Text(
+                  textAlign: TextAlign.center,
+                  'Submit',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  // Bill Type section
+  Widget _buildBillTypeSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
@@ -58,9 +167,7 @@ class _BillMethodState extends State<BillMethod> {
                   fontWeight: FontWeight.w500),
             ),
             const SizedBox(width: 8),
-            SvgPicture.asset(
-              'assets/svg_images/bill_type.svg',
-            ),
+            SvgPicture.asset('assets/svg_images/bill_type.svg'),
           ],
         ),
         const SizedBox(height: 5),
@@ -74,18 +181,28 @@ class _BillMethodState extends State<BillMethod> {
             ),
           ),
         ),
-        const SizedBox(height: 10),
-        Row(children: [
-          const Text(
-            'Bill Date',
-            style: TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500),
-          ),
-          const SizedBox(width: 8),
-          SvgPicture.asset(
-            'assets/svg_images/bill_date.svg',
-          ),
-        ]),
+      ],
+    );
+  }
+
+  // Bill Date section
+  Widget _buildBillDateSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            const Text(
+              'Bill Date',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(width: 8),
+            SvgPicture.asset('assets/svg_images/bill_date.svg'),
+          ],
+        ),
         const SizedBox(height: 5),
         InkWell(
           onTap: () => _selectDate(context),
@@ -99,7 +216,15 @@ class _BillMethodState extends State<BillMethod> {
             child: Text(_selectedDate),
           ),
         ),
-        const SizedBox(height: 10),
+      ],
+    );
+  }
+
+  // Total Amount section
+  Widget _buildTotalAmountSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Row(
           children: [
             const Text(
@@ -110,13 +235,12 @@ class _BillMethodState extends State<BillMethod> {
                   fontWeight: FontWeight.w500),
             ),
             const SizedBox(width: 5),
-            SvgPicture.asset(
-              'assets/svg_images/total_amt.svg',
-            ),
+            SvgPicture.asset('assets/svg_images/total_amt.svg'),
           ],
         ),
         const SizedBox(height: 5),
         TextField(
+          keyboardType: TextInputType.number,
           decoration: InputDecoration(
             hintText: 'Enter Total Amount',
             border: OutlineInputBorder(
@@ -124,50 +248,165 @@ class _BillMethodState extends State<BillMethod> {
             ),
           ),
         ),
-        const SizedBox(height: 15),
-        DottedBorder(
-          color: Theme.of(context).primaryColor,
-          strokeWidth: 1,
-          dashPattern: const [8, 4],
-          borderType: BorderType.RRect,
-          radius: const Radius.circular(8),
-          child: InkWell(
-            onTap: _pickImage,
-            child: Container(
-              height: 150,
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _selectedImage == null
-                      ? SvgPicture.asset(
-                          'assets/svg_images/upload_icon.svg',
-                          height: 48,
-                          width: 48,
-                        )
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.file(
-                            _selectedImage!,
-                            height: 150,
-                            width: 150,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                  const SizedBox(height: 10),
-                  Text(
-                    _selectedImage == null
-                        ? 'Tap to upload your bill'
-                        : _fileName ?? 'File Uploaded',
-                    style: const TextStyle(fontSize: 14, color: Colors.black54),
-                  ),
-                  const SizedBox(height: 10),
-                ],
+      ],
+    );
+  }
+
+  // File Upload section
+  Widget _buildFileUploadSection() {
+    return DottedBorder(
+      color: Theme.of(context).primaryColor,
+      strokeWidth: 1,
+      dashPattern: const [8, 4],
+      borderType: BorderType.RRect,
+      radius: const Radius.circular(8),
+      child: InkWell(
+        onTap: _pickImage,
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                'assets/svg_images/upload_icon.svg',
+                height: 48,
+                width: 48,
               ),
-            ),
+              const SizedBox(height: 10),
+              const Text(
+                'Tap to upload your bill',
+                style: TextStyle(fontSize: 14, color: Colors.black54),
+              ),
+              const SizedBox(height: 10),
+            ],
           ),
         ),
+      ),
+    );
+  }
+
+  // Display the progress of each uploaded file
+  Widget _buildUploadingSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Uploaded Files',
+          style: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        const SizedBox(height: 10),
+        ...files.map((file) => _buildFileItem(file)),
       ],
+    );
+  }
+
+  // Display each file with its progress indicator and delete button
+  Widget _buildFileItem(Map<String, dynamic> file) {
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.green),
+              borderRadius: BorderRadius.circular(8)),
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(file['fileName']),
+              ),
+              file['isUploaded']
+                  ? Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 20,
+                          backgroundColor: const Color(0x33dddddd),
+                          child: IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: () =>
+                                _showDeleteConfirmationDialog(file),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Expanded(
+                      child: LinearProgressIndicator(
+                        value: file['progress'],
+                        minHeight: 5.0,
+                      ),
+                    ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
+    );
+  }
+
+  // Confirm deletion of file
+  void _showDeleteConfirmationDialog(Map<String, dynamic> file) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Icon(Icons.warning, color: Colors.red),
+          content: const Text('Are you sure you want to delete this file?'),
+          actions: <Widget>[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                backgroundColor: const Color(0xffdddddd),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child:
+                  const Text('Cancel', style: TextStyle(color: Colors.black)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                backgroundColor: const Color(0xffff3333),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child:
+                  const Text('Delete', style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                _deleteFile(file['fileName']);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+ 
+  // Show submit confirmation dialog
+  void _showSubmitDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const AlertDialog(
+          title: CircleAvatar(
+              radius: 30,
+              backgroundColor: Color(0x33008000),
+              child: Icon(
+                Icons.check_outlined,
+                color: Colors.green,
+                size: 30,
+              )),
+          content: Text('Your bill has been sucessfully upload!'),
+        );
+      },
     );
   }
 }
