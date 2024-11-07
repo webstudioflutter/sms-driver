@@ -1,4 +1,3 @@
-import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:flutter/material.dart';
 
 import 'emergency_confirmed.dart';
@@ -10,20 +9,57 @@ class EmergencyConfirmationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[900],
-      appBar: AppBar(
-        backgroundColor: Colors.grey[900],
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const EmergencyMain()));
-          },
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(120), // Custom height
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned(
+              top: 20,
+              left: 10,
+              right: 10,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 50,
+                      decoration: const BoxDecoration(
+                        color: Color(0xffff3333),
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                      ),
+                      child: TextFormField(
+                        cursorColor: const Color(0xffcdeede),
+                        decoration: InputDecoration(
+                          labelText: "Emergency",
+                          labelStyle: const TextStyle(color: Colors.white),
+                          prefixIcon: IconButton(
+                            icon: const Icon(Icons.arrow_back,
+                                color: Colors.white),
+                            onPressed: () {
+                              // Handle back action if necessary
+                            },
+                          ),
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.close, color: Colors.white),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        title: const Text("Emergency", style: TextStyle(color: Colors.white)),
-        centerTitle: true,
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           GestureDetector(
             onTap: () {

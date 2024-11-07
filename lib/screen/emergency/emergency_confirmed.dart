@@ -1,4 +1,3 @@
-import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:flutter/material.dart';
 
 class EmergencyConfirmedPage extends StatelessWidget {
@@ -8,74 +7,89 @@ class EmergencyConfirmedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[900],
-      body: Column(
-        children: [
-          const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.only(top: 20, bottom: 20),
-            decoration: const BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(20),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(120), // Custom height
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned(
+              top: 20,
+              left: 10,
+              right: 10,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 50,
+                      decoration: const BoxDecoration(
+                        color: Color(0xffffffff),
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                      ),
+                      child: TextFormField(
+                        cursorColor: const Color(0xffcdeede),
+                        decoration: InputDecoration(
+                          labelText: "Emergency",
+                          prefixIcon: IconButton(
+                            icon: const Icon(Icons.arrow_back,
+                                color: Colors.black),
+                            onPressed: () {
+                              // Handle back action if necessary
+                            },
+                          ),
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.close, color: Colors.black),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const EmergencyMain()),
-                    );
-                  },
-                ),
-                const Text(
-                  "Emergency",
+          ],
+        ),
+      ),
+      body: Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const EmergencyConfirmedPage()));
+            },
+            child: const CircleAvatar(
+              radius: 110,
+              backgroundColor: Color(0x33FF3333),
+              child: CircleAvatar(
+                radius: 90,
+                backgroundColor: Colors.red,
+                child: Text(
+                  'SOS',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 32,
                     fontWeight: FontWeight.bold,
                   ),
-                ),
-                const SizedBox(
-                    width:
-                        48), // Add space equal to IconButton to center the title
-              ],
-            ),
-          ),
-          const SizedBox(height: 40),
-          // SOS Alert Circle
-          const CircleAvatar(
-            radius: 110,
-            backgroundColor: Color(0x33ffffff),
-            child: CircleAvatar(
-              radius: 90,
-              backgroundColor: Colors.white,
-              child: Text(
-                'SOS',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
           const SizedBox(height: 20),
-          // Subtitle
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              'SOS alert activated. Help is on the way. Stay calm and safe.',
-              softWrap: true,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 16,
-              ),
+          const Text(
+            'By clicking this red button, you\'re activating the SOS alert, sharing your live location, and placing an emergency call.',
+            softWrap: true,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
             ),
           ),
         ],
