@@ -1,3 +1,4 @@
+import 'package:driver_app/screen/bill/bill_main.dart';
 import 'package:driver_app/screen/emergency/emergency_confirmation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -37,7 +38,10 @@ class EmergencyMain extends StatelessWidget {
                             icon: const Icon(Icons.arrow_back,
                                 color: Colors.white),
                             onPressed: () {
-                              // Handle back action if necessary
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const BillMain()));
                             },
                           ),
                           border: InputBorder.none,
@@ -67,7 +71,7 @@ class EmergencyMain extends StatelessWidget {
               radius: 70,
               backgroundColor: Color(0x33FF3333),
               child: CircleAvatar(
-                radius: 50,
+                radius: 55,
                 backgroundColor: Color(0xffFF3333),
                 child: Text(
                   'SOS',
@@ -108,7 +112,7 @@ class EmergencyMain extends StatelessWidget {
                 crossAxisSpacing: 16,
                 children: const [
                   EmergencyOption(
-                      svgPath: 'assets/svg_images/history.svg',
+                      svgPath: 'assets/svg_images/medical.svg',
                       label: 'Medical Emergency'),
                   EmergencyOption(
                       svgPath: 'assets/svg_images/bill.svg', label: 'Accident'),
