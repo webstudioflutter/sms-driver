@@ -1,6 +1,6 @@
-import 'package:driver_app/screen/bill/bill_main.dart';
-import 'package:driver_app/screen/dashboard/dashboard.dart';
+// import 'package:driver_app/screen/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class MainNavbar extends StatefulWidget {
   const MainNavbar({super.key});
@@ -13,11 +13,11 @@ class _MainNavbarState extends State<MainNavbar> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const DashboardPage(),
-    const BillMain(),
+    // const DashboardPage(),
+    const Center(child: Text("Search Page")),
     const Center(child: Text("Location Page")),
     const Center(child: Text("Notification Page")),
-    const Center(child: Text("Profile Page")),
+    // const ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -30,17 +30,19 @@ class _MainNavbarState extends State<MainNavbar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomAppBar(
+      resizeToAvoidBottomInset: false,
+      bottomNavigationBar: const BottomAppBar(
+        color: Color(0xffcdeede),
         notchMargin: 8.0,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(Icons.home, "Home", 0),
-            _buildNavItem(Icons.search, "Search", 1),
-            const SizedBox(width: 20),
-            _buildNavItem(Icons.notifications, "Notification", 3),
-            _buildNavItem(Icons.person, "Profile", 4),
-          ],
+          // children: [
+          //   _buildNavItem(Assets.svgImages.home2, "Home", 0),
+          //   _buildNavItem(Assets.svgImages.searchnormal, "Search", 1),
+          //   const SizedBox(width: 20),
+          //   _buildNavItem(Assets.svgImages.Component3, "Notification", 3),
+          //   _buildNavItem(Assets.svgImages.user, "Profile", 4),
+          // ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -55,7 +57,7 @@ class _MainNavbarState extends State<MainNavbar> {
                 width: 60,
                 height: 60,
                 decoration: BoxDecoration(
-                  color: Colors.green, // Green background color
+                  color: const Color(0xff60BF8F), // Green background color
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
@@ -68,18 +70,18 @@ class _MainNavbarState extends State<MainNavbar> {
                 ),
               ),
             ),
-            Icon(
-              Icons.location_on,
-              color: _selectedIndex == 2 ? Colors.grey : Colors.white,
-              size: 40,
-            ),
+            // SvgPicture.asset(
+            //   Assets.svgImages.notification2,
+            //   height: 25,
+            //   color: _selectedIndex == 2 ? Colors.green : Colors.white,
+            // ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, int index) {
+  Widget _buildNavItem(String svgAsset, String label, int index) {
     bool isSelected = index == _selectedIndex;
     return GestureDetector(
       onTap: () => _onItemTapped(index),
@@ -88,14 +90,15 @@ class _MainNavbarState extends State<MainNavbar> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              color: isSelected ? Colors.green : Colors.grey,
+            SvgPicture.asset(
+              svgAsset,
+              height: 22,
+              color: isSelected ? Colors.green : const Color(0xff516B5E),
             ),
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? Colors.green : Colors.grey,
+                color: isSelected ? Colors.green : const Color(0xff516B5E),
                 fontSize: 12.0,
               ),
             ),

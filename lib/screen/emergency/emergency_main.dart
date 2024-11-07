@@ -1,8 +1,6 @@
-import 'package:driver_app/screen/bill/bill_main.dart';
+import 'package:driver_app/screen/emergency/emergency_confirmation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import 'emergency_confirmation.dart';
 
 class EmergencyMain extends StatelessWidget {
   const EmergencyMain({super.key});
@@ -11,29 +9,66 @@ class EmergencyMain extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[900],
-      appBar: AppBar(
-        backgroundColor: Colors.grey[900],
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const BillMain()));
-          },
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(90), // Custom height
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned(
+              top: 20,
+              left: 10,
+              right: 10,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 50,
+                      decoration: const BoxDecoration(
+                        color: Color(0xffff3333),
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                      ),
+                      child: TextFormField(
+                        cursorColor: const Color(0xffcdeede),
+                        decoration: InputDecoration(
+                          labelText: "Bill Upload",
+                          labelStyle: const TextStyle(color: Colors.white),
+                          prefixIcon: IconButton(
+                            icon: const Icon(Icons.arrow_back,
+                                color: Colors.white),
+                            onPressed: () {
+                              // Handle back action if necessary
+                            },
+                          ),
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.close, color: Colors.white),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        title: const Text("Report", style: TextStyle(color: Colors.white)),
-        centerTitle: true,
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 20),
             // SOS Button
             const CircleAvatar(
               radius: 70,
-              backgroundColor: Color(0x33FF3333), // Red color with 20% opacity
+              backgroundColor: Color(0x33FF3333),
               child: CircleAvatar(
                 radius: 50,
-                backgroundColor: Color(0xffFF3333), // Fully opaque red
+                backgroundColor: Color(0xffFF3333),
                 child: Text(
                   'SOS',
                   style: TextStyle(
@@ -64,10 +99,11 @@ class EmergencyMain extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             // Emergency options grid
-            Expanded(
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: GridView.count(
+                shrinkWrap: true,
                 crossAxisCount: 2,
-                padding: const EdgeInsets.all(16.0),
                 mainAxisSpacing: 16,
                 crossAxisSpacing: 16,
                 children: const [
@@ -96,48 +132,43 @@ class EmergencyMain extends StatelessWidget {
   }
 }
 
+// EmergencyOption Widget for the grid items
 class EmergencyOption extends StatelessWidget {
   final String svgPath;
   final String label;
 
-  const EmergencyOption({
-    super.key,
-    required this.svgPath,
-    required this.label,
-  });
+  const EmergencyOption(
+      {super.key, required this.svgPath, required this.label});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const EmergencyConfirmationPage(),
-          ),
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[850],
-          borderRadius: BorderRadius.circular(8.0),
-        ),
+    return Card(
+      color: Colors.grey[800],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const EmergencyConfirmationPage()));
+        },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 48,
-              width: 48,
-              child: SvgPicture.asset(
-                svgPath,
-                color: Colors.white,
-              ),
+            SvgPicture.asset(
+              svgPath,
+              height: 50,
+              width: 50,
             ),
             const SizedBox(height: 10),
             Text(
               label,
-              style: const TextStyle(color: Colors.white, fontSize: 14),
-              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -145,4 +176,3 @@ class EmergencyOption extends StatelessWidget {
     );
   }
 }
-

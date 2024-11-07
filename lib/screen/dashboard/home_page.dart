@@ -25,7 +25,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+        child: Scaffold(
       resizeToAvoidBottomInset:
           true, // This ensures the UI resizes when the keyboard appears
       key: _scaffoldKey, // Assign the key to the Scaffold
@@ -277,9 +278,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-    );
+    ));
   }
-  // This function opens the modal bottom sheet when called
 
   void _openModalBottomSheetForStartRoute(BuildContext context) {
     showModalBottomSheet(
