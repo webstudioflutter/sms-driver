@@ -1,5 +1,5 @@
 import 'package:driver_app/core/color_constant.dart';
-import 'package:driver_app/screen/navbar/MainNavbar.dart';
+import 'package:driver_app/screen/bill/bill_main.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xffFEFEFE),
         useMaterial3: true,
       ),
-      home: const MainNavbar(),
+      home: const BillMain(),
     );
   }
 }
