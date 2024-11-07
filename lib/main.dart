@@ -1,5 +1,5 @@
 import 'package:driver_app/core/color_constant.dart';
-import 'package:driver_app/screen/bill/bill_main.dart';
+import 'package:driver_app/screen/navbar/MainNavbar.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,11 +15,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
-        fontFamily: 'Lato',
-        scaffoldBackgroundColor: const Color(0xffFEFEFE),
         useMaterial3: true,
       ),
-      home: const BillMain(),
+      home: const MainNavbar(),
     );
   }
 }
