@@ -32,100 +32,115 @@ class _HomePageState extends State<HomePage> {
       key: _scaffoldKey, // Assign the key to the Scaffold
       drawer: const HomePageDrawer(),
 
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(270),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            // Background with a curved bottom
-            Container(
-              height: 190,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xff6bccc1),
-                      Color(0xff6fcf99)
-                    ], // Gradient colors
-                    begin: Alignment.topLeft, // Start point of gradient
-                    end: Alignment.bottomRight, // End point of gradient
-                  ),
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(40),
-                      bottomRight: Radius.circular(40))),
-            ),
-            Positioned(
-              top: 20,
-              left: 10,
-              right: 10,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 50, // Height of the container
-                      decoration: const BoxDecoration(
-                          color: Color(0xffcdeede),
-                          borderRadius: BorderRadius.all(Radius.circular(25))),
-                      child: TextFormField(
-                        controller: _searchController,
-                        cursorColor: const Color(0xffcdeede),
-                        // cursorHeight: 16,
-                        decoration: InputDecoration(
-                          prefixIcon: GestureDetector(
-                              onTap: () {
-                                // Open the drawer when the menu icon is clicked
-                                _scaffoldKey.currentState?.openDrawer();
-                              },
-                              child: const Icon(Icons.menu)
-                              //     SvgPicture.asset(
-                              //   'assets/svg_images/menu.svg', // Load image from assets
-                              //   height: 20, // Adjust size for the menu icon
-                              //   width: 10, // Adjust size for the menu icon
-                              // ),
-                              ),
-                          suffixIcon: Icon(Icons.notifications_active_sharp,
-                              color: Colors.red.shade500),
-                          //     SvgPicture.asset(
-                          //   'assets/svg_images/notification.svg', // Load image from assets
-                          //   height: 20, // Adjust size for the notification icon
-                          //   width: 20, // Adjust size for the notification icon
-                          // ),
-                          // contentPadding: const EdgeInsets.symmetric(
-                          //   horizontal:
-                          //       15.0, // Adjust the left and right padding for better spacing
-                          //   vertical:
-                          //       10, // Adjust the vertical padding for better height alignment
-                          // ),
-                          border: InputBorder.none, // Remove the border
-                          focusedBorder:
-                              InputBorder.none, // Remove the focused border
-                          enabledBorder:
-                              InputBorder.none, // Remove the enabled border
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(270),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              // Background with a curved bottom
+              Container(
+                height: 190,
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xff59CDDA),
+                        Color(0xff60BF8F)
+                      ], // Gradient colors
+                      begin: Alignment.topLeft, // Start point of gradient
+                      end: Alignment.bottomRight, // End point of gradient
+                    ),
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(40),
+                        bottomRight: Radius.circular(40))),
+              ),
+              Positioned(
+                top: 20,
+                left: 10,
+                right: 10,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 50, // Height of the container
+                        decoration: const BoxDecoration(
+                            color: Color(0xffcdeede),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(25))),
+                        child: TextFormField(
+                          controller: _searchController,
+                          cursorColor: const Color(0xffcdeede),
+                          // cursorHeight: 16,
+                          decoration: InputDecoration(
+                            prefixIcon: GestureDetector(
+                                onTap: () {
+                                  // Open the drawer when the menu icon is clicked
+                                  _scaffoldKey.currentState?.openDrawer();
+                                },
+                                child: const Icon(Icons.menu)
+                                //     SvgPicture.asset(
+                                //   'assets/svg_images/menu.svg', // Load image from assets
+                                //   height: 20, // Adjust size for the menu icon
+                                //   width: 10, // Adjust size for the menu icon
+                                // ),
+                                ),
+                            suffixIcon: Icon(Icons.notifications_active_sharp,
+                                color: Colors.red.shade500),
+                            //     SvgPicture.asset(
+                            //   'assets/svg_images/notification.svg', // Load image from assets
+                            //   height: 20, // Adjust size for the notification icon
+                            //   width: 20, // Adjust size for the notification icon
+                            // ),
+                            // contentPadding: const EdgeInsets.symmetric(
+                            //   horizontal:
+                            //       15.0, // Adjust the left and right padding for better spacing
+                            //   vertical:
+                            //       10, // Adjust the vertical padding for better height alignment
+                            // ),
+                            border: InputBorder.none, // Remove the border
+                            focusedBorder:
+                                InputBorder.none, // Remove the focused border
+                            enabledBorder:
+                                InputBorder.none, // Remove the enabled border
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.sizeOf(context).height * 0.21,
-                    child: Card(
-                      color: const Color(0xffd8f3e1),
-                      // color: Colors.yellow,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 10),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.21,
+                      child: Card(
+                        color: const Color(0xffd8f3e1),
+                        // color: Colors.yellow,
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 16),
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          // crossAxisAlignment: CrossAxisAlignment.center,
+                          // mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            ClipOval(
-                              child: Container(
-                                color: Colors.grey,
-                                child: const FlutterLogo(
-                                  size: 80,
-                                ),
-                              ),
+                            Container(
+                              margin: const EdgeInsets.only(
+                                  right: 22, left: 30, top: 20, bottom: 20),
+                              height: 80,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/fake_profile.jpg"),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(80),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color(0xffB4E6C8),
+                                      spreadRadius: 5,
+                                      blurRadius: 7,
+                                      offset: Offset(0, 3),
+                                    ),
+                                  ],
+                                  border: Border.all(
+                                      width: 1,
+                                      color: const Color(0xffB4E6C8))),
                             ),
                             SizedBox(
                                 width: MediaQuery.sizeOf(context).width * 0.06),
@@ -133,26 +148,41 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('Lal Bahadur Ojha'),
-                                const SizedBox(height: 5),
-                                const Text('Bus No:Ba2 cha 9820'),
-                                const SizedBox(height: 5),
+                                const Text('Lal Bahadur Ojha',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        color: Color(0xff221F1F))),
+                                const SizedBox(height: 13),
+                                const Text(
+                                  'Bus No:Ba2 cha 9820',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff221F1F)),
+                                ),
+                                const SizedBox(height: 10),
                                 GestureDetector(
                                   onTap: () {
                                     _openModalBottomSheetForStartRoute(context);
                                   },
                                   child: Container(
-                                    height: 40,
-                                    width:
-                                        MediaQuery.sizeOf(context).width * 0.43,
+                                    // height: 40,
+                                    // width:
+                                    //     MediaQuery.sizeOf(context).width * 0.43,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 12),
                                     decoration: BoxDecoration(
                                       color: const Color(0xffff6448),
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: const Center(
                                       child: Text(
                                         'Start Route',
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(
+                                            color: Color(0xffFEFEFE),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400),
                                       ),
                                     ),
                                   ),
@@ -163,122 +193,120 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-
-      body: SingleChildScrollView(
-        // Wrap the entire body with a SingleChildScrollView
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: 15.0,
-              vertical: MediaQuery.of(context).size.height * 0.1),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Text(
-                    'Next Servicing Date',
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(width: 5),
-                  SvgPicture.asset(
-                    'assets/svg_images/scheduled-maintenance.svg', // Load image from assets (with fallback)
-                    height: 30, // Set a fixed size for the image
-                    width: 30,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Icon(Icons.calendar_month),
-                  const Text('5th November'),
-                  SizedBox(width: MediaQuery.sizeOf(context).width * 0.04),
-                  Text(
-                    '13 days from today',
-                    style: TextStyle(color: Colors.grey.shade400),
-                  ),
-                ],
-              ),
-              SizedBox(height: MediaQuery.sizeOf(context).height * 0.04),
-              const Text(
-                'Quick Access',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-              ),
-              GridView.builder(
-                shrinkWrap: true, // Ensure it doesn't take up infinite space
-                physics:
-                    const NeverScrollableScrollPhysics(), // Disable scrolling on the GridView itself
-                // Number of items in the cross-axis (2 items per row)
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 8.0, // Space between columns
-                  mainAxisSpacing: 8.0, // Space between rows
-                  childAspectRatio: 1.4, // Aspect ratio of each grid item
+                  ],
                 ),
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final item = items[index];
-                  return GestureDetector(
-                    onTap: () {
-                      ///Perform navigation for Quick Access Items like this
-                      if (index == 0) {
-                      } else if (index == 1) {
-                      } else if (index == 2) {
-                      } else if (index == 3) {
-                      } else if (index == 4) {
-                      } else if (index == 5) {}
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Card(
-                        elevation:
-                            2, // Card's elevation will still give it some internal shadow
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              12), // Rounded corners for the card
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                item['image'] ??
-                                    '', // Load image from assets (with fallback)
-                                height: 40, // Set a fixed size for the image
-                                width: 40,
-                              ),
-                              const SizedBox(height: 8.0),
-                              Text(
-                                item['text'] ??
-                                    '', // Text displayed in the card
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  color: Color(0xff60bf8f),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
               ),
             ],
           ),
         ),
+
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: 15.0,
+                vertical: MediaQuery.of(context).size.height * 0.1),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Text(
+                      'Next Servicing Date',
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(width: 5),
+                    SvgPicture.asset(
+                      'assets/svg_images/scheduled-maintenance.svg', // Load image from assets (with fallback)
+                      height: 30, // Set a fixed size for the image
+                      width: 30,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Icon(Icons.calendar_month),
+                    const Text('5th November'),
+                    SizedBox(width: MediaQuery.sizeOf(context).width * 0.04),
+                    Text(
+                      '13 days from today',
+                      style: TextStyle(color: Colors.grey.shade400),
+                    ),
+                  ],
+                ),
+                SizedBox(height: MediaQuery.sizeOf(context).height * 0.04),
+                const Text(
+                  'Quick Access',
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                ),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8.0, // Space between columns
+                    mainAxisSpacing: 8.0, // Space between rows
+                    childAspectRatio: 1.4, // Aspect ratio of each grid item
+                  ),
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return GestureDetector(
+                      onTap: () {
+                        ///Perform navigation for Quick Access Items like this
+                        if (index == 0) {
+                        } else if (index == 1) {
+                        } else if (index == 2) {
+                        } else if (index == 3) {
+                        } else if (index == 4) {
+                        } else if (index == 5) {}
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Card(
+                          elevation:
+                              2, // Card's elevation will still give it some internal shadow
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                12), // Rounded corners for the card
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  item['image'] ??
+                                      '', // Load image from assets (with fallback)
+                                  height: 40, // Set a fixed size for the image
+                                  width: 40,
+                                ),
+                                const SizedBox(height: 8.0),
+                                Text(
+                                  item['text'] ??
+                                      '', // Text displayed in the card
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    color: Color(0xff60bf8f),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
-    ));
+    );
   }
 
   void _openModalBottomSheetForStartRoute(BuildContext context) {
