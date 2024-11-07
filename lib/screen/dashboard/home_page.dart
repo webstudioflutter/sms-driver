@@ -66,43 +66,50 @@ class _HomePageState extends State<HomePage> {
                             color: Color(0xffcdeede),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(25))),
-                        child: TextFormField(
-                          controller: _searchController,
-                          cursorColor: const Color(0xffcdeede),
-                          // cursorHeight: 16,
-                          decoration: InputDecoration(
-                            prefixIcon: GestureDetector(
-                                onTap: () {
-                                  // Open the drawer when the menu icon is clicked
-                                  _scaffoldKey.currentState?.openDrawer();
-                                },
-                                child: const Icon(Icons.menu)
-                                //     SvgPicture.asset(
-                                //   'assets/svg_images/menu.svg', // Load image from assets
-                                //   height: 20, // Adjust size for the menu icon
-                                //   width: 10, // Adjust size for the menu icon
-                                // ),
-                                ),
-                            suffixIcon: Icon(Icons.notifications_active_sharp,
-                                color: Colors.red.shade500),
-                            //     SvgPicture.asset(
-                            //   'assets/svg_images/notification.svg', // Load image from assets
-                            //   height: 20, // Adjust size for the notification icon
-                            //   width: 20, // Adjust size for the notification icon
-                            // ),
-                            // contentPadding: const EdgeInsets.symmetric(
-                            //   horizontal:
-                            //       15.0, // Adjust the left and right padding for better spacing
-                            //   vertical:
-                            //       10, // Adjust the vertical padding for better height alignment
-                            // ),
-                            border: InputBorder.none, // Remove the border
-                            focusedBorder:
-                                InputBorder.none, // Remove the focused border
-                            enabledBorder:
-                                InputBorder.none, // Remove the enabled border
-                          ),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset('assets/svg_images/menu.svg'),
+                            SvgPicture.asset(
+                                'assets/svg_images/notification.svg'),
+                          ],
                         ),
+                        // TextFormField(
+                        //   controller: _searchController,
+                        //   cursorColor: const Color(0xffcdeede),
+                        //   // cursorHeight: 16,
+                        //   decoration: InputDecoration(
+                        //     prefixIcon: GestureDetector(
+                        //         onTap: () {
+                        //           // Open the drawer when the menu icon is clicked
+                        //           _scaffoldKey.currentState?.openDrawer();
+                        //         },
+                        //         child: const Icon(Icons.menu, size: 100)
+                        //         //     SvgPicture.asset(
+                        //         //   'assets/svg_images/menu.svg', // Load image from assets
+                        //         //   height: 20, // Adjust size for the menu icon
+                        //         //   width: 10, // Adjust size for the menu icon
+                        //         // ),
+                        //         ),
+                        //     suffixIcon: Icon(Icons.notifications_active_sharp,
+                        //         color: Colors.red.shade500),
+                        //     //     SvgPicture.asset(
+                        //     //   'assets/svg_images/notification.svg', // Load image from assets
+                        //     //   height: 20, // Adjust size for the notification icon
+                        //     //   width: 20, // Adjust size for the notification icon
+                        //     // ),
+                        //     // contentPadding: const EdgeInsets.symmetric(
+                        //     //   horizontal:
+                        //     //       15.0, // Adjust the left and right padding for better spacing
+                        //     //   vertical:
+                        //     //       10, // Adjust the vertical padding for better height alignment
+                        //     // ),
+                        //     border: InputBorder.none, // Remove the border
+                        //     focusedBorder:
+                        //         InputBorder.none, // Remove the focused border
+                        //     enabledBorder:
+                        //         InputBorder.none, // Remove the enabled border
+                        //   ),
+                        // ),
                       ),
                     ),
                     SizedBox(
@@ -220,8 +227,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(width: 5),
                   SvgPicture.asset(
-                    'assets/svg_images/scheduled-maintenance.svg', // Load image from assets (with fallback)
-                    height: 30, // Set a fixed size for the image
+                    'assets/svg_images/scheduled-maintenance.svg',
+                    height: 30,
                     width: 30,
                   ),
                 ],
@@ -263,9 +270,9 @@ class _HomePageState extends State<HomePage> {
                   physics: const AlwaysScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 5.0, // Space between columns
-                    mainAxisSpacing: 8.0, // Space between rows
-                    childAspectRatio: 1.4, // Aspect ratio of each grid item
+                    crossAxisSpacing: 5.0,
+                    mainAxisSpacing: 8.0,
+                    childAspectRatio: 1.4,
                   ),
                   itemCount: items.length,
                   itemBuilder: (context, index) {
@@ -285,8 +292,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: Card(
-                          elevation:
-                              2, // Card's elevation will still give it some internal shadow
+                          elevation: 2,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -297,15 +303,13 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(
-                                  item['image'] ??
-                                      '', // Load image from assets (with fallback)
-                                  height: 40, // Set a fixed size for the image
+                                  item['image'] ?? '',
+                                  height: 40,
                                   width: 40,
                                 ),
                                 const SizedBox(height: 8.0),
                                 Text(
-                                  item['text'] ??
-                                      '', // Text displayed in the card
+                                  item['text'] ?? '',
                                   style: const TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w500,
@@ -342,7 +346,7 @@ class _HomePageState extends State<HomePage> {
               clipBehavior: Clip.none,
               children: [
                 Container(
-                  height: 300, // Set the height of the bottom sheet
+                  height: 300,
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -372,22 +376,17 @@ class _HomePageState extends State<HomePage> {
                             border: Border.all(color: Colors.green)),
                         child: TextFormField(
                           controller: _routeController,
-                          textAlign: TextAlign
-                              .center, // Aligns both hint text and user input to center
+                          textAlign: TextAlign.center,
                           cursorColor: const Color(0xffcdeede),
                           cursorHeight: 16,
                           decoration: InputDecoration(
                             hintText: 'XXX-XXX-XX',
                             hintStyle: TextStyle(color: Colors.grey.shade200),
                             contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 10.0,
-                                vertical: 9), // Add padding here
-                            // Customize hint text color
-                            border: InputBorder.none, // Remove the border
-                            focusedBorder:
-                                InputBorder.none, // Remove the focused border
-                            enabledBorder:
-                                InputBorder.none, // Remove the enabled border
+                                horizontal: 10.0, vertical: 9),
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
                           ),
                         ),
                       ),
@@ -395,7 +394,6 @@ class _HomePageState extends State<HomePage> {
                           height: MediaQuery.sizeOf(context).height * 0.03),
                       GestureDetector(
                         onTap: () {
-                          // Navigator.of(context).push(MaterialPageRoute(builder: (_)=>));
                           Navigator.of(context).pop();
                           _openModalBottomSheetForPickDrop(context);
                         },
@@ -424,8 +422,8 @@ class _HomePageState extends State<HomePage> {
                   left: 0,
                   right: 0,
                   child: SvgPicture.asset(
-                    'assets/svg_images/green-notification.svg', // Load image from assets
-                    height: 55, // Set a fixed size for the image
+                    'assets/svg_images/green-notification.svg',
+                    height: 55,
                     width: 55,
                   ),
                 ),
@@ -494,8 +492,8 @@ class _HomePageState extends State<HomePage> {
               left: 0,
               right: 0,
               child: SvgPicture.asset(
-                'assets/svg_images/green-notification.svg', // Load image from assets
-                height: 55, // Set a fixed size for the image
+                'assets/svg_images/green-notification.svg',
+                height: 55,
                 width: 55,
               ),
             ),
@@ -519,26 +517,21 @@ class HomePageDrawer extends StatelessWidget {
         child: Column(
           children: [
             Center(
-              // This centers the content in the DrawerHeader.
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 50.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment
-                      .center, // Centers Row content horizontally.
-                  crossAxisAlignment: CrossAxisAlignment
-                      .center, // Centers content vertically inside Row.
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Column(
-                      mainAxisAlignment: MainAxisAlignment
-                          .center, // Ensures column contents are centered vertically.
-                      crossAxisAlignment: CrossAxisAlignment
-                          .center, // Ensures column items are centered horizontally.
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SvgPicture.asset(
                           'assets/images/fuel.svg', // Load image from assets
                           colorFilter: const ColorFilter.mode(
                               Colors.blue, BlendMode.lighten),
-                          height: 20, // Set a fixed size for the image
+                          height: 20,
                           width: 20,
                         ),
                         const SizedBox(height: 8),
