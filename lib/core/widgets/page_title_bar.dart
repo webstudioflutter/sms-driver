@@ -55,7 +55,7 @@ class PageTitleBar extends StatelessWidget {
             const Spacer(), // Adds space between the title and last widget
             // Last Widget (e.g., notification icon)
             Padding(
-              padding: const EdgeInsets.only(right: 5.0),
+              padding: const EdgeInsets.only(right: 10.0),
               child: lastWidget,
             ),
           ],

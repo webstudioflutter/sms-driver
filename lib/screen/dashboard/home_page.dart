@@ -1,4 +1,6 @@
-import 'package:driver_app/screen/bill/bill_main.dart';
+import 'package:driver_app/core/constants/string_constants.dart';
+import 'package:driver_app/core/utils/asset_provider.dart';
+import 'package:driver_app/screen/dashboard/home_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -14,321 +16,364 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _routeController = TextEditingController();
 
-  List<Map<String, dynamic>> items = [
-    {'image': 'assets/svg_images/attendance.svg', 'text': 'Attendance'},
-    {'image': 'assets/svg_images/fuel.svg', 'text': 'Fuel Tracking'},
-    {'image': 'assets/svg_images/report.svg', 'text': 'Report Issue'},
-    {'image': 'assets/svg_images/servicing.svg', 'text': 'Servicing'},
-    {'image': 'assets/svg_images/bill-upload.svg', 'text': 'Bill Upload'},
-    {'image': 'assets/svg_images/student-list.svg', 'text': 'Student List'},
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       resizeToAvoidBottomInset:
           true, // This ensures the UI resizes when the keyboard appears
-      key: _scaffoldKey, // Assign the key to the Scaffold
+      key: _scaffoldKey,
       drawer: const HomePageDrawer(),
-
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(270),
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              // Background with a curved bottom
-              Container(
-                height: 190,
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xff59CDDA),
-                        Color(0xff60BF8F)
-                      ], // Gradient colors
-                      begin: Alignment.topLeft, // Start point of gradient
-                      end: Alignment.bottomRight, // End point of gradient
-                    ),
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(40),
-                        bottomRight: Radius.circular(40))),
+      appBar: _appBarContent(context),
+      body: Padding(
+        padding: EdgeInsets.only(
+          left: 15.0,
+          right: 15.0,
+          top: MediaQuery.of(context).size.height * 0.08,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _fuelLevelContent(),
+            SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
+            _servicingDateContent(context),
+            SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
+            const Text(
+              'Quick Access',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff363636),
               ),
-              Positioned(
-                top: 20,
-                left: 10,
-                right: 10,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 50, // Height of the container
-                        decoration: const BoxDecoration(
-                            color: Color(0xffcdeede),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(25))),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset('assets/svg_images/menu.svg'),
-                            SvgPicture.asset(
-                                'assets/svg_images/notification.svg'),
-                          ],
-                        ),
-                        // TextFormField(
-                        //   controller: _searchController,
-                        //   cursorColor: const Color(0xffcdeede),
-                        //   // cursorHeight: 16,
-                        //   decoration: InputDecoration(
-                        //     prefixIcon: GestureDetector(
-                        //         onTap: () {
-                        //           // Open the drawer when the menu icon is clicked
-                        //           _scaffoldKey.currentState?.openDrawer();
-                        //         },
-                        //         child: const Icon(Icons.menu, size: 100)
-                        //         //     SvgPicture.asset(
-                        //         //   'assets/svg_images/menu.svg', // Load image from assets
-                        //         //   height: 20, // Adjust size for the menu icon
-                        //         //   width: 10, // Adjust size for the menu icon
-                        //         // ),
-                        //         ),
-                        //     suffixIcon: Icon(Icons.notifications_active_sharp,
-                        //         color: Colors.red.shade500),
-                        //     //     SvgPicture.asset(
-                        //     //   'assets/svg_images/notification.svg', // Load image from assets
-                        //     //   height: 20, // Adjust size for the notification icon
-                        //     //   width: 20, // Adjust size for the notification icon
-                        //     // ),
-                        //     // contentPadding: const EdgeInsets.symmetric(
-                        //     //   horizontal:
-                        //     //       15.0, // Adjust the left and right padding for better spacing
-                        //     //   vertical:
-                        //     //       10, // Adjust the vertical padding for better height alignment
-                        //     // ),
-                        //     border: InputBorder.none, // Remove the border
-                        //     focusedBorder:
-                        //         InputBorder.none, // Remove the focused border
-                        //     enabledBorder:
-                        //         InputBorder.none, // Remove the enabled border
-                        //   ),
-                        // ),
+            ),
+            _quickAccessItems(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Expanded _quickAccessItems(BuildContext context) {
+    return Expanded(
+      child: GridView.count(
+        crossAxisCount: 2,
+        crossAxisSpacing: 5.0,
+        mainAxisSpacing: 5.0,
+        childAspectRatio: 1.6,
+        children: [
+          GestureDetector(
+            onTap: () {},
+            child: buildStdQuickAccessItem(
+              Assets.svgImages.attendance,
+              kAttendance,
+              context,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: buildStdQuickAccessItem(
+              Assets.svgImages.fuel,
+              kFuelTracking,
+              context,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) =>
+              //         SchoolFeeInvoiceScreen(),
+              //   ),
+              // );
+            },
+            child: buildStdQuickAccessItem(
+              Assets.svgImages.report,
+              kReportIssue,
+              context,
+            ),
+          ),
+          GestureDetector(
+            onTap: () async {
+              // await Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => AssignmentScreen(),
+              //   ),
+              // );
+            },
+            child: buildStdQuickAccessItem(
+              Assets.svgImages.servicing,
+              kServicing,
+              context,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => ResultsScreen(),
+              //   ),
+              // );
+            },
+            child: buildStdQuickAccessItem(
+              Assets.svgImages.billupload,
+              kBillUpload,
+              context,
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) =>
+              //         const StudyMaterialsScreen(),
+              //   ),
+              // );
+            },
+            child: buildStdQuickAccessItem(
+                Assets.svgImages.studentlist, kStudentList, context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Column _servicingDateContent(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            const Text(
+              'Next Servicing Date',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff363636),
+              ),
+            ),
+            const SizedBox(width: 5),
+            SvgPicture.asset(
+              'assets/svg_images/scheduled-maintenance.svg',
+              height: 30,
+              width: 30,
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            const Icon(Icons.calendar_month),
+            const Text(
+              '5th November',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Color(0xff221f1f),
+              ),
+            ),
+            SizedBox(width: MediaQuery.sizeOf(context).width * 0.04),
+            const Text(
+              '13 days from today',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: Color(0xff999999),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Column _fuelLevelContent() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            const Text(
+              'Fuel Level',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff363636),
+              ),
+            ),
+            const SizedBox(width: 5),
+            SvgPicture.asset(
+              'assets/svg_images/fuel-level.svg',
+              height: 30,
+              width: 30,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 10,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 6,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.5),
+                child: Container(
+                  height: 10,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: const Color(0xff60bf8f)),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  PreferredSize _appBarContent(BuildContext context) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(270),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            // height: 200,
+            height: MediaQuery.sizeOf(context).height * 0.28,
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xff59CDDA), Color(0xff60BF8F)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(40),
+                    bottomRight: Radius.circular(40))),
+          ),
+          Positioned(
+            // top: 40,
+            top: MediaQuery.sizeOf(context).height * 0.07,
+            left: 10,
+            right: 10,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 50,
+                    decoration: const BoxDecoration(
+                        color: Color(0xffcdeede),
+                        borderRadius: BorderRadius.all(Radius.circular(25))),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _scaffoldKey.currentState?.openDrawer();
+                            },
+                            child: SvgPicture.asset(
+                              'assets/svg_images/menu.svg',
+                              height: 30,
+                            ),
+                          ),
+                          const Spacer(),
+                          SvgPicture.asset(
+                            'assets/svg_images/notification.svg',
+                            height: 20,
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(
-                      height: MediaQuery.sizeOf(context).height * 0.21,
-                      child: Card(
-                        color: const Color(0xffd8f3e1),
-                        // color: Colors.yellow,
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 16),
-                        child: Row(
-                          // crossAxisAlignment: CrossAxisAlignment.center,
-                          // mainAxisAlignment: MainAxisAlignment.center,
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.sizeOf(context).height * 0.21,
+                  child: Card(
+                    color: const Color(0xffd8f3e1),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 16),
+                    child: Row(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(
+                              right: 15, left: 30, top: 20, bottom: 20),
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                              image: const DecorationImage(
+                                image: AssetImage(
+                                    "assets/images/fake_profile.jpg"),
+                                fit: BoxFit.cover,
+                              ),
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(80),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0xffB4E6C8),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                              border: Border.all(
+                                  width: 1, color: const Color(0xffB4E6C8))),
+                        ),
+                        SizedBox(
+                            width: MediaQuery.sizeOf(context).width * 0.06),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  right: 15, left: 30, top: 20, bottom: 20),
-                              height: 80,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                  image: const DecorationImage(
-                                    image: AssetImage(
-                                        "assets/images/fake_profile.jpg"),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  color: Colors.grey,
-                                  borderRadius: BorderRadius.circular(80),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Color(0xffB4E6C8),
-                                      spreadRadius: 5,
-                                      blurRadius: 7,
-                                      offset: Offset(0, 3),
-                                    ),
-                                  ],
-                                  border: Border.all(
-                                      width: 1,
-                                      color: const Color(0xffB4E6C8))),
+                            const Text('Lal Bahadur Ojha',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xff221F1F))),
+                            const SizedBox(height: 13),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 5.0),
+                              child: Text(
+                                'Bus No:Ba2 cha 9820',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xff221F1F)),
+                              ),
                             ),
-                            SizedBox(
-                                width: MediaQuery.sizeOf(context).width * 0.06),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text('Lal Bahadur Ojha',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        color: Color(0xff221F1F))),
-                                const SizedBox(height: 13),
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 5.0),
+                            const SizedBox(height: 10),
+                            GestureDetector(
+                              onTap: () {
+                                _openModalBottomSheetForStartRoute(context);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 12),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xffff6448),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: const Center(
                                   child: Text(
-                                    'Bus No:Ba2 cha 9820',
+                                    'Start Route',
                                     style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                        color: Color(0xff221F1F)),
+                                        color: Color(0xffFEFEFE),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400),
                                   ),
                                 ),
-                                const SizedBox(height: 10),
-                                GestureDetector(
-                                  onTap: () {
-                                    _openModalBottomSheetForStartRoute(context);
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8, horizontal: 12),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xffff6448),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: const Center(
-                                      child: Text(
-                                        'Start Route',
-                                        style: TextStyle(
-                                            color: Color(0xffFEFEFE),
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
+                              ),
                             )
                           ],
-                        ),
-                      ),
+                        )
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-
-        body: Padding(
-          padding: EdgeInsets.only(
-            left: 15.0,
-            right: 15.0,
-            top: MediaQuery.of(context).size.height * 0.08,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Text(
-                    'Next Servicing Date',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xff363636),
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  SvgPicture.asset(
-                    'assets/svg_images/scheduled-maintenance.svg',
-                    height: 30,
-                    width: 30,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Icon(Icons.calendar_month),
-                  const Text(
-                    '5th November',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xff221f1f),
-                    ),
-                  ),
-                  SizedBox(width: MediaQuery.sizeOf(context).width * 0.04),
-                  const Text(
-                    '13 days from today',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xff999999),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: MediaQuery.sizeOf(context).height * 0.02),
-              const Text(
-                'Quick Access',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xff363636),
-                ),
-              ),
-              Expanded(
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 5.0,
-                    mainAxisSpacing: 8.0,
-                    childAspectRatio: 1.4,
-                  ),
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    return GestureDetector(
-                      onTap: () {
-                        ///Perform navigation for Quick Access Items like this
-                        if (index == 0) {
-                        } else if (index == 1) {
-                        } else if (index == 2) {
-                        } else if (index == 3) {
-                        } else if (index == 4) {
-                        } else if (index == 5) {}
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Card(
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  item['image'] ?? '',
-                                  height: 40,
-                                  width: 40,
-                                ),
-                                const SizedBox(height: 8.0),
-                                Text(
-                                  item['text'] ?? '',
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xff60bf8f),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }
@@ -505,222 +550,35 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class HomePageDrawer extends StatelessWidget {
-  const HomePageDrawer({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      backgroundColor: const Color(0xff36a674),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 50.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/images/fuel.svg', // Load image from assets
-                          colorFilter: const ColorFilter.mode(
-                              Colors.blue, BlendMode.lighten),
-                          height: 20,
-                          width: 20,
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'BLUE RIDGE',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Color(0xff2078bf),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 10),
-                    const Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment
-                          .start, // Ensures the texts are centered in the column.
-                      children: [
-                        Text(
-                          'Bright Horizons School',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          'GoSchool',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+Widget buildStdQuickAccessItem(
+    String svgAsset, String label, BuildContext context) {
+  return Card(
+    elevation: 2,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            svgAsset,
+            height: 30,
+            width: 30,
+          ),
+          const SizedBox(height: 5.0),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: Color(0xff60bf8f),
             ),
-
-            // First ListTile with icon and text
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: const Icon(Icons.date_range_rounded,
-                        color: Colors.white), // Icon for the item
-                    title: const Text(
-                      'Home',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onTap: () {
-                      // Handle tap (navigate, etc.)
-                    },
-                  ),
-                  // Second ListTile with icon and text
-                  ListTile(
-                    leading: const Icon(Icons.settings,
-                        color: Colors.white), // Icon for the item
-                    title: const Text(
-                      'Attendance',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onTap: () {
-                      // Handle tap (navigate, etc.)
-                    },
-                  ),
-                  // Additional ListTile with icon and text
-                  ListTile(
-                    leading: const Icon(Icons.location_on,
-                        color: Colors.white), // Icon for the item
-                    title: const Text(
-                      'Live Overview',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onTap: () {
-                      // Handle tap (navigate, etc.)
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.account_balance_wallet,
-                        color: Colors.white), // Icon for the item
-                    title: const Text(
-                      'Maintenance',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onTap: () {
-                      // Handle tap (navigate, etc.)
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.percent,
-                        color: Colors.white), // Icon for the item
-                    title: const Text(
-                      'Fuel Tracking',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onTap: () {
-                      // Handle tap (navigate, etc.)
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.people_alt_outlined,
-                        color: Colors.white), // Icon for the item
-                    title: const Text(
-                      'Servicing',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onTap: () {
-                      // Handle tap (navigate, etc.)
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.people_alt_outlined,
-                        color: Colors.white), // Icon for the item
-                    title: const Text(
-                      'Bill Upload',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const BillMain()));
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.call,
-                        color: Colors.white), // Icon for the item
-                    title: const Text(
-                      'Quick Call',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onTap: () {
-                      // Handle tap (navigate, etc.)
-                    },
-                  ),
-                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.1),
-                  const Divider(
-                    thickness: 1,
-                    height: 1,
-                    color: Color(0xff5bb28d),
-                    // color: Colors.amber,
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.question_mark_rounded,
-                        color: Colors.white), // Icon for the item
-                    title: const Text(
-                      'Support',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onTap: () {
-                      // Handle tap (navigate, etc.)
-                    },
-                  ),
-                  Container(
-                    width: MediaQuery.sizeOf(context).width * 0.7,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(18),
-                      color: Colors.white,
-                    ),
-                    child: const Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.logout_outlined,
-                            color: Color(0xfff24b3f),
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Logout',
-                            style: TextStyle(
-                              color: Color(0xfff24b3f),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10)
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
 }
