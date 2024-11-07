@@ -1,6 +1,5 @@
 import 'package:driver_app/core/utils/asset_provider.dart';
-import 'package:driver_app/screen/bill/bill_main.dart';
-import 'package:driver_app/screen/dashboard/dashboard.dart';
+import 'package:driver_app/screen/dashboard/home_page.dart';
 import 'package:driver_app/screen/dashboard/profile_page.dart';
 import 'package:driver_app/screen/servicing/log_servicing_form.dart';
 import 'package:flutter/material.dart';

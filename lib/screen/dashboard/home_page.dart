@@ -1,5 +1,6 @@
 import 'package:driver_app/core/constants/string_constants.dart';
 import 'package:driver_app/core/utils/asset_provider.dart';
+import 'package:driver_app/screen/bill/bill_main.dart';
 import 'package:driver_app/screen/dashboard/home_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -109,12 +110,12 @@ class _HomePageState extends State<HomePage> {
           ),
           GestureDetector(
             onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => ResultsScreen(),
-              //   ),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const BillMain(),
+                ),
+              );
             },
             child: buildStdQuickAccessItem(
               Assets.svgImages.billupload,
