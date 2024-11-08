@@ -63,6 +63,42 @@ class EmergencyMain extends StatelessWidget {
           ],
         ),
       ),
+
+      // appBar: PreferredSize(
+      //   preferredSize:
+      //       Size.fromHeight(MediaQuery.sizeOf(context).height * 0.15),
+      //   child: Stack(
+      //     clipBehavior: Clip.none,
+      //     children: [
+      //       Positioned(
+      //         top: MediaQuery.sizeOf(context).height * 0.07,
+      //         right: 10,
+      //         left: 10,
+      //         child: Container(
+      //           color: Colors.red, // Set the background color to red
+      //           child: PageTitleBar(
+      //             title: 'Report',
+      //             // Set title color to white
+      //             firstIcon: Icons.arrow_back,
+      //             // Set arrow color to white
+      //             lastWidget: IconButton(
+      //               icon: const Icon(Icons.close,
+      //                   color: Colors.white), // Close icon color to white
+      //               onPressed: () {
+      //                 Navigator.push(
+      //                   context,
+      //                   MaterialPageRoute(
+      //                       builder: (context) => const BillMain()),
+      //                 );
+      //               },
+      //             ),
+      //           ),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
+
       body: SingleChildScrollView(
         child: Column(
           children: [
