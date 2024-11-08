@@ -1,6 +1,7 @@
 import 'package:driver_app/core/widgets/page_title_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -10,6 +11,25 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final ImagePicker _picker = ImagePicker();
+  XFile? _image;
+  
+  // Function to pick image from camera or gallery
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final XFile? image = await _picker.pickImage(source: source);
+      setState(() {
+        _image = image;
+      });
+      if (image != null) {
+        // You can use the image file here, e.g., display it or upload it
+        print('Picked image path: ${image.path}');
+      }
+    } catch (e) {
+      print('Error picking image: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,17 +101,22 @@ class _ProfilePageState extends State<ProfilePage> {
                           Positioned(
                               right: -5,
                               bottom: 10,
-                              child: Container(
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: const Icon(
-                                    Icons.edit_square,
-                                    size: 25,
-                                    color: Colors.white,
-                                  )))
+                              child: GestureDetector(
+                                onTap: () {
+                                  _openModalBottomSheetForProfileEdit(context);
+                                },
+                                child: Container(
+                                    padding: const EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Icon(
+                                      Icons.edit_square,
+                                      size: 25,
+                                      color: Colors.white,
+                                    )),
+                              ))
                         ],
                       ),
                       const Text(
@@ -284,6 +309,102 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
+    );
+  }
+
+  void _openModalBottomSheetForProfileEdit(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 25.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Container(
+                  height: 75,
+                  width: 75,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle, // Makes the border circular
+                    border: Border.all(
+                      color: const Color(0xff60bf8f),
+                      width: 2,
+                    ),
+                  ),
+                  child: ClipOval(
+                    child: Image.asset(
+                      'assets/images/fake_profile.jpg',
+                      height: 120,
+                      width: 120,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+                child: GestureDetector(
+                  onTap: () {
+                    _pickImage(ImageSource.camera); // Select from camera
+                    Navigator.pop(context);
+                  },
+                  child: Row(
+                    children: [
+                      const Icon(Icons.camera_alt_outlined),
+                      SizedBox(width: MediaQuery.sizeOf(context).width * 0.02),
+                      const Text(
+                        'Take Photograph',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+                child: GestureDetector(
+                  onTap: () {
+                    _pickImage(ImageSource.gallery); // Select from gallery
+                    Navigator.pop(context);
+                  },
+                  child: Row(
+                    children: [
+                      const Icon(Icons.image),
+                      SizedBox(width: MediaQuery.sizeOf(context).width * 0.02),
+                      const Text(
+                        'Select from album',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Row(
+                    children: [
+                      const Icon(Icons.delete, color: Colors.red),
+                      SizedBox(width: MediaQuery.sizeOf(context).width * 0.02),
+                      const Text(
+                        'Remove Profile Picture',
+                        style: TextStyle(fontSize: 16, color: Colors.red),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
