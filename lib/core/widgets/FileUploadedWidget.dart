@@ -7,9 +7,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FileUploadedWidget extends StatefulWidget {
-  String? svgname;
-  String? Title;
-  FileUploadedWidget({super.key, this.svgname, this.Title});
+  final String? svgname;
+  final String? Title;
+  const FileUploadedWidget({super.key, this.svgname, this.Title});
 
   @override
   State<FileUploadedWidget> createState() => _FileUploadedWidgetState();
@@ -17,6 +17,7 @@ class FileUploadedWidget extends StatefulWidget {
 
 class _FileUploadedWidgetState extends State<FileUploadedWidget> {
   List<Map<String, dynamic>> files = [];
+
   Future<void> _pickImage() async {
     showDialog(
       context: context,
@@ -27,9 +28,7 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
             const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
         actions: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(
-              left: 50.0,
-            ),
+            padding: const EdgeInsets.only(left: 50.0),
             child: TextButton(
               onPressed: () async {
                 Navigator.pop(context);
@@ -50,9 +49,7 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-              left: 50.0,
-            ),
+            padding: const EdgeInsets.only(left: 50.0),
             child: TextButton(
               onPressed: () async {
                 Navigator.pop(context);
@@ -139,7 +136,7 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
           ),
         ),
         const SizedBox(height: 15),
-        _buildUploadingSection(),
+        if (files.isNotEmpty) _buildUploadingSection(),
       ],
     );
   }

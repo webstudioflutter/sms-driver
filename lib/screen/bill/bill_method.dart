@@ -42,7 +42,7 @@ class _BillMethodState extends State<BillMethod> {
           const SizedBox(height: 10),
           _buildTotalAmountSection(),
           const SizedBox(height: 15),
-          FileUploadedWidget(
+          const FileUploadedWidget(
             svgname: "assets/svg_images/upload_icon.svg",
             Title: "Tap to upload your bill",
           ),
@@ -126,9 +126,11 @@ class _BillMethodState extends State<BillMethod> {
         const SizedBox(height: 5),
         TextField(
           decoration: InputDecoration(
-            fillColor: Colors.white,
-            filled: true,
             hintText: 'Select Bill Type',
+            hintStyle: const TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -199,6 +201,10 @@ class _BillMethodState extends State<BillMethod> {
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             hintText: 'Enter Total Amount',
+            hintStyle: const TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),

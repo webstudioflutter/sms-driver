@@ -1,4 +1,4 @@
-import 'package:driver_app/screen/emergency/emergency_main.dart';
+import 'package:driver_app/screen/dashboard/home_page.dart';
 import 'package:flutter/material.dart';
 
 class EmergencyConfirmedPage extends StatelessWidget {
@@ -9,7 +9,7 @@ class EmergencyConfirmedPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(150),
+        preferredSize: const Size.fromHeight(150), // Custom height
         child: Stack(
           clipBehavior: Clip.none,
           children: [
@@ -24,36 +24,99 @@ class EmergencyConfirmedPage extends StatelessWidget {
                     child: Container(
                       height: 50,
                       decoration: const BoxDecoration(
-                        color: Color(0xffffffff),
+                        color: Color(0xffFFFFFF),
                         borderRadius: BorderRadius.all(Radius.circular(25)),
                       ),
-                      child: TextFormField(
-                        cursorColor: const Color(0xffcdeede),
-                        decoration: InputDecoration(
-                          labelText: "Emergency",
-                          prefixIcon: IconButton(
-                            icon: const Icon(Icons.arrow_back,
-                                color: Colors.black),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const EmergencyMain()));
-                            },
-                          ),
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.close, color: Colors.black),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.arrow_back,
+                            ),
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
                           ),
-                        ),
+                          const Text(
+                            "Emergency",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const HomePage()));
+                            },
+                          ),
+                        ],
                       ),
+                      // child: TextFormField(
+                      //   cursorColor: const Color(0xffcdeede),
+                      //   decoration: InputDecoration(
+                      //     hintText: "Emergency",
+                      //     labelStyle: const TextStyle(color: Colors.white),
+                      //     prefixIcon: IconButton(
+                      //       icon: const Icon(Icons.arrow_back,
+                      //           color: Colors.white),
+                      //       onPressed: () {
+                      //         Navigator.of(context).pop();
+                      //       },
+                      //     ),
+                      //     border: InputBorder.none,
+                      //     focusedBorder: InputBorder.none,
+                      //     enabledBorder: InputBorder.none,
+                      //     suffixIcon: IconButton(
+                      //       icon: const Icon(Icons.close, color: Colors.white),
+                      //       onPressed: () {
+                      //         Navigator.push(
+                      //             context,
+                      //             MaterialPageRoute(
+                      //                 builder: (context) => const HomePage()));
+                      //       },
+                      //     ),
+                      //   ),
+                      // ),
                     ),
+
+                    //   child: Container(
+                    //     height: 50,
+                    //     decoration: const BoxDecoration(
+                    //       color: Color(0xffff3333),
+                    //       borderRadius: BorderRadius.all(Radius.circular(25)),
+                    //     ),
+                    //     child: TextFormField(
+                    //       cursorColor: const Color(0xffcdeede),
+                    //       decoration: InputDecoration(
+                    //         labelText: "Emergency",
+                    //         labelStyle: const TextStyle(color: Colors.white),
+                    //         prefixIcon: IconButton(
+                    //           icon: const Icon(Icons.arrow_back,
+                    //               color: Colors.white),
+                    //           onPressed: () {
+                    //             Navigator.push(
+                    //                 context,
+                    //                 MaterialPageRoute(
+                    //                     builder: (context) => const HomePage()));
+                    //           },
+                    //         ),
+                    //         border: InputBorder.none,
+                    //         focusedBorder: InputBorder.none,
+                    //         enabledBorder: InputBorder.none,
+                    //         suffixIcon: IconButton(
+                    //           icon: const Icon(Icons.close, color: Colors.white),
+                    //           onPressed: () {
+                    //             Navigator.of(context).pop();
+                    //           },
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
                   ),
                 ],
               ),
