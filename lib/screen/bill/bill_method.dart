@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dotted_border/dotted_border.dart';
+import 'package:driver_app/core/widgets/FileUploadedWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:image_picker/image_picker.dart';
 
 class BillMethod extends StatefulWidget {
   const BillMethod({super.key});
@@ -15,10 +14,8 @@ class BillMethod extends StatefulWidget {
 
 class _BillMethodState extends State<BillMethod> {
   String _selectedDate = 'Select Date';
-  List<Map<String, dynamic>> files = [];
   File? _selectedImage;
   String? _fileName;
-
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -33,165 +30,75 @@ class _BillMethodState extends State<BillMethod> {
     }
   }
 
-  // Method to choose between taking a photo or selecting from the gallery
-  Future<void> _pickImage() async {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        alignment: Alignment.center,
-        actionsAlignment: MainAxisAlignment.center,
-        actionsPadding:
-            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 50.0,
-            ),
-            child: TextButton(
-              onPressed: () async {
-                Navigator.pop(context);
-                final pickedFile =
-                    await ImagePicker().pickImage(source: ImageSource.camera);
-                if (pickedFile != null) {
-                  _startFileUpload(File(pickedFile.path), pickedFile.name);
-                }
-              },
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset('assets/svg_images/take_photo.svg'),
-                  const SizedBox(width: 8),
-                  const Text('Take Photograph'),
-                ],
-              ),
-            ),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _buildBillTypeSection(),
+          const SizedBox(height: 10),
+          _buildBillDateSection(),
+          const SizedBox(height: 10),
+          _buildTotalAmountSection(),
+          const SizedBox(height: 15),
+          FileUploadedWidget(
+            svgname: "assets/svg_images/upload_icon.svg",
+            Title: "Tap to upload your bill",
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 50.0,
-            ),
-            child: TextButton(
-              onPressed: () async {
-                Navigator.pop(context);
-                final pickedFile =
-                    await ImagePicker().pickImage(source: ImageSource.gallery);
-                if (pickedFile != null) {
-                  _startFileUpload(File(pickedFile.path), pickedFile.name);
-                }
-              },
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset('assets/svg_images/select_album.svg'),
-                  const SizedBox(width: 8),
-                  const Text('Select from album'),
-                ],
+          const SizedBox(height: 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              OutlinedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.all(10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const SizedBox(
+                  width: 150,
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    'Cancel',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
               ),
-            ),
+              ElevatedButton(
+                onPressed: () {
+                  _showSubmitDialog();
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(10),
+                  backgroundColor: const Color(0xff60BF8F),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const SizedBox(
+                  width: 150,
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    'Submit',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
-    );
-  }
-
-  void _startFileUpload(File file, String fileName) {
-    setState(() {
-      files.add({
-        'fileName': fileName,
-        'file': file,
-        'progress': 0.0,
-        'isUploaded': false,
-      });
-    });
-
-    Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      setState(() {
-        int index = files.indexWhere((f) => f['fileName'] == fileName);
-        if (index != -1) {
-          if (files[index]['progress'] < 1.0) {
-            files[index]['progress'] += 0.1;
-          } else {
-            files[index]['progress'] = 1.0;
-            files[index]['isUploaded'] = true;
-            timer.cancel();
-          }
-        }
-      });
-    });
-  }
-
-  // Method to delete a file from the list
-  void _deleteFile(String fileName) {
-    setState(() {
-      files.removeWhere((file) => file['fileName'] == fileName);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        _buildBillTypeSection(),
-        const SizedBox(height: 10),
-        _buildBillDateSection(),
-        const SizedBox(height: 10),
-        _buildTotalAmountSection(),
-        const SizedBox(height: 15),
-        _buildFileUploadSection(),
-        const SizedBox(height: 20),
-        _buildUploadingSection(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            OutlinedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.all(10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const SizedBox(
-                width: 150,
-                child: Text(
-                  textAlign: TextAlign.center,
-                  'Cancel',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _showSubmitDialog();
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(10),
-                backgroundColor: const Color(0xff60BF8F),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const SizedBox(
-                width: 150,
-                child: Text(
-                  textAlign: TextAlign.center,
-                  'Submit',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 
@@ -301,6 +208,7 @@ class _BillMethodState extends State<BillMethod> {
     );
   }
 
+<<<<<<< HEAD
   Widget _buildFileUploadSection() {
     return DottedBorder(
       color: Theme.of(context).primaryColor,
@@ -440,6 +348,8 @@ class _BillMethodState extends State<BillMethod> {
   }
 
   // Show submit confirmation dialog
+=======
+>>>>>>> f8f12a17fcbc5cb830d00efd2f5084de9a766333
   void _showSubmitDialog() {
     showDialog(
       context: context,

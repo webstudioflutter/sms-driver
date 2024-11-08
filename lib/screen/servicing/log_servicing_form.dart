@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dotted_border/dotted_border.dart';
+import 'package:driver_app/core/widgets/FileUploadedWidget.dart';
+import 'package:driver_app/core/widgets/page_title_bar.dart';
+import 'package:driver_app/screen/emergency/emergency_main.dart';
+import 'package:driver_app/screen/servicing/servicing_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:image_picker/image_picker.dart';
 
 class LogServicingForm extends StatefulWidget {
   const LogServicingForm({super.key});
@@ -44,172 +46,46 @@ class _LogServicingFormState extends State<LogServicingForm> {
     }
   }
 
-  // Method to choose between taking a photo or selecting from the gallery
-  Future<void> _pickImage() async {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        actions: <Widget>[
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              final pickedFile =
-                  await ImagePicker().pickImage(source: ImageSource.camera);
-              if (pickedFile != null) {
-                _startFileUpload(File(pickedFile.path), pickedFile.name);
-              }
-            },
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset('assets/svg_images/take_photo.svg'),
-                const SizedBox(width: 8),
-                const Text('Take Photograph'),
-              ],
-            ),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              final pickedFile =
-                  await ImagePicker().pickImage(source: ImageSource.gallery);
-              if (pickedFile != null) {
-                _startFileUpload(File(pickedFile.path), pickedFile.name);
-              }
-            },
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset('assets/svg_images/select_album.svg'),
-                const SizedBox(width: 8),
-                const Text('Select from album'),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _startFileUpload(File file, String fileName) {
-    setState(() {
-      files.add({
-        'fileName': fileName,
-        'file': file,
-        'progress': 0.0,
-        'isUploaded': false,
-      });
-    });
-
-    Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      setState(() {
-        int index = files.indexWhere((f) => f['fileName'] == fileName);
-        if (index != -1) {
-          if (files[index]['progress'] < 1.0) {
-            files[index]['progress'] += 0.1;
-          } else {
-            files[index]['progress'] = 1.0;
-            files[index]['isUploaded'] = true;
-            timer.cancel();
-          }
-        }
-      });
-    });
-  }
-
-  // Method to delete a file from the list
-  void _deleteFile(String fileName) {
-    setState(() {
-      files.removeWhere((file) => file['fileName'] == fileName);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(180),
+          preferredSize:
+              Size.fromHeight(MediaQuery.sizeOf(context).height * 0.15),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              // Background with a curved bottom
               Container(
-                height: 110,
+                // height: MediaQuery.sizeOf(context).height * 0.20,
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [
-                        Color(0xff6bccc1),
-                        Color(0xff6fcf99)
-                      ], // Gradient colors
-                      begin: Alignment.topLeft, // Start point of gradient
-                      end: Alignment.bottomRight, // End point of gradient
+                      colors: [Color(0xff6bccc1), Color(0xff6fcf99)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(40),
                         bottomRight: Radius.circular(40))),
               ),
               Positioned(
-                top: 30,
-                left: 10,
+                top: MediaQuery.sizeOf(context).height * 0.07,
                 right: 10,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 50, // Height of the container
-                        decoration: const BoxDecoration(
-                            color: Color(0xffcdeede),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(25))),
-
-                        child: TextFormField(
-                          cursorColor: const Color(0xffcdeede),
-                          // cursorHeight: 16,
-                          decoration: InputDecoration(
-                            labelText: "Servicing",
-                            prefixIcon: IconButton(
-                              icon: const Icon(Icons.arrow_back,
-                                  color: Colors.black),
-                              onPressed: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) =>
-                                //             const HomePage()));
-                              },
-                            ),
-                            suffixIcon: GestureDetector(
-                              onTap: () {},
-                              child: SizedBox(
-                                height: 5,
-                                width: 5,
-                                child: SvgPicture.asset(
-                                  'assets/svg_images/notification.svg',
-                                ),
-                              ),
-                            ),
-                            // suffixIcon: IconButton(
-                            //   icon: Icon(Icons.notifications_active_sharp,
-                            //       color: Colors.red.shade500),
-                            //   onPressed: () {
-                            //     Navigator.push(
-                            //         context,
-                            //         MaterialPageRoute(
-                            //             builder: (context) =>
-                            //                 const EmergencyMain()));
-                            //   },
-                            // ),
-
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder:
-                                InputBorder.none, // Remove the enabled border
-                          ),
-                        ),
-                      ),
+                left: 10,
+                child: PageTitleBar(
+                  title: 'Servicing',
+                  firstIcon: Icons.arrow_back,
+                  lastWidget: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const EmergencyMain()));
+                    },
+                    child: SvgPicture.asset(
+                      'assets/svg_images/notification.svg',
+                      height: 20,
                     ),
-                  ],
+                  ),
                 ),
               ),
             ],
@@ -224,15 +100,19 @@ class _LogServicingFormState extends State<LogServicingForm> {
             const SizedBox(height: 25),
             _buildTotalAmountSection(),
             const SizedBox(height: 15),
-            _buildFileUploadSection(),
-            const SizedBox(height: 20),
-            _buildUploadingSection(),
+            FileUploadedWidget(
+              svgname: "assets/svg_images/upload_image_receipt.svg",
+              Title: "Tap to Upload Image of Receipt ",
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 OutlinedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ServicingMain()));
                   },
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.all(10),
@@ -435,144 +315,6 @@ class _LogServicingFormState extends State<LogServicingForm> {
     );
   }
 
-  Widget _buildFileUploadSection() {
-    return DottedBorder(
-      color: Theme.of(context).primaryColor,
-      strokeWidth: 1,
-      dashPattern: const [8, 4],
-      borderType: BorderType.RRect,
-      radius: const Radius.circular(8),
-      child: InkWell(
-        onTap: _pickImage,
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                'assets/svg_images/upload_image_receipt.svg',
-                height: 48,
-                width: 48,
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Tap to Upload Image of Reciept',
-                style: TextStyle(fontSize: 14, color: Colors.black54),
-              ),
-              const SizedBox(height: 10),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Display the progress of each uploaded file
-  Widget _buildUploadingSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Uploaded Files',
-          style: TextStyle(
-              fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
-        ),
-        const SizedBox(height: 10),
-        ...files.map((file) => _buildFileItem(file)),
-      ],
-    );
-  }
-
-  // Display each file with its progress indicator and delete button
-  Widget _buildFileItem(Map<String, dynamic> file) {
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.green),
-              borderRadius: BorderRadius.circular(8)),
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(file['fileName']),
-              ),
-              file['isUploaded']
-                  ? Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundColor: const Color(0x33dddddd),
-                          child: IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () =>
-                                _showDeleteConfirmationDialog(file),
-                          ),
-                        ),
-                      ],
-                    )
-                  : Expanded(
-                      child: LinearProgressIndicator(
-                        value: file['progress'],
-                        minHeight: 5.0,
-                      ),
-                    ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 10),
-      ],
-    );
-  }
-
-  // Confirm deletion of file
-  void _showDeleteConfirmationDialog(Map<String, dynamic> file) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Icon(Icons.warning, color: Colors.red),
-          content: const Text('Are you sure you want to delete this file?'),
-          actions: <Widget>[
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(10),
-                backgroundColor: const Color(0xffdddddd),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child:
-                  const Text('Cancel', style: TextStyle(color: Colors.black)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(10),
-                backgroundColor: const Color(0xffff3333),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child:
-                  const Text('Delete', style: TextStyle(color: Colors.white)),
-              onPressed: () {
-                _deleteFile(file['fileName']);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // Show submit confirmation dialog
   void _showSubmitDialog() {
     showDialog(
       context: context,
