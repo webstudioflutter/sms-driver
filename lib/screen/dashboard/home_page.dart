@@ -294,7 +294,7 @@ class _HomePageState extends State<HomePage> {
                   child: Card(
                     color: const Color(0xffd8f3e1),
                     margin: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 16),
+                        horizontal: 10, vertical: 16),
                     child: Row(
                       children: [
                         Container(
