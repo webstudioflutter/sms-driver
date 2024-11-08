@@ -333,6 +333,7 @@ class _BillMethodState extends State<BillMethod> {
         ),
       ),
     );
+  
   }
 
   // Display the progress of each uploaded file

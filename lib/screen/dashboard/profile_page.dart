@@ -13,7 +13,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
-  
+
   // Function to pick image from camera or gallery
   Future<void> _pickImage(ImageSource source) async {
     try {
@@ -136,6 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
+    
       body: Padding(
         padding: const EdgeInsets.only(top: 110.0, right: 10, left: 10),
         child: Column(
