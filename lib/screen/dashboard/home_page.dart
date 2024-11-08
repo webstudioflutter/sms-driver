@@ -1,8 +1,10 @@
 import 'package:driver_app/core/constants/string_constants.dart';
 import 'package:driver_app/core/utils/asset_provider.dart';
 import 'package:driver_app/screen/bill/bill_main.dart';
+import 'package:driver_app/screen/dashboard/attendance/attendance.dart';
 import 'package:driver_app/screen/dashboard/home_drawer.dart';
 import 'package:driver_app/screen/dashboard/report-issue/report_issue.dart';
+import 'package:driver_app/screen/dashboard/student-list/student_list.dart';
 import 'package:driver_app/screen/fuel/fuel_tracking.dart';
 import 'package:driver_app/screen/servicing/servicing_main.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +67,14 @@ class _HomePageState extends State<HomePage> {
         childAspectRatio: 1.6,
         children: [
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Attendance(),
+                ),
+              );
+            },
             child: buildStdQuickAccessItem(
               Assets.svgImages.attendance,
               kAttendance,
@@ -134,16 +143,18 @@ class _HomePageState extends State<HomePage> {
           ),
           GestureDetector(
             onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) =>
-              //         const StudyMaterialsScreen(),
-              //   ),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const StudentList(),
+                ),
+              );
             },
             child: buildStdQuickAccessItem(
-                Assets.svgImages.studentlist, kStudentList, context),
+              Assets.svgImages.studentlist,
+              kStudentList,
+              context,
+            ),
           ),
         ],
       ),
