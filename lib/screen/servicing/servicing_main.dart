@@ -1,5 +1,4 @@
-import 'package:driver_app/core/widgets/page_title_bar.dart';
-import 'package:driver_app/screen/emergency/emergency_main.dart';
+import 'package:driver_app/core/widgets/custom_app_bar.dart';
 import 'package:driver_app/screen/servicing/log_servicing_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,47 +27,9 @@ class _ServicingMainState extends State<ServicingMain> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.sizeOf(context).height * 0.15),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Container(
-              // height: MediaQuery.sizeOf(context).height * 0.20,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xff6bccc1), Color(0xff6fcf99)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(40),
-                      bottomRight: Radius.circular(40))),
-            ),
-            Positioned(
-              top: MediaQuery.sizeOf(context).height * 0.07,
-              right: 10,
-              left: 10,
-              child: PageTitleBar(
-                title: 'Servicing',
-                firstIcon: Icons.arrow_back,
-                lastWidget: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const EmergencyMain()));
-                  },
-                  child: SvgPicture.asset(
-                    'assets/svg_images/notification.svg',
-                    height: 20,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+      appBar: customBar(
+        context: context,
+        title: 'Servicing',
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

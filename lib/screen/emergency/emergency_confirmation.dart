@@ -1,4 +1,4 @@
-import 'package:driver_app/screen/emergency/emergency_main.dart';
+import 'package:driver_app/screen/dashboard/home_page.dart';
 import 'package:flutter/material.dart';
 
 import 'emergency_confirmed.dart';
@@ -29,33 +29,61 @@ class EmergencyConfirmationPage extends StatelessWidget {
                         color: Color(0xffff3333),
                         borderRadius: BorderRadius.all(Radius.circular(25)),
                       ),
-                      child: TextFormField(
-                        cursorColor: const Color(0xffcdeede),
-                        decoration: InputDecoration(
-                          labelText: "Emergency",
-                          labelStyle: const TextStyle(color: Colors.white),
-                          prefixIcon: IconButton(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
                             icon: const Icon(Icons.arrow_back,
                                 color: Colors.white),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const EmergencyMain()));
-                            },
-                          ),
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.close, color: Colors.white),
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
                           ),
-                        ),
+                          const Text(
+                            "Emergency",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close, color: Colors.white),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const HomePage()));
+                            },
+                          ),
+                        ],
                       ),
+                      // child: TextFormField(
+                      //   cursorColor: const Color(0xffcdeede),
+                      //   decoration: InputDecoration(
+                      //     hintText: "Emergency",
+                      //     labelStyle: const TextStyle(color: Colors.white),
+                      //     prefixIcon: IconButton(
+                      //       icon: const Icon(Icons.arrow_back,
+                      //           color: Colors.white),
+                      //       onPressed: () {
+                      //         Navigator.of(context).pop();
+                      //       },
+                      //     ),
+                      //     border: InputBorder.none,
+                      //     focusedBorder: InputBorder.none,
+                      //     enabledBorder: InputBorder.none,
+                      //     suffixIcon: IconButton(
+                      //       icon: const Icon(Icons.close, color: Colors.white),
+                      //       onPressed: () {
+                      //         Navigator.push(
+                      //             context,
+                      //             MaterialPageRoute(
+                      //                 builder: (context) => const HomePage()));
+                      //       },
+                      //     ),
+                      //   ),
+                      // ),
                     ),
                   ),
                 ],

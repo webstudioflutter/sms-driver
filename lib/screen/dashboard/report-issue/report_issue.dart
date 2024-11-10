@@ -36,7 +36,10 @@ class _ReportIssueState extends State<ReportIssue> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customBar(context: context, title: 'Report Issue'),
+      appBar: customBar(
+        context: context,
+        title: 'Report Issue',
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
         child: Column(

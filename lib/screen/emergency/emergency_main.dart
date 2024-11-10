@@ -1,4 +1,4 @@
-import 'package:driver_app/screen/bill/bill_main.dart';
+import 'package:driver_app/screen/dashboard/home_page.dart';
 import 'package:driver_app/screen/emergency/emergency_confirmation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,8 +10,62 @@ class EmergencyMain extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[900],
+      // appBar: PreferredSize(
+      //   preferredSize: const Size.fromHeight(90), // Custom height
+      //   child: Stack(
+      //     clipBehavior: Clip.none,
+      //     children: [
+      //       Positioned(
+      //         top: 20,
+      //         left: 10,
+      //         right: 10,
+      //         child: Column(
+      //           children: [
+      //             Padding(
+      //               padding: const EdgeInsets.all(8.0),
+      //               child: Container(
+      //                 height: 50,
+      //                 decoration: const BoxDecoration(
+      //                   color: Color(0xffff3333),
+      //                   borderRadius: BorderRadius.all(Radius.circular(25)),
+      //                 ),
+      //                 child: TextFormField(
+      //                   cursorColor: const Color(0xffcdeede),
+      //                   decoration: InputDecoration(
+      //                     labelText: "Report",
+      //                     labelStyle: const TextStyle(color: Colors.white),
+      //                     prefixIcon: IconButton(
+      //                       icon: const Icon(Icons.arrow_back,
+      //                           color: Colors.white),
+      //                       onPressed: () {
+      //                         Navigator.push(
+      //                             context,
+      //                             MaterialPageRoute(
+      //                                 builder: (context) => const BillMain()));
+      //                       },
+      //                     ),
+      //                     border: InputBorder.none,
+      //                     focusedBorder: InputBorder.none,
+      //                     enabledBorder: InputBorder.none,
+      //                     suffixIcon: IconButton(
+      //                       icon: const Icon(Icons.close, color: Colors.white),
+      //                       onPressed: () {
+      //                         Navigator.of(context).pop();
+      //                       },
+      //                     ),
+      //                   ),
+      //                 ),
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
+
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(90), // Custom height
+        preferredSize: const Size.fromHeight(100), // Custom height
         child: Stack(
           clipBehavior: Clip.none,
           children: [
@@ -29,32 +83,61 @@ class EmergencyMain extends StatelessWidget {
                         color: Color(0xffff3333),
                         borderRadius: BorderRadius.all(Radius.circular(25)),
                       ),
-                      child: TextFormField(
-                        cursorColor: const Color(0xffcdeede),
-                        decoration: InputDecoration(
-                          labelText: "Report",
-                          labelStyle: const TextStyle(color: Colors.white),
-                          prefixIcon: IconButton(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
                             icon: const Icon(Icons.arrow_back,
                                 color: Colors.white),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const BillMain()));
-                            },
-                          ),
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.close, color: Colors.white),
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
                           ),
-                        ),
+                          const Text(
+                            "Report",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close, color: Colors.white),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const HomePage()));
+                            },
+                          ),
+                        ],
                       ),
+                      // child: TextFormField(
+                      //   cursorColor: const Color(0xffcdeede),
+                      //   decoration: InputDecoration(
+                      //     hintText: "Emergency",
+                      //     labelStyle: const TextStyle(color: Colors.white),
+                      //     prefixIcon: IconButton(
+                      //       icon: const Icon(Icons.arrow_back,
+                      //           color: Colors.white),
+                      //       onPressed: () {
+                      //         Navigator.of(context).pop();
+                      //       },
+                      //     ),
+                      //     border: InputBorder.none,
+                      //     focusedBorder: InputBorder.none,
+                      //     enabledBorder: InputBorder.none,
+                      //     suffixIcon: IconButton(
+                      //       icon: const Icon(Icons.close, color: Colors.white),
+                      //       onPressed: () {
+                      //         Navigator.push(
+                      //             context,
+                      //             MaterialPageRoute(
+                      //                 builder: (context) => const HomePage()));
+                      //       },
+                      //     ),
+                      //   ),
+                      // ),
                     ),
                   ),
                 ],
@@ -63,41 +146,6 @@ class EmergencyMain extends StatelessWidget {
           ],
         ),
       ),
-
-      // appBar: PreferredSize(
-      //   preferredSize:
-      //       Size.fromHeight(MediaQuery.sizeOf(context).height * 0.15),
-      //   child: Stack(
-      //     clipBehavior: Clip.none,
-      //     children: [
-      //       Positioned(
-      //         top: MediaQuery.sizeOf(context).height * 0.07,
-      //         right: 10,
-      //         left: 10,
-      //         child: Container(
-      //           color: Colors.red, // Set the background color to red
-      //           child: PageTitleBar(
-      //             title: 'Report',
-      //             // Set title color to white
-      //             firstIcon: Icons.arrow_back,
-      //             // Set arrow color to white
-      //             lastWidget: IconButton(
-      //               icon: const Icon(Icons.close,
-      //                   color: Colors.white), // Close icon color to white
-      //               onPressed: () {
-      //                 Navigator.push(
-      //                   context,
-      //                   MaterialPageRoute(
-      //                       builder: (context) => const BillMain()),
-      //                 );
-      //               },
-      //             ),
-      //           ),
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
 
       body: SingleChildScrollView(
         child: Column(
