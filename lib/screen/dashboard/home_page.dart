@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
         padding: EdgeInsets.only(
           left: 15.0,
           right: 15.0,
-          top: MediaQuery.of(context).size.height * 0.08,
+          top: MediaQuery.of(context).size.height * 0.09,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
