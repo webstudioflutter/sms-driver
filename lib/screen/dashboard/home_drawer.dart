@@ -1,4 +1,9 @@
+import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/screen/bill/bill_main.dart';
+import 'package:driver_app/screen/dashboard/attendance/attendance.dart';
+import 'package:driver_app/screen/dashboard/home_page.dart';
+import 'package:driver_app/screen/fuel/fuel_tracking.dart';
+import 'package:driver_app/screen/servicing/servicing_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -14,9 +19,12 @@ class HomePageDrawer extends StatelessWidget {
         color: const Color(0xff36a674),
         child: Column(
           children: [
-            _headerPart(),
+            _headerPart(context),
             Expanded(child: _buildDrawerOptions(context)),
-            const Divider(color: Colors.white54),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              child: Divider(color: Colors.white54),
+            ),
             _logoutButton(context),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
           ],
@@ -25,37 +33,26 @@ class HomePageDrawer extends StatelessWidget {
     );
   }
 
-  Center _headerPart() {
+  Center _headerPart(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 40.0),
+        padding: EdgeInsets.only(
+          top: getHeight(context) * 0.09,
+          bottom: getHeight(context) * 0.03,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ClipOval(
-                  child: Image.asset(
-                    'assets/images/fake_profile.jpg',
-                    height: 50,
-                    width: 50,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'BLUE RIDGE',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Color(0xff2078bf),
-                  ),
-                ),
-              ],
+            ClipOval(
+              child: Image.network(
+                'https://img.freepik.com/free-vector/gradient-high-school-logo-design_23-2149626932.jpg?t=st=1731222465~exp=1731226065~hmac=373644b2dd9c85880d024478d228c20810da4d9e6bc4fb3f07c8fcef59a5a57a&w=740',
+                width: getHeight(context) * 0.07,
+                height: getHeight(context) * 0.07,
+                fit: BoxFit.cover,
+              ),
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: getWidth(context) * 0.04),
             const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +84,7 @@ class HomePageDrawer extends StatelessWidget {
       width: MediaQuery.sizeOf(context).width * 0.7,
       height: 50,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(8),
         color: Colors.white,
       ),
       child: const Center(
@@ -119,12 +116,12 @@ class HomePageDrawer extends StatelessWidget {
           svgAsset: 'assets/svg_images/drawer/home.svg',
           imageColor: Colors.white,
           label: 'Home',
-          // destination: AssignmentScreen(),
+          destination: HomePage(),
         ),
         DrawerCard(
           svgAsset: 'assets/svg_images/drawer/attendance.svg',
-          label: 'Assignment',
-          // destination: AssignmentScreen(),
+          label: 'Attendance',
+          destination: Attendance(),
         ),
         DrawerCard(
           svgAsset: 'assets/svg_images/location.svg',
@@ -139,22 +136,17 @@ class HomePageDrawer extends StatelessWidget {
         DrawerCard(
           svgAsset: 'assets/svg_images/drawer/fuel-tracking.svg',
           label: 'Fuel Tracking',
-          // destination: AssignmentScreen(),
+          destination: FuelTrackingMain(),
         ),
         DrawerCard(
           svgAsset: 'assets/svg_images/drawer/servicing.svg',
           label: 'Servicing',
-          // destination: AssignmentScreen(),
+          destination: ServicingMain(),
         ),
         DrawerCard(
           svgAsset: 'assets/svg_images/drawer/servicing.svg',
           label: 'Bill Upload',
           destination: BillMain(),
-
-          //           Navigator.push(
-          //               context,
-          //               MaterialPageRoute(
-          //                   builder: (context) => const BillMain()));
         ),
         DrawerCard(
           svgAsset: 'assets/svg_images/drawer/quick-call.svg',

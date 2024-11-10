@@ -1,5 +1,6 @@
 import 'package:driver_app/core/constants/string_constants.dart';
 import 'package:driver_app/core/utils/asset_provider.dart';
+import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/screen/bill/bill_main.dart';
 import 'package:driver_app/screen/dashboard/attendance/attendance.dart';
 import 'package:driver_app/screen/dashboard/home_drawer.dart';
@@ -177,8 +178,8 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(width: 5),
             SvgPicture.asset(
               'assets/svg_images/scheduled-maintenance.svg',
-              height: 30,
-              width: 30,
+              height: 25,
+              width: 25,
             ),
           ],
         ),
@@ -224,26 +225,55 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(width: 5),
             SvgPicture.asset(
               'assets/svg_images/fuel-level.svg',
-              height: 30,
-              width: 30,
+              height: 25,
+              width: 25,
             ),
           ],
         ),
+        // SizedBox(
+        //   height: 10,
+        //   child: ListView.builder(
+        //     scrollDirection: Axis.horizontal,
+        //     itemCount: 6,
+        //     itemBuilder: (context, index) {
+        //       return Padding(
+        //         padding: const EdgeInsets.symmetric(horizontal: 2.5),
+        //         child: Container(
+        //           height: 10,
+        //           width: 50,
+        //           decoration: BoxDecoration(
+        //               borderRadius: BorderRadius.circular(8),
+        //               color: const Color(0xff60bf8f)),
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // ),
+        SizedBox(height: getHeight(context) * 0.01),
         SizedBox(
           height: 10,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 6,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2.5),
-                child: Container(
-                  height: 10,
-                  width: 50,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: const Color(0xff60bf8f)),
-                ),
+          child: Builder(
+            builder: (context) {
+              double screenWidth = getWidth(context);
+              double itemWidth = (screenWidth - 2 * 5) /
+                  8; // Calculate width of each item based on screen width and spacing
+
+              return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 6,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Container(
+                      height: 10,
+                      width: itemWidth, // Use calculated width for each item
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: const Color(0xff60bf8f),
+                      ),
+                    ),
+                  );
+                },
               );
             },
           ),
@@ -259,7 +289,6 @@ class _HomePageState extends State<HomePage> {
         clipBehavior: Clip.none,
         children: [
           Container(
-            // height: 200,
             height: MediaQuery.sizeOf(context).height * 0.28,
             decoration: const BoxDecoration(
                 gradient: LinearGradient(
@@ -272,7 +301,6 @@ class _HomePageState extends State<HomePage> {
                     bottomRight: Radius.circular(40))),
           ),
           Positioned(
-            // top: 40,
             top: MediaQuery.sizeOf(context).height * 0.07,
             left: 10,
             right: 10,
@@ -308,86 +336,84 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
+                SizedBox(height: getHeight(context) * 0.018),
                 SizedBox(
-                  height: MediaQuery.sizeOf(context).height * 0.21,
+                  height: getHeight(context) * 0.17,
                   child: Card(
                     color: const Color(0xffd8f3e1),
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 16),
-                    child: Row(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(
-                              right: 15, left: 30, top: 20, bottom: 20),
-                          height: 80,
-                          width: 80,
-                          decoration: BoxDecoration(
-                              image: const DecorationImage(
-                                image: AssetImage(
-                                    "assets/images/fake_profile.jpg"),
-                                fit: BoxFit.cover,
-                              ),
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(80),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Color(0xffB4E6C8),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                              border: Border.all(
-                                  width: 1, color: const Color(0xffB4E6C8))),
-                        ),
-                        SizedBox(
-                            width: MediaQuery.sizeOf(context).width * 0.06),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('Lal Bahadur Ojha',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff221F1F))),
-                            const SizedBox(height: 13),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 5.0),
-                              child: Text(
-                                'Bus No:Ba2 cha 9820',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xff221F1F)),
-                              ),
+                    margin: EdgeInsets.symmetric(
+                      horizontal: getWidth(context) * 0.021,
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: getWidth(context) * 0.07,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ClipOval(
+                            child: Image.network(
+                              'https://thumbs.wbm.im/pw/medium/6ee9298a0daeccde4df0d2df499bda96.avif',
+                              width: getHeight(context) * 0.11,
+                              height: getHeight(context) * 0.11,
+                              fit: BoxFit.cover,
                             ),
-                            const SizedBox(height: 10),
-                            GestureDetector(
-                              onTap: () {
-                                _openModalBottomSheetForStartRoute(context);
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 12),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xffff6448),
-                                  borderRadius: BorderRadius.circular(12),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Lal Bahadur Ojha',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xff221F1F),
+                                  height: 1.2,
                                 ),
-                                child: const Center(
-                                  child: Text(
-                                    'Start Route',
-                                    style: TextStyle(
-                                        color: Color(0xffFEFEFE),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400),
+                              ),
+                              SizedBox(height: getHeight(context) * 0.01),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 5.0),
+                                child: Text(
+                                  'Bus No:Ba2 cha 9820',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xff221F1F),
+                                    height: 1.2,
                                   ),
                                 ),
                               ),
-                            )
-                          ],
-                        )
-                      ],
+                              SizedBox(height: getHeight(context) * 0.01),
+                              InkWell(
+                                onTap: () {
+                                  _openModalBottomSheetForStartRoute(context);
+                                },
+                                child: Container(
+                                  width: getWidth(context) * 0.4,
+                                  height: 40,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 12),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffff6448),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'Start Route',
+                                      style: TextStyle(
+                                          color: Color(0xffFEFEFE),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),

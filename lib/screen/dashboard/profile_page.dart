@@ -1,3 +1,4 @@
+import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/core/widgets/page_title_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,6 +33,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = getWidth(context);
+    double itemWidth = (screenWidth - 2 * 5) /
+        8; // Calculate width of each item based on screen width and spacing
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:
@@ -56,11 +60,12 @@ class _ProfilePageState extends State<ProfilePage> {
               right: 10,
               left: 10,
               child: PageTitleBar(
-                  title: 'Profile',
-                  firstIcon: Icons.arrow_back,
-                  lastWidget: SvgPicture.asset(
-                      'assets/svg_images/notification.svg',
-                      height: 20)),
+                title: 'Profile',
+                firstIcon: Icons.arrow_back,
+                lastWidget: SvgPicture.asset(
+                    'assets/svg_images/notification.svg',
+                    height: 20),
+              ),
             ),
             Positioned(
               bottom: -95,
@@ -79,21 +84,18 @@ class _ProfilePageState extends State<ProfilePage> {
                         clipBehavior: Clip.none,
                         children: [
                           Container(
-                            height: 120,
-                            width: 120,
                             decoration: BoxDecoration(
-                              shape:
-                                  BoxShape.circle, // Makes the border circular
+                              shape: BoxShape.circle,
                               border: Border.all(
                                 color: const Color(0xff60bf8f),
                                 width: 2,
                               ),
                             ),
                             child: ClipOval(
-                              child: Image.asset(
-                                'assets/images/fake_profile.jpg',
-                                height: 120,
-                                width: 120,
+                              child: Image.network(
+                                'https://thumbs.wbm.im/pw/medium/6ee9298a0daeccde4df0d2df499bda96.avif',
+                                height: getWidth(context) * 0.33,
+                                width: getWidth(context) * 0.33,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -126,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 2),
                       const Text('License No: 4048683576'),
                     ],
                   ),
@@ -136,9 +138,12 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
-    
       body: Padding(
-        padding: const EdgeInsets.only(top: 110.0, right: 10, left: 10),
+        padding: EdgeInsets.only(
+          top: getHeight(context) * 0.13,
+          right: 10,
+          left: 10,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -147,67 +152,106 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.only(left: 5.0),
                 child: Column(
                   children: [
-                    SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 20.0),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset('assets/svg_images/profile.svg'),
-                            const SizedBox(width: 10),
-                            const Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'General Information',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Text(
-                                    'View your personal and work details',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            SvgPicture.asset('assets/svg_images/warning.svg'),
-                            GestureDetector(
-                              onTap: () {},
-                              child: const Icon(
-                                Icons.chevron_right,
-                                size: 35,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 20.0),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset('assets/svg_images/lock.svg'),
-                            const SizedBox(width: 10),
-                            const Column(
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset('assets/svg_images/profile.svg'),
+                          const SizedBox(width: 10),
+                          SizedBox(
+                            width: getWidth(context) * 0.6,
+                            child: const Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Face ID / Touch ID',
+                                  'General Information',
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  'View your personal and work details',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.warning, color: Colors.red),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {},
+                            child: const Icon(
+                              Icons.chevron_right,
+                              size: 35,
+                              color: Color(0xff999999),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset('assets/svg_images/lock.svg'),
+                          const SizedBox(width: 10),
+                          const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Face ID / Touch ID',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                'Manage your device security',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 5),
+                          const Spacer(),
+                          Switch(
+                            value: false,
+                            onChanged: (value) {},
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 20.0,
+                        bottom: 20,
+                      ),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset('assets/svg_images/logout.svg'),
+                          const SizedBox(width: 10),
+                          SizedBox(
+                            width: getWidth(context) * 0.6,
+                            child: const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Log out',
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 Text(
-                                  'Manage your device security',
+                                  'Further secure your account for safety',
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: TextStyle(
@@ -216,52 +260,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               ],
                             ),
-                            const SizedBox(width: 5),
-                            const Spacer(),
-                            Switch(value: false, onChanged: (value) {})
-                          ],
-                        ),
-                      ),
-                    ),
-                    SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 20.0, bottom: 20),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset('assets/svg_images/logout.svg'),
-                            const SizedBox(width: 10),
-                            const Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Log out',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Further secure your account for safety',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {},
+                            child: const Icon(
+                              Icons.chevron_right,
+                              size: 35,
+                              color: Color(0xff999999),
                             ),
-                            const SizedBox(width: 5),
-                            GestureDetector(
-                              onTap: () {},
-                              child: const Icon(
-                                Icons.chevron_right,
-                                size: 35,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -280,7 +289,13 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Card(
               child: Padding(
-                padding: const EdgeInsets.only(top: 20.0, bottom: 20, left: 5),
+                padding: EdgeInsets.only(
+                  // top: 20.0,
+                  top: getHeight(context) * 0.01,
+                  // bottom: 20,
+                  bottom: getHeight(context) * 0.01,
+                  left: 5,
+                ),
                 child: Row(
                   children: [
                     SvgPicture.asset('assets/svg_images/notification2.svg'),
@@ -301,6 +316,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: const Icon(
                         Icons.chevron_right,
                         size: 35,
+                        color: Color(0xff999999),
                       ),
                     ),
                   ],

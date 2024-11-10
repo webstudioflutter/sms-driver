@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:driver_app/core/utils/asset_provider.dart';
 import 'package:driver_app/core/utils/util.dart';
+import 'package:driver_app/core/widgets/FileUploadedWidget.dart';
 import 'package:driver_app/core/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -51,7 +52,11 @@ class _ReportIssueState extends State<ReportIssue> {
             SizedBox(height: getHeight(context) * 0.03),
             addPhotoTitle(context),
             SizedBox(height: getHeight(context) * 0.01),
-            imageUploadSection(context),
+            // imageUploadSection(context),
+            const FileUploadedWidget(
+              svgname: "assets/svg_images/upload_icon.svg",
+              Title: "Tap to Upload Image of Fuel Receipt",
+            ),
             SizedBox(height: getHeight(context) * 0.04),
             submitButton(context),
             SizedBox(height: getHeight(context) * 0.03),
