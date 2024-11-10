@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:driver_app/core/widgets/page_title_bar.dart';
+import 'package:driver_app/screen/login_and_logout/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -90,33 +93,47 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             child: ClipOval(
-                              child: Image.asset(
-                                'assets/images/fake_profile.jpg',
-                                height: 120,
-                                width: 120,
-                                fit: BoxFit.cover,
-                              ),
+                              child: _image == null
+                                  ? Image.asset(
+                                      'assets/images/fake_profile.jpg',
+                                      height: 120,
+                                      width: 120,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.file(
+                                      File(_image!.path),
+                                      fit: BoxFit.cover,
+                                      width: 120,
+                                      height: 120,
+                                    ),
                             ),
                           ),
                           Positioned(
-                              right: -5,
-                              bottom: 10,
-                              child: GestureDetector(
-                                onTap: () {
-                                  _openModalBottomSheetForProfileEdit(context);
-                                },
-                                child: Container(
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      color: Colors.green,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: const Icon(
-                                      Icons.edit_square,
-                                      size: 25,
-                                      color: Colors.white,
-                                    )),
-                              ))
+                            right: -5,
+                            bottom: 10,
+                            child: GestureDetector(
+                              onTap: () {
+                                // _openModalBottomSheetForProfileEdit(context);
+                              },
+                              child: Container(
+                                // padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.edit_square,
+                                    size: 25,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () =>
+                                      _openModalBottomSheetForProfileEdit(
+                                          context),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       const Text(
@@ -136,7 +153,6 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
-    
       body: Padding(
         padding: const EdgeInsets.only(top: 110.0, right: 10, left: 10),
         child: Column(
@@ -230,8 +246,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           children: [
                             SvgPicture.asset('assets/svg_images/logout.svg'),
                             const SizedBox(width: 10),
-                            const Flexible(
-                              child: Column(
+                            GestureDetector(
+                              onTap: () {
+                                showLogoutConfirmation(context);
+                              },
+                              child: const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -253,12 +272,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             const SizedBox(width: 5),
-                            GestureDetector(
-                              onTap: () {},
-                              child: const Icon(
-                                Icons.chevron_right,
-                                size: 35,
-                              ),
+                            IconButton(
+                              icon: const Icon(Icons.chevron_right, size: 30),
+                              onPressed: () => showLogoutConfirmation(context),
                             ),
                           ],
                         ),
@@ -336,12 +352,19 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   child: ClipOval(
-                    child: Image.asset(
-                      'assets/images/fake_profile.jpg',
-                      height: 120,
-                      width: 120,
-                      fit: BoxFit.cover,
-                    ),
+                    child: _image == null
+                        ? Image.asset(
+                            'assets/images/fake_profile.jpg',
+                            height: 120,
+                            width: 120,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.file(
+                            File(_image!.path),
+                            fit: BoxFit.cover,
+                            width: 120,
+                            height: 120,
+                          ),
                   ),
                 ),
               ),
@@ -408,4 +431,92 @@ class _ProfilePageState extends State<ProfilePage> {
       },
     );
   }
+
+  void showLogoutConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Icon(Icons.logout, color: Colors.green),
+          content: const Text('Are you sure you want to log out?'),
+          actions: <Widget>[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                backgroundColor: const Color(0xffdddddd),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child:
+                  const Text('Cancel', style: TextStyle(color: Colors.black)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text('Yes', style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const TeacherLoginScreen()));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
+
+// void showLogoutConfirmation(BuildContext context) {
+//     showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return AlertDialog(
+//           title: const Icon(Icons.logout, color: Colors.green),
+//           content: const Text('Are you sure you want to log out?'),
+//           actions: <Widget>[
+//             ElevatedButton(
+//               style: ElevatedButton.styleFrom(
+//                 padding: const EdgeInsets.all(10),
+//                 backgroundColor: const Color(0xffdddddd),
+//                 shape: RoundedRectangleBorder(
+//                   borderRadius: BorderRadius.circular(12),
+//                 ),
+//               ),
+//               child:
+//                   const Text('Cancel', style: TextStyle(color: Colors.black)),
+//               onPressed: () {
+//                 Navigator.of(context).pop();
+//               },
+//             ),
+//             ElevatedButton(
+//               style: ElevatedButton.styleFrom(
+//                 padding: const EdgeInsets.all(10),
+//                 backgroundColor: Colors.green,
+//                 shape: RoundedRectangleBorder(
+//                   borderRadius: BorderRadius.circular(12),
+//                 ),
+//               ),
+//               child: const Text('Yes', style: TextStyle(color: Colors.white)),
+//               onPressed: () {
+//                 Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                         builder: (context) => const TeacherLoginScreen()));
+//               },
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
