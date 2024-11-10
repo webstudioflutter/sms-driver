@@ -63,7 +63,7 @@ class _BillMethodState extends State<BillMethod> {
                 ),
                 child: SizedBox(
                   // width: 150,
-                  width: getWidth(context) * 0.35,
+                  width: getWidth(context) * 0.39,
                   child: const Text(
                     textAlign: TextAlign.center,
                     'Cancel',
@@ -87,7 +87,8 @@ class _BillMethodState extends State<BillMethod> {
                 ),
                 child: SizedBox(
                   // width: 150,
-                  width: getWidth(context) * 0.35,
+                  width: getWidth(context) * 0.39,
+
                   child: const Text(
                     textAlign: TextAlign.center,
                     'Submit',

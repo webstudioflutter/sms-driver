@@ -51,8 +51,9 @@ class Attendance extends StatelessWidget {
                           borderRadius: BorderRadius.circular(6.0),
                         ),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: getWidth(context) * 0.06,
+                          ),
                           height: getHeight(context) * 0.1,
                           child: const Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -75,8 +76,9 @@ class Attendance extends StatelessWidget {
                           borderRadius: BorderRadius.circular(6.0),
                         ),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: getWidth(context) * 0.06,
+                          ),
                           height: getHeight(context) * 0.1,
                           child: const Column(
                             mainAxisAlignment: MainAxisAlignment.center,

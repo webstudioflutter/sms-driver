@@ -83,7 +83,8 @@ class _LogServicingFormState extends State<LogServicingForm> {
                     ),
                   ),
                   child: SizedBox(
-                    width: getWidth(context) * 0.35,
+                    // width: 150,
+                    width: getWidth(context) * 0.39,
                     child: const Text(
                       textAlign: TextAlign.center,
                       'Cancel',
@@ -106,7 +107,8 @@ class _LogServicingFormState extends State<LogServicingForm> {
                     ),
                   ),
                   child: SizedBox(
-                    width: getWidth(context) * 0.35,
+                    // width: 150,
+                    width: getWidth(context) * 0.39,
                     child: const Text(
                       textAlign: TextAlign.center,
                       'Submit',
