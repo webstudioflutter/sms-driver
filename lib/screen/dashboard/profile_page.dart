@@ -269,7 +269,15 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             const SizedBox(width: 5),
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const TeacherLoginScreen(),
+                                  ),
+                                );
+                              },
                               child: const Icon(
                                 Icons.chevron_right,
                                 size: 35,
