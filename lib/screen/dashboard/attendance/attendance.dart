@@ -193,8 +193,8 @@ class Attendance extends StatelessWidget {
                           // ),
 
                           ClipOval(
-                            child: Image.network(
-                              'https://thumbs.wbm.im/pw/medium/6ee9298a0daeccde4df0d2df499bda96.avif',
+                            child: Image.asset(
+                              'assets/images/fake_profile.jpg',
                               width: getHeight(context) * 0.07,
                               height: getHeight(context) * 0.07,
                               fit: BoxFit.cover,
