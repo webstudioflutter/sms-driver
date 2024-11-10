@@ -92,8 +92,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             child: ClipOval(
-                              child: Image.network(
-                                'https://thumbs.wbm.im/pw/medium/6ee9298a0daeccde4df0d2df499bda96.avif',
+                              child: Image.asset(
+                                'assets/images/fake_profile.jpg',
                                 height: getHeight(context) * 0.14,
                                 width: getHeight(context) * 0.14,
                                 fit: BoxFit.cover,
