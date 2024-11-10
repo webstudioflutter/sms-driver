@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/core/widgets/FileUploadedWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -60,9 +61,10 @@ class _BillMethodState extends State<BillMethod> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const SizedBox(
-                  width: 150,
-                  child: Text(
+                child: SizedBox(
+                  // width: 150,
+                  width: getWidth(context) * 0.35,
+                  child: const Text(
                     textAlign: TextAlign.center,
                     'Cancel',
                     style: TextStyle(
@@ -83,9 +85,10 @@ class _BillMethodState extends State<BillMethod> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const SizedBox(
-                  width: 150,
-                  child: Text(
+                child: SizedBox(
+                  // width: 150,
+                  width: getWidth(context) * 0.35,
+                  child: const Text(
                     textAlign: TextAlign.center,
                     'Submit',
                     style: TextStyle(

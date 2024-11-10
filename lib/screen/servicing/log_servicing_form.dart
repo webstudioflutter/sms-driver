@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/core/widgets/FileUploadedWidget.dart';
 import 'package:driver_app/core/widgets/custom_app_bar.dart';
 import 'package:driver_app/screen/servicing/servicing_main.dart';
@@ -50,7 +51,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
     return Scaffold(
         appBar: customBar(
           context: context,
-          title: 'Bill Upload',
+          title: 'Servicing',
         ),
         body: ListView(
           padding: const EdgeInsets.all(16),
@@ -81,9 +82,9 @@ class _LogServicingFormState extends State<LogServicingForm> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const SizedBox(
-                    width: 150,
-                    child: Text(
+                  child: SizedBox(
+                    width: getWidth(context) * 0.35,
+                    child: const Text(
                       textAlign: TextAlign.center,
                       'Cancel',
                       style: TextStyle(
@@ -104,9 +105,9 @@ class _LogServicingFormState extends State<LogServicingForm> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const SizedBox(
-                    width: 150,
-                    child: Text(
+                  child: SizedBox(
+                    width: getWidth(context) * 0.35,
+                    child: const Text(
                       textAlign: TextAlign.center,
                       'Submit',
                       style: TextStyle(
