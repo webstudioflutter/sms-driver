@@ -21,7 +21,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final TextEditingController _searchController = TextEditingController();
+  // final TextEditingController _searchController = TextEditingController();
   final TextEditingController _routeController = TextEditingController();
 
   @override
@@ -34,11 +34,12 @@ class _HomePageState extends State<HomePage> {
       appBar: _appBarContent(context),
       body: Padding(
         padding: EdgeInsets.only(
-          left: 15.0,
-          right: 15.0,
-          top: MediaQuery.of(context).size.height * 0.09,
+          left: 16.0,
+          right: 16.0,
+          top: 60.0,
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _fuelLevelContent(),
@@ -66,7 +67,7 @@ class _HomePageState extends State<HomePage> {
         crossAxisCount: 2,
         crossAxisSpacing: 5.0,
         mainAxisSpacing: 5.0,
-        childAspectRatio: 1.6,
+        childAspectRatio: 1.65,
         children: [
           GestureDetector(
             onTap: () {
@@ -285,12 +286,12 @@ class _HomePageState extends State<HomePage> {
 
   PreferredSize _appBarContent(BuildContext context) {
     return PreferredSize(
-      preferredSize: const Size.fromHeight(270),
+      preferredSize: Size.fromHeight(250),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           Container(
-            height: MediaQuery.sizeOf(context).height * 0.28,
+            height: MediaQuery.sizeOf(context).height * 0.25,
             decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Color(0xff59CDDA), Color(0xff60BF8F)],
@@ -302,10 +303,12 @@ class _HomePageState extends State<HomePage> {
                     bottomRight: Radius.circular(40))),
           ),
           Positioned(
-            top: MediaQuery.sizeOf(context).height * 0.07,
+            top: MediaQuery.sizeOf(context).height * 0.035,
             left: 10,
             right: 10,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -315,7 +318,7 @@ class _HomePageState extends State<HomePage> {
                         color: Color(0xffcdeede),
                         borderRadius: BorderRadius.all(Radius.circular(25))),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         children: [
                           GestureDetector(
@@ -337,7 +340,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                SizedBox(height: getHeight(context) * 0.018),
+                SizedBox(height: 10),
                 SizedBox(
                   height: getHeight(context) * 0.17,
                   child: Card(
@@ -368,7 +371,7 @@ class _HomePageState extends State<HomePage> {
                                 'Lal Bahadur Ojha',
                                 style: TextStyle(
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w400,
                                   color: Color(0xff221F1F),
                                   height: 1.2,
                                 ),

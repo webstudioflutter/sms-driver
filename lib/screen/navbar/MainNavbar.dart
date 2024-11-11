@@ -40,11 +40,31 @@ class _MainNavbarState extends State<MainNavbar> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildNavItem(Assets.svgImages.home2, "Home", 0),
-            _buildNavItem(Assets.svgImages.searchnormal, "Search", 1),
+            _buildNavItem(
+              Assets.svgImages.homecopy,
+              "Home",
+              0,
+              Assets.svgImages.home2,
+            ),
+            _buildNavItem(
+              Assets.svgImages.searchnormal,
+              "Search",
+              1,
+              Assets.svgImages.searchnormal,
+            ),
             const SizedBox(width: 20),
-            _buildNavItem(Assets.svgImages.Component3, "Notification", 3),
-            _buildNavItem(Assets.svgImages.user, "Profile", 4),
+            _buildNavItem(
+              Assets.svgImages.Component3,
+              "Notification",
+              3,
+              Assets.svgImages.notificationcopy,
+            ),
+            _buildNavItem(
+              Assets.svgImages.user,
+              "Profile",
+              4,
+              Assets.svgImages.user2,
+            ),
           ],
         ),
       ),
@@ -74,9 +94,11 @@ class _MainNavbarState extends State<MainNavbar> {
               ),
             ),
             SvgPicture.asset(
-              Assets.svgImages.location,
+              _selectedIndex == 2
+                  ? Assets.svgImages.Component4
+                  : Assets.svgImages.location,
               height: 25,
-              color: _selectedIndex == 2 ? Colors.green : Colors.white,
+              color: Colors.white,
             ),
           ],
         ),
@@ -84,7 +106,8 @@ class _MainNavbarState extends State<MainNavbar> {
     );
   }
 
-  Widget _buildNavItem(String svgAsset, String label, int index) {
+  Widget _buildNavItem(
+      String svgAsset, String label, int index, String svgAsset2) {
     bool isSelected = index == _selectedIndex;
     return GestureDetector(
       onTap: () => _onItemTapped(index),
@@ -94,7 +117,7 @@ class _MainNavbarState extends State<MainNavbar> {
           mainAxisSize: MainAxisSize.min,
           children: [
             SvgPicture.asset(
-              svgAsset,
+              isSelected ? svgAsset2 : svgAsset,
               height: 22,
               color: isSelected ? Colors.green : const Color(0xff516B5E),
             ),

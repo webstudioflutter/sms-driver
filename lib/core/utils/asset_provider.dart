@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import '../constants/constant_path.dart';
 
 class _AssetsImagesGen {
@@ -16,7 +18,6 @@ class _AssetsSvgImagesGen {
   String get user => '$kSvgImagesPath/user.svg';
   String get home2 => '$kSvgImagesPath/home-2.svg';
   String get searchnormal => '$kSvgImagesPath/search-normal.svg';
-  String get Component4 => '$kSvgImagesPath/Component4.svg';
   String get notification => '$kSvgImagesPath/notification.svg';
   String get notification2 => '$kSvgImagesPath/notification2.svg';
   String get location => '$kSvgImagesPath/location.svg';
@@ -32,6 +33,10 @@ class _AssetsSvgImagesGen {
   String get servicing => '$kSvgImagesPath/servicing.svg';
   String get billupload => '$kSvgImagesPath/bill-upload.svg';
   String get studentlist => '$kSvgImagesPath/student-list.svg';
+  String get notificationcopy => '$kSvgImagesPath/notificationcopy.svg';
+  String get user2 => '$kSvgImagesPath/user2.svg';
+  String get homecopy => '$kSvgImagesPath/homecopy.svg';
+  String get Component4 => '$kSvgImagesPath/Component 4.svg';
 }
 
 class Assets {
