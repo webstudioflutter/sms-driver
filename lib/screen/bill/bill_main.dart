@@ -74,7 +74,7 @@ class _BillMainState extends State<BillMain> {
                         const Text(
                           'History',
                           style: TextStyle(
-                            fontSize: 1,
+                            fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
