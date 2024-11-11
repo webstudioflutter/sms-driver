@@ -7,6 +7,7 @@ import 'package:driver_app/screen/dashboard/home_drawer.dart';
 import 'package:driver_app/screen/dashboard/report-issue/report_issue.dart';
 import 'package:driver_app/screen/dashboard/student-list/student_list.dart';
 import 'package:driver_app/screen/fuel/fuel_tracking.dart';
+import 'package:driver_app/screen/fuel/location/bus_route_main.dart';
 import 'package:driver_app/screen/servicing/servicing_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -487,8 +488,11 @@ class _HomePageState extends State<HomePage> {
                           height: MediaQuery.sizeOf(context).height * 0.03),
                       GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pop();
-                          _openModalBottomSheetForPickDrop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const BusRouteMain()),
+                          );
                         },
                         child: Container(
                           margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -506,7 +510,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
