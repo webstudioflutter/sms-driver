@@ -49,7 +49,8 @@ PreferredSize customBar({
 }) {
   return PreferredSize(
     preferredSize: Size.fromHeight(MediaQuery.sizeOf(context).height * 0.14),
-    child: Stack(
+    child: 
+    Stack(
       clipBehavior: Clip.none,
       children: [
         Container(
@@ -121,5 +122,6 @@ PreferredSize customBar({
         ),
       ],
     ),
+  
   );
 }

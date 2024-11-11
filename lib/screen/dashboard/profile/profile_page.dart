@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/core/widgets/page_title_bar.dart';
+import 'package:driver_app/screen/dashboard/profile/my_account.dart';
 import 'package:driver_app/screen/login_and_logout/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -157,44 +158,49 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 20.0),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset('assets/svg_images/profile.svg'),
-                          const SizedBox(width: 10),
-                          SizedBox(
-                            width: getWidth(context) * 0.6,
-                            child: const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'General Information',
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                    overflow: TextOverflow.ellipsis,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MyAccount()));
+                        },
+                        child: Row(
+                          children: [
+                            SvgPicture.asset('assets/svg_images/profile.svg'),
+                            const SizedBox(width: 10),
+                            SizedBox(
+                              width: getWidth(context) * 0.6,
+                              child: const Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'General Information',
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  'View your personal and work details',
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                              ],
+                                  Text(
+                                    'View your personal and work details',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const Icon(Icons.warning, color: Colors.red),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: () {},
-                            child: const Icon(
+                            const Icon(Icons.warning, color: Colors.red),
+                            const Spacer(),
+                            const Icon(
                               Icons.chevron_right,
                               size: 35,
                               color: Color(0xff999999),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     Padding(
