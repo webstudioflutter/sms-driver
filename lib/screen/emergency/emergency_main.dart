@@ -196,12 +196,12 @@ class EmergencyMain extends StatelessWidget {
                 crossAxisSpacing: 16,
                 children: const [
                   EmergencyOption(
-                      svgPath: 'assets/svg_images/medical.svg',
+                      svgPath: 'assets/images/medical.png',
                       label: 'Medical Emergency'),
                   EmergencyOption(
-                      svgPath: 'assets/svg_images/bill.svg', label: 'Accident'),
+                      svgPath: 'assets/images/accident.png', label: 'Accident'),
                   EmergencyOption(
-                      svgPath: 'assets/svg_images/fire.svg', label: 'Fire'),
+                      svgPath: 'assets/images/fire.png', label: 'Fire'),
                   EmergencyOption(
                       svgPath: 'assets/svg_images/weather.svg',
                       label: 'Severe Weather'),

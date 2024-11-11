@@ -352,10 +352,10 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           ClipOval(
-                            child: Image.network(
-                              'https://thumbs.wbm.im/pw/medium/6ee9298a0daeccde4df0d2df499bda96.avif',
-                              width: getHeight(context) * 0.11,
-                              height: getHeight(context) * 0.11,
+                            child: Image.asset(
+                              'assets/images/fake_profile.jpg',
+                              height: 100,
+                              width: 100,
                               fit: BoxFit.cover,
                             ),
                           ),

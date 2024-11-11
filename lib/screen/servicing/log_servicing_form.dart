@@ -51,7 +51,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
     return Scaffold(
         appBar: customBar(
           context: context,
-          title: 'Bill Upload',
+          title: 'Servicing',
         ),
         body: ListView(
           padding: const EdgeInsets.all(16),
