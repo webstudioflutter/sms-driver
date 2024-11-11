@@ -1,5 +1,6 @@
 import 'package:driver_app/core/widgets/custom_app_bar.dart';
 import 'package:driver_app/screen/location/list-method.dart';
+import 'package:driver_app/screen/location/map_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -85,7 +86,7 @@ class _BusRouteMainState extends State<BusRouteMain> {
               ),
               Expanded(
                 child: TabBarView(
-                  children: [ListMethod()],
+                  children: [AddressList(), const MapMethod()],
                 ),
               ),
             ],
