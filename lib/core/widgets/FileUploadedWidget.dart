@@ -27,46 +27,40 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
         actionsPadding:
             const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
         actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 50.0),
-            child: TextButton(
-              onPressed: () async {
-                Navigator.pop(context);
-                final pickedFile =
-                    await ImagePicker().pickImage(source: ImageSource.camera);
-                if (pickedFile != null) {
-                  _startFileUpload(File(pickedFile.path), pickedFile.name);
-                }
-              },
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset('assets/svg_images/take_photo.svg'),
-                  const SizedBox(width: 8),
-                  const Text('Take Photograph'),
-                ],
-              ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              final pickedFile =
+                  await ImagePicker().pickImage(source: ImageSource.camera);
+              if (pickedFile != null) {
+                _startFileUpload(File(pickedFile.path), pickedFile.name);
+              }
+            },
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset('assets/svg_images/take_photo.svg'),
+                const SizedBox(width: 8),
+                const Text('Take Photograph'),
+              ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 50.0),
-            child: TextButton(
-              onPressed: () async {
-                Navigator.pop(context);
-                final pickedFile =
-                    await ImagePicker().pickImage(source: ImageSource.gallery);
-                if (pickedFile != null) {
-                  _startFileUpload(File(pickedFile.path), pickedFile.name);
-                }
-              },
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset('assets/svg_images/select_album.svg'),
-                  const SizedBox(width: 8),
-                  const Text('Select from album'),
-                ],
-              ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              final pickedFile =
+                  await ImagePicker().pickImage(source: ImageSource.gallery);
+              if (pickedFile != null) {
+                _startFileUpload(File(pickedFile.path), pickedFile.name);
+              }
+            },
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset('assets/svg_images/select_album.svg'),
+                const SizedBox(width: 8),
+                const Text('Select from album'),
+              ],
             ),
           ),
         ],
