@@ -1,21 +1,119 @@
+// lib/attendance.dart
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/core/widgets/page_title_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class Attendance extends StatelessWidget {
+class Attendance extends StatefulWidget {
   const Attendance({super.key});
+
+  @override
+  _AttendanceState createState() => _AttendanceState();
+}
+
+class _AttendanceState extends State<Attendance> {
+  Map<String, List<Map<String, String>>> contacts = {
+    'A': [
+      {'name': 'Aakash Kunwar', 'class': '5A', 'location': 'Kathmandu'},
+      {'name': 'Aarohi', 'class': '4B', 'location': 'Lalitpur'},
+      {'name': 'Aashish Bhai', 'class': '6C', 'location': 'Bhaktapur'},
+      {'name': 'Amit Poudel', 'class': '3A', 'location': 'Pokhara'},
+      {'name': 'Arun Bhai', 'class': '5B', 'location': 'Biratnagar'},
+    ],
+    'B': [
+      {'name': 'Bage', 'class': '4A', 'location': 'Chitwan'},
+      {'name': 'Bed', 'class': '7A', 'location': 'Janakpur'},
+      {'name': 'Bharat Fupaju', 'class': '5C', 'location': 'Hetauda'},
+      {'name': 'Bharat Sathi', 'class': '6A', 'location': 'Dharan'},
+    ],
+    'C': [
+      {'name': 'Chandan', 'class': '6B', 'location': 'Mahendranagar'},
+      {'name': 'Chandravardana', 'class': '7B', 'location': 'Nagarjuna'},
+      {'name': 'Chandravani', 'class': '3B', 'location': 'Rameshwaram'},
+    ],
+    'D': [
+      {'name': 'Dilip', 'class': '2A', 'location': 'Butwal'},
+      {'name': 'Divya', 'class': '3C', 'location': 'Nepalgunj'},
+      {'name': 'Dinesh', 'class': '4C', 'location': 'Rajbirajanagar'},
+    ],
+  };
+
+  bool sortByName = false;
+  bool sortByLocation = false;
+
+  void sortContacts() {
+    contacts.forEach((letter, namesList) {
+      if (sortByName) {
+        namesList.sort((a, b) => a['name']!.compareTo(b['name']!));
+      } else if (sortByLocation) {
+        namesList.sort((a, b) => a['location']!.compareTo(b['location']!));
+      }
+    });
+  }
+
+  void showSortDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Align(
+            alignment: Alignment.center,
+            child: Text('Sort By'),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CheckboxListTile(
+                title: const Text('By Name'),
+                value: sortByName,
+                onChanged: (bool? value) {
+                  setState(() {
+                    sortByName = value ?? false;
+                    sortByLocation =
+                        false; // Uncheck location if name is selected
+                    sortContacts();
+                  });
+                  Navigator.of(context).pop();
+                },
+              ),
+              CheckboxListTile(
+                title: const Text('By Location'),
+                value: sortByLocation,
+                onChanged: (bool? value) {
+                  setState(() {
+                    sortByLocation = value ?? false;
+                    sortByName = false; // Uncheck name if location is selected
+                    sortContacts();
+                  });
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(MediaQuery.sizeOf(context).height * 0.3),
+        preferredSize:
+            Size.fromHeight(MediaQuery.sizeOf(context).height * 0.29),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
             Container(
-              height: MediaQuery.sizeOf(context).height * 0.3,
+              height: MediaQuery.sizeOf(context).height * 0.29,
               decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Color(0xff6bccc1), Color(0xff6fcf99)],
@@ -108,8 +206,6 @@ class Attendance extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: getHeight(context) * 0.02),
-
-            ///Edit and Sort
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -169,130 +265,85 @@ class Attendance extends StatelessWidget {
             ),
             SizedBox(height: getHeight(context) * 0.04),
             Expanded(
-              child: ListView.separated(
-                itemCount: 10,
+              child: ListView.builder(
+                itemCount: contacts.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5.0, vertical: 8),
-                      child: Row(
-                        children: [
-                          // Container(
-                          //   decoration: const BoxDecoration(
-                          //     shape: BoxShape.circle,
-                          //   ),
-                          //   child: ClipOval(
-                          //     child: Image.asset(
-                          //       'assets/images/fake_profile.jpg',
-                          //       height: getHeight(context) * 0.07,
-                          //       width: getHeight(context) * 0.07,
-                          //       fit: BoxFit.cover,
-                          //     ),
-                          //   ),
-                          // ),
-
-                          ClipOval(
-                            child: Image.asset(
-                              'assets/images/fake_profile.jpg',
-                              width: getHeight(context) * 0.07,
-                              height: getHeight(context) * 0.07,
-                              fit: BoxFit.cover,
-                            ),
+                  String letter = contacts.keys.elementAt(index);
+                  List<Map<String, String>> names = contacts[letter]!;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          letter,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
                           ),
-
-                          SizedBox(width: getHeight(context) * 0.01),
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Sahadev Kunwar',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                'Class: 5A',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xff345326),
-                                ),
-                              ),
-                              Text(
-                                'Location: Kathmandu',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xff345326),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          SvgPicture.asset('assets/svg_images/present.svg'),
-                          SizedBox(width: getHeight(context) * 0.01),
-                          SvgPicture.asset('assets/svg_images/absent.svg'),
-                        ],
+                        ),
                       ),
-                    ),
+                      ...names.map((contact) => Card(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5.0, vertical: 8),
+                              child: Row(
+                                children: [
+                                  ClipOval(
+                                    child: Image.asset(
+                                      'assets/images/fake_profile.jpg',
+                                      width: getHeight(context) * 0.07,
+                                      height: getHeight(context) * 0.07,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  SizedBox(width: getHeight(context) * 0.01),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        contact['name']!,
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Class: ${contact['class']}',
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Color(0xff345326),
+                                        ),
+                                      ),
+                                      Text(
+                                        'Location: ${contact['location']}',
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Color(0xff345326),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const Spacer(),
+                                  SvgPicture.asset(
+                                      'assets/svg_images/present.svg'),
+                                  SizedBox(width: getHeight(context) * 0.01),
+                                  SvgPicture.asset(
+                                      'assets/svg_images/absent.svg'),
+                                ],
+                              ),
+                            ),
+                          )),
+                      SizedBox(height: getHeight(context) * 0.015),
+                    ],
                   );
-                },
-                separatorBuilder: (context, index) {
-                  return SizedBox(height: getHeight(context) * 0.015);
                 },
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  void showSortDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Align(
-            alignment: Alignment.center,
-            child: Text('Sort By'),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CheckboxListTile(
-                title: const Text('By Name'),
-                value: true, // Set to true for demonstration
-                onChanged: (bool? value) {
-                  // Handle change
-                },
-              ),
-              CheckboxListTile(
-                title: const Text('By Location'),
-                value: false,
-                onChanged: (bool? value) {
-                  // Handle change
-                },
-              ),
-              CheckboxListTile(
-                title: const Text('By Name'),
-                value: false,
-                onChanged: (bool? value) {
-                  // Handle change
-                },
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
     );
   }
 }
