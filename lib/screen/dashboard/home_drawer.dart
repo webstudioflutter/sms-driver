@@ -111,8 +111,8 @@ class HomePageDrawer extends StatelessWidget {
   Widget _buildDrawerOptions(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.only(left: 8.0),
-      children: const [
-        DrawerCard(
+      children: [
+        const DrawerCard(
           svgAsset: 'assets/svg_images/drawer/home.svg',
           imageColor: Colors.white,
           label: 'Home',
@@ -123,32 +123,32 @@ class HomePageDrawer extends StatelessWidget {
           label: 'Attendance',
           destination: Attendance(),
         ),
-        DrawerCard(
+        const DrawerCard(
           svgAsset: 'assets/svg_images/location.svg',
           label: 'Live Overview',
           // destination: AssignmentScreen(),
         ),
-        DrawerCard(
+        const DrawerCard(
           svgAsset: 'assets/svg_images/drawer/maintenance.svg',
           label: 'Maintenance',
           // destination: AssignmentScreen(),
         ),
-        DrawerCard(
+        const DrawerCard(
           svgAsset: 'assets/svg_images/drawer/fuel-tracking.svg',
           label: 'Fuel Tracking',
           destination: FuelTrackingMain(),
         ),
-        DrawerCard(
+        const DrawerCard(
           svgAsset: 'assets/svg_images/drawer/servicing.svg',
           label: 'Servicing',
           destination: ServicingMain(),
         ),
-        DrawerCard(
+        const DrawerCard(
           svgAsset: 'assets/svg_images/drawer/servicing.svg',
           label: 'Bill Upload',
           destination: BillMain(),
         ),
-        DrawerCard(
+        const DrawerCard(
           svgAsset: 'assets/svg_images/drawer/quick-call.svg',
           label: 'Quick Call',
           // destination: AssignmentScreen(),
