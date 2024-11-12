@@ -424,7 +424,7 @@ class _LiveTrackingMapPageState extends State<LiveTrackingMapPage> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    _showConfirmationDialog();
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(16),
@@ -471,6 +471,52 @@ class _LiveTrackingMapPageState extends State<LiveTrackingMapPage> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Are you sure?',
+            textAlign: TextAlign.center,
+          ),
+          content: const Text(
+            'Are you sure you want to set this location as a pick-up point?',
+            textAlign: TextAlign.center,
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                backgroundColor: const Color(0xffdddddd),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child:
+                  const Text('Cancel', style: TextStyle(color: Colors.black)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                backgroundColor: const Color(0xff60bf8f),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child:
+                  const Text('Confirm', style: TextStyle(color: Colors.white)),
+              onPressed: () {},
+            ),
+          ],
+        );
+      },
     );
   }
 }

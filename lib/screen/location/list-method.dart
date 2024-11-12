@@ -343,7 +343,7 @@ class _AddressListState extends State<AddressList> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const NavigateLocation()),
+                                              NavigateLocation()),
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
