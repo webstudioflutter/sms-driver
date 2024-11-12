@@ -98,8 +98,8 @@
 // }
 
 import 'package:driver_app/core/widgets/custom_app_bar.dart';
-import 'package:driver_app/screen/fuel/location/list-method.dart';
-import 'package:driver_app/screen/fuel/location/map.dart';
+import 'package:driver_app/screen/location/list-method.dart';
+import 'package:driver_app/screen/location/map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

@@ -194,7 +194,7 @@
 // }
 
 import 'package:driver_app/core/utils/util.dart';
-import 'package:driver_app/screen/fuel/location/Navigate_location.dart';
+import 'package:driver_app/screen/location/Navigate_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -343,7 +343,7 @@ class _AddressListState extends State<AddressList> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const RouteMapScreen()),
+                                              const NavigateLocation()),
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(

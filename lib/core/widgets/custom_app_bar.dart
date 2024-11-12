@@ -49,8 +49,7 @@ PreferredSize customBar({
 }) {
   return PreferredSize(
     preferredSize: Size.fromHeight(MediaQuery.sizeOf(context).height * 0.14),
-    child: 
-    Stack(
+    child: Stack(
       clipBehavior: Clip.none,
       children: [
         Container(
@@ -74,7 +73,7 @@ PreferredSize customBar({
           child: Container(
             height: 50,
             decoration: const BoxDecoration(
-              color: Color(0xffF5FFF5),
+              color: Color(0xffD8F3E1),
               borderRadius: BorderRadius.all(Radius.circular(25)),
             ),
             child: Padding(
@@ -122,6 +121,5 @@ PreferredSize customBar({
         ),
       ],
     ),
-  
   );
 }
