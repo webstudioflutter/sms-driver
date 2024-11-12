@@ -6,11 +6,30 @@ import 'package:driver_app/screen/fuel/fuel_tracking.dart';
 import 'package:driver_app/screen/servicing/servicing_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class HomePageDrawer extends StatelessWidget {
+class HomePageDrawer extends StatefulWidget {
   const HomePageDrawer({
     super.key,
   });
+
+  @override
+  State<HomePageDrawer> createState() => _HomePageDrawerState();
+}
+
+class _HomePageDrawerState extends State<HomePageDrawer> {
+  Future<void> _makePhoneCall() async {
+    final Uri phoneUri = Uri(
+      scheme: 'tel',
+      path: '+1234567890', // Replace with your desired phone number
+    );
+
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(phoneUri);
+    } else {
+      throw 'Could not launch $phoneUri';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,22 +106,25 @@ class HomePageDrawer extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         color: Colors.white,
       ),
-      child: const Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.logout_outlined,
-              color: Color(0xfff24b3f),
-            ),
-            SizedBox(width: 8),
-            Text(
-              'Logout',
-              style: TextStyle(
+      child: Center(
+        child: GestureDetector(
+          onTap: () {},
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.logout_outlined,
                 color: Color(0xfff24b3f),
               ),
-            ),
-          ],
+              SizedBox(width: 8),
+              Text(
+                'Logout',
+                style: TextStyle(
+                  color: Color(0xfff24b3f),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -148,10 +170,10 @@ class HomePageDrawer extends StatelessWidget {
           label: 'Bill Upload',
           destination: BillMain(),
         ),
-        const DrawerCard(
+        DrawerCard(
           svgAsset: 'assets/svg_images/drawer/quick-call.svg',
           label: 'Quick Call',
-          // destination: AssignmentScreen(),
+          onPressed: _makePhoneCall,
         ),
       ],
     );
@@ -164,6 +186,7 @@ class DrawerCard extends StatelessWidget {
   final Color? badgeColor;
   final Color? imageColor;
   final Widget? destination;
+  final VoidCallback? onPressed;
 
   const DrawerCard({
     super.key,
@@ -172,6 +195,7 @@ class DrawerCard extends StatelessWidget {
     this.destination,
     this.badgeColor,
     this.imageColor = Colors.white,
+    this.onPressed,
   });
 
   @override
@@ -188,11 +212,16 @@ class DrawerCard extends StatelessWidget {
             color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
       ),
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => destination ?? const SizedBox.shrink()),
-        );
+        if (onPressed != null) {
+          onPressed!();
+        } else if (destination != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => destination!,
+            ),
+          );
+        }
       },
     );
   }

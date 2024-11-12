@@ -271,7 +271,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      const TeacherLoginScreen(),
+                                      const DriverLoginScreen(),
                                 ),
                               );
                             },
@@ -478,7 +478,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const TeacherLoginScreen()));
+                        builder: (context) => const DriverLoginScreen()));
               },
             ),
           ],

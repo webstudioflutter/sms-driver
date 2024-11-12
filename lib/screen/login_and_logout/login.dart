@@ -2,58 +2,70 @@ import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/screen/navbar/MainNavbar.dart';
 import 'package:flutter/material.dart';
 
-class TeacherLoginScreen extends StatelessWidget {
-  const TeacherLoginScreen({super.key});
+class DriverLoginScreen extends StatefulWidget {
+  const DriverLoginScreen({super.key});
+
+  @override
+  State<DriverLoginScreen> createState() => _DriverLoginScreenState();
+}
+
+class _DriverLoginScreenState extends State<DriverLoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool isPasswordVisible = false;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[800],
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xff6bccc1), Color(0xff6fcf99)],
-            begin: Alignment.topLeft,
-            end: Alignment.topRight,
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xff6bccc1), Color(0xff6fcf99)],
+              begin: Alignment.topLeft,
+              end: Alignment.topRight,
+            ),
           ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/school_bus.png',
-              colorBlendMode: BlendMode.color,
-              height: 250,
-            ),
-            const SizedBox(height: 10),
-
-            const Text(
-              'School Bus Driver Login',
-              style: TextStyle(
-                fontSize: 28,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/school_bus.png',
+                colorBlendMode: BlendMode.color,
+                height: getHeight(context) * 0.35,
               ),
-            ),
-            const SizedBox(height: 10),
-            // Subtitle
-            const Text(
-              'Already registered? Log in here',
-              style: TextStyle(
-                color: Color(0xeeffffff),
-                fontSize: 16,
+              SizedBox(height: getHeight(context) * 0.01),
+              const Text(
+                'School Bus Driver Login',
+                style: TextStyle(
+                  fontSize: 28,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            // const SizedBox(height: 30),
-            const Spacer(),
-
-            Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8),
-              child: Container(
-                // height: getHeight(context) * 0.5,
-                padding: const EdgeInsets.only(top: 64, left: 26, right: 26),
-                // margin: const EdgeInsets.symmetric(horizontal: 24),
+              SizedBox(height: getHeight(context) * 0.01),
+              const Text(
+                'Already registered? Log in here',
+                style: TextStyle(
+                  color: Color(0xeeffffff),
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(height: getHeight(context) * 0.03),
+              Container(
+                padding: EdgeInsets.only(
+                  top: getHeight(context) * 0.04,
+                  left: getWidth(context) * 0.08,
+                  right: getWidth(context) * 0.08,
+                ),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -64,6 +76,9 @@ class TeacherLoginScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     TextField(
+                      controller: emailController,
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         labelText: 'Email',
                         prefixIcon: const Icon(Icons.email),
@@ -73,24 +88,32 @@ class TeacherLoginScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: getHeight(context) * 0.02),
-
                     TextField(
+                      controller: passwordController,
+                      obscureText: !isPasswordVisible,
                       decoration: InputDecoration(
                         labelText: 'Password',
                         prefixIcon: const Icon(Icons.lock),
-                        suffixIcon: const Icon(Icons.visibility),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              isPasswordVisible = !isPasswordVisible;
+                            });
+                          },
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      obscureText: true,
                     ),
                     SizedBox(height: getHeight(context) * 0.04),
-
-                    // Login button
                     ElevatedButton(
                       onPressed: () {
-                        // const MainNavbar();
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -107,9 +130,6 @@ class TeacherLoginScreen extends StatelessWidget {
                           style: TextStyle(fontSize: 18, color: Colors.white)),
                     ),
                     SizedBox(height: getHeight(context) * 0.02),
-
-                    // Back button
-
                     TextButton.icon(
                       onPressed: () {
                         Navigator.push(
@@ -126,8 +146,8 @@ class TeacherLoginScreen extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
