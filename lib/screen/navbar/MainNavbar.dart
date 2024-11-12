@@ -1,7 +1,7 @@
 import 'package:driver_app/core/utils/asset_provider.dart';
 import 'package:driver_app/screen/dashboard/home_page.dart';
 import 'package:driver_app/screen/dashboard/profile/profile_page.dart';
-import 'package:driver_app/screen/fuel/location/bus_route_main.dart';
+import 'package:driver_app/screen/location/bus_route_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

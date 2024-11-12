@@ -210,9 +210,10 @@
 import 'dart:async';
 
 import 'package:driver_app/core/utils/util.dart';
-import 'package:driver_app/screen/dashboard/home_page.dart';
+import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:latlong2/latlong.dart';
 
 class LiveTrackingMapPage extends StatefulWidget {
@@ -289,9 +290,8 @@ class _LiveTrackingMapPageState extends State<LiveTrackingMapPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Map is the background
           FlutterMap(
-            mapController: mapController, // Set the map controller
+            mapController: mapController,
             options: MapOptions(
               initialCenter: busLocation,
               initialZoom: 14.5,
@@ -357,43 +357,55 @@ class _LiveTrackingMapPageState extends State<LiveTrackingMapPage> {
           ),
           Positioned(
             top: 50,
+            left: 10,
+            right: 10,
             child: Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    height: 20,
+                    height: 50,
                     width: width,
                     decoration: const BoxDecoration(
-                      color: Colors.white,
+                      color: Color(0xff9BDCB9),
                       borderRadius: BorderRadius.all(Radius.circular(25)),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                          icon:
-                              const Icon(Icons.arrow_back, color: Colors.white),
+                          icon: const Icon(Icons.arrow_back,
+                              color: Color(0xff155037)),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
                         ),
                         const Text(
-                          "Emergency",
+                          "Route Map",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xff12422e),
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.close, color: Colors.white),
-                          onPressed: () {
+                        GestureDetector(
+                          onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const HomePage()));
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const EmergencyMain(),
+                              ),
+                            );
                           },
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(right: 12.0, bottom: 4),
+                            child: SvgPicture.asset(
+                              'assets/svg_images/notification.svg',
+                              height: 20,
+                              width: 20,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -412,7 +424,7 @@ class _LiveTrackingMapPageState extends State<LiveTrackingMapPage> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    _showConfirmationDialog();
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(16),
@@ -459,6 +471,52 @@ class _LiveTrackingMapPageState extends State<LiveTrackingMapPage> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Are you sure?',
+            textAlign: TextAlign.center,
+          ),
+          content: const Text(
+            'Are you sure you want to set this location as a pick-up point?',
+            textAlign: TextAlign.center,
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                backgroundColor: const Color(0xffdddddd),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child:
+                  const Text('Cancel', style: TextStyle(color: Colors.black)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                backgroundColor: const Color(0xff60bf8f),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child:
+                  const Text('Confirm', style: TextStyle(color: Colors.white)),
+              onPressed: () {},
+            ),
+          ],
+        );
+      },
     );
   }
 }
