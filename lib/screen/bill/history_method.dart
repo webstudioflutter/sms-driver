@@ -70,6 +70,7 @@ class _HistoryMethodState extends State<HistoryMethod> {
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
+                  isExpanded: true,
                   items: billTypes.map((type) {
                     return DropdownMenuItem(
                       value: type,
