@@ -390,27 +390,61 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               SizedBox(height: getHeight(context) * 0.01),
-                              InkWell(
-                                onTap: () {
-                                  _openModalBottomSheetForStartRoute(context);
+                              // InkWell(
+                              //   onTap: () {
+                              //     Navigator.push(
+                              //       context,
+                              //       MaterialPageRoute(
+                              //           builder: (context) =>
+                              //               const BusRouteMain()),
+                              //     );
+                              //   },
+                              //   child: Container(
+                              //     width: getWidth(context) * 0.4,
+                              //     height: 40,
+                              //     padding: const EdgeInsets.symmetric(
+                              //         vertical: 8, horizontal: 12),
+                              //     decoration: BoxDecoration(
+                              //       color: const Color(0xffff6448),
+                              //       borderRadius: BorderRadius.circular(12),
+                              //     ),
+                              //     child: const Center(
+                              //       child: Text(
+                              //         'Start Route',
+                              //         style: TextStyle(
+                              //             color: Color(0xffFEFEFE),
+                              //             fontSize: 16,
+                              //             fontWeight: FontWeight.w400),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const BusRouteMain()),
+                                  );
                                 },
-                                child: Container(
-                                  width: getWidth(context) * 0.4,
-                                  height: 40,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 12),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xffff6448),
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(12),
+                                  backgroundColor: const Color(0xffFF6448),
+                                  shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  child: const Center(
-                                    child: Text(
-                                      'Start Route',
-                                      style: TextStyle(
-                                          color: Color(0xffFEFEFE),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400),
-                                    ),
+                                ),
+                                child: SizedBox(
+                                  // width: getWidth(context) * 0.35,
+                                  width: getWidth(context) * 0.4,
+                                  child: const Text(
+                                    textAlign: TextAlign.center,
+                                    'Start Route',
+                                    style: TextStyle(
+                                        color: Color(0xffFEFEFE),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400),
                                   ),
                                 ),
                               ),
@@ -491,11 +525,11 @@ class _HomePageState extends State<HomePage> {
                           height: MediaQuery.sizeOf(context).height * 0.03),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const BusRouteMain()),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) => const BusRouteMain()),
+                          // );
                         },
                         child: Container(
                           margin: const EdgeInsets.symmetric(horizontal: 20),

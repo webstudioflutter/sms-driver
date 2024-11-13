@@ -149,18 +149,20 @@ class _BillMethodState extends State<BillMethod> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            const Text(
-              'Bill Date',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(width: 8),
-            SvgPicture.asset('assets/svg_images/bill_date.svg'),
-          ],
+        Container(
+          child: Row(
+            children: [
+              const Text(
+                'Bill Date',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(width: 8),
+              SvgPicture.asset('assets/svg_images/bill_date.svg'),
+            ],
+          ),
         ),
         const SizedBox(height: 5),
         InkWell(
@@ -172,7 +174,13 @@ class _BillMethodState extends State<BillMethod> {
               ),
               suffixIcon: const Icon(Icons.calendar_month_outlined),
             ),
-            child: Text(_selectedDate),
+            child: Text(
+              _selectedDate,
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w500),
+            ),
           ),
         ),
       ],

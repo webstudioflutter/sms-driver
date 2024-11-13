@@ -1,3 +1,4 @@
+import 'package:driver_app/core/utils/util.dart';
 import 'package:flutter/material.dart';
 
 class HistoryMethod extends StatefulWidget {
@@ -65,22 +66,35 @@ class _HistoryMethodState extends State<HistoryMethod> {
           child: Row(
             children: [
               Expanded(
-                child: DropdownButtonFormField<String>(
-                  value: selectedBillType,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                child: Container(
+                  height: getHeight(context) * 0.08,
+                  child: DropdownButtonFormField<String>(
+                    value: selectedBillType,
+                    hint:
+                        const Text('Bill Type', style: TextStyle(fontSize: 14)),
+                    decoration: const InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                    ),
+                    items: billTypes.map((type) {
+                      return DropdownMenuItem(
+                        value: type,
+                        child: Text(
+                          type,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedBillType = value;
+                      });
+                    },
                   ),
-                  items: billTypes.map((type) {
-                    return DropdownMenuItem(
-                      value: type,
-                      child: Text(type),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedBillType = value;
-                    });
-                  },
                 ),
               ),
               const SizedBox(width: 8),
@@ -99,32 +113,48 @@ class _HistoryMethodState extends State<HistoryMethod> {
                       });
                     }
                   },
-                  child: InputDecorator(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          selectedDate == null
-                              ? 'Choose Date'
-                              : formatDate(selectedDate!),
-                          style: const TextStyle(color: Colors.black),
+                  child: Container(
+                    height: getHeight(context) * 0.08,
+                    child: InputDecorator(
+                      decoration: const InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
                         ),
-                        Visibility(
-                          visible: selectedDate != null,
-                          // replacement: const SizedBox(width: 48),
-                          child: IconButton(
-                            icon: const Icon(Icons.clear, color: Colors.grey),
-                            onPressed: () {
-                              setState(() {
-                                selectedDate = null;
-                              });
-                            },
+                        border: OutlineInputBorder(),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            selectedDate == null
+                                ? 'Choose Date'
+                                : formatDate(selectedDate!),
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 16),
                           ),
-                        ),
-                      ],
+                          Visibility(
+                            visible: selectedDate == null,
+                            child: Icon(
+                              Icons.calendar_month_outlined,
+                              color: Colors.grey,
+                              size: 24.0,
+                            ),
+                          ),
+                          if (selectedDate != null)
+                            IconButton(
+                              icon: const Icon(
+                                Icons.clear,
+                                color: Colors.grey,
+                                size: 24.0,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  selectedDate = null;
+                                });
+                              },
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -153,7 +183,8 @@ class _HistoryMethodState extends State<HistoryMethod> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.only(
+                        left: 16, right: 16, top: 8, bottom: 8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -185,7 +216,6 @@ class _HistoryMethodState extends State<HistoryMethod> {
                               fontSize: 14,
                               fontWeight: FontWeight.w500),
                         ),
-                        const SizedBox(height: 20),
                       ],
                     ),
                   ),

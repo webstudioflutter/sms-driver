@@ -110,7 +110,7 @@ class _StudentListState extends State<StudentList> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Card(
-                    elevation: 3,
+                    elevation: 1,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6.0),
                     ),
@@ -120,7 +120,10 @@ class _StudentListState extends State<StudentList> {
                       height: getHeight(context) * 0.06,
                       child: DropdownButton<String>(
                         value: classSelectedValue,
-                        hint: const Text('10 A'),
+                        hint: const Text(
+                          '10 A',
+                          style: TextStyle(color: Colors.black),
+                        ),
                         items: classDropdownItems.map((String item) {
                           return DropdownMenuItem<String>(
                             value: item,
@@ -137,7 +140,7 @@ class _StudentListState extends State<StudentList> {
                   ),
                   SizedBox(width: getWidth(context) * 0.02),
                   Card(
-                    elevation: 3,
+                    elevation: 1,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6.0),
                     ),
@@ -147,7 +150,8 @@ class _StudentListState extends State<StudentList> {
                       height: getHeight(context) * 0.06,
                       child: DropdownButton<String>(
                         value: locationSelectedValue,
-                        hint: const Text('Location'),
+                        hint: const Text('Location',
+                            style: TextStyle(color: Colors.black)),
                         items: locationDropdownItems.map((String item) {
                           return DropdownMenuItem<String>(
                             value: item,
@@ -166,65 +170,80 @@ class _StudentListState extends State<StudentList> {
               ),
             ],
           ),
-          SizedBox(height: getHeight(context) * 0.04),
+          // SizedBox(height: getHeight(context) * 0.04),
           Expanded(
-            child: ListView.separated(
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 5.0, vertical: 8),
-                    child: Row(
-                      children: [
-                        ClipOval(
-                          child: Image.network(
-                            'https://thumbs.wbm.im/pw/medium/6ee9298a0daeccde4df0d2df499bda96.avif',
-                            width: getHeight(context) * 0.07,
-                            height: getHeight(context) * 0.07,
-                            fit: BoxFit.cover,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.separated(
+                itemCount: 10,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: Padding(
+                      // padding: const EdgeInsets.symmetric(
+                      //     horizontal: 8.0, vertical: 8),
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          ClipOval(
+                            child: Image.asset(
+                              'assets/images/fake_profile.jpg',
+                              width: getHeight(context) * 0.07,
+                              height: getHeight(context) * 0.07,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                        SizedBox(width: getHeight(context) * 0.01),
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Sahadev Kunwar',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
+                          SizedBox(width: getHeight(context) * 0.01),
+                          const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Sahadev Kunwar',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'Class: 5A Location: Balaju',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Color(0xff345326),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Class: 5A ',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xff676767),
+                                    ),
+                                  ),
+                                  Text(
+                                    ' Location: Kathmandu',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xff676767),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Text(
-                              'Location: Kathmandu',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Color(0xff345326),
+                              Text(
+                                'Gender: Male',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xff676767),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.arrow_forward_sharp)),
-                        SizedBox(width: getHeight(context) * 0.01),
-                      ],
+                            ],
+                          ),
+                          const Spacer(),
+                          IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.arrow_forward_sharp)),
+                          SizedBox(width: getHeight(context) * 0.01),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return SizedBox(height: getHeight(context) * 0.015);
-              },
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: getHeight(context) * 0.015);
+                },
+              ),
             ),
           ),
         ],

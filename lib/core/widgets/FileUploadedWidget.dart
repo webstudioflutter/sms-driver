@@ -121,7 +121,10 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
                   const SizedBox(height: 10),
                   Text(
                     '${widget.Title}',
-                    style: const TextStyle(fontSize: 14, color: Colors.black54),
+                    style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 10),
                 ],
