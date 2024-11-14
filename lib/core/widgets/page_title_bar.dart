@@ -1,3 +1,4 @@
+import 'package:driver_app/core/color_constant.dart';
 import 'package:flutter/material.dart';
 
 class PageTitleBar extends StatelessWidget {
@@ -5,15 +6,14 @@ class PageTitleBar extends StatelessWidget {
   final IconData? firstIcon;
   final VoidCallback? firstIconAction;
   final VoidCallback? lastIconAction;
-  final Widget
-      lastWidget; // The last widget can be an icon or anything you want.
+  final Widget lastWidget;
 
   const PageTitleBar({
     super.key,
     this.title, // Title passed as a parameter
     this.firstIcon =
         Icons.arrow_back, // Default icon for the first button (back button)
-    this.lastIconAction,
+    this.lastIconAction, // Action for the last icon
     this.firstIconAction, // Action for the first icon (optional)
     this.lastWidget = const Icon(Icons
         .notifications_active_outlined), // Default last widget (notification icon)
@@ -38,25 +38,29 @@ class PageTitleBar extends StatelessWidget {
               onPressed: firstIconAction ??
                   () => Navigator.pop(
                       context), // Default action is to pop the page
-              icon: Icon(firstIcon),
-            ),
-            const Spacer(), // Adds space between the widgets
-            // Title Text
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                title ?? "",
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+              icon: Icon(
+                firstIcon,
+                color: pageTitleColor,
               ),
             ),
-            const Spacer(), // Adds space between the title and last widget
+            const Spacer(),
+
+            Text(
+              title ?? "",
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: pageTitleColor,
+              ),
+            ),
+            const Spacer(),
             // Last Widget (e.g., notification icon)
             Padding(
               padding: const EdgeInsets.only(right: 10.0),
-              child: lastWidget,
+              child: GestureDetector(
+                onTap: lastIconAction,
+                child: lastWidget,
+              ),
             ),
           ],
         ),

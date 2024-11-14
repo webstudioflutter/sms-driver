@@ -1,6 +1,7 @@
 // lib/attendance.dart
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/core/widgets/page_title_bar.dart';
+import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -108,12 +109,12 @@ class _AttendanceState extends State<Attendance> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:
-            Size.fromHeight(MediaQuery.sizeOf(context).height * 0.29),
+            Size.fromHeight(MediaQuery.sizeOf(context).height * 0.26),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
             Container(
-              height: MediaQuery.sizeOf(context).height * 0.29,
+              height: MediaQuery.sizeOf(context).height * 0.26,
               decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Color(0xff6bccc1), Color(0xff6fcf99)],
@@ -125,7 +126,7 @@ class _AttendanceState extends State<Attendance> {
                       bottomRight: Radius.circular(40))),
             ),
             Positioned(
-              top: MediaQuery.sizeOf(context).height * 0.07,
+              top: MediaQuery.sizeOf(context).height * 0.05,
               right: 10,
               left: 10,
               child: Column(
@@ -133,6 +134,13 @@ class _AttendanceState extends State<Attendance> {
                   PageTitleBar(
                     firstIconAction: () {
                       Navigator.pop(context);
+                    },
+                    lastIconAction: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EmergencyMain(),
+                          ));
                     },
                     title: 'Attendance',
                     firstIcon: Icons.arrow_back,
@@ -152,7 +160,7 @@ class _AttendanceState extends State<Attendance> {
                           padding: EdgeInsets.symmetric(
                             horizontal: getWidth(context) * 0.06,
                           ),
-                          height: getHeight(context) * 0.1,
+                          height: getHeight(context) * 0.09,
                           child: const Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -177,7 +185,7 @@ class _AttendanceState extends State<Attendance> {
                           padding: EdgeInsets.symmetric(
                             horizontal: getWidth(context) * 0.06,
                           ),
-                          height: getHeight(context) * 0.1,
+                          height: getHeight(context) * 0.09,
                           child: const Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -205,7 +213,7 @@ class _AttendanceState extends State<Attendance> {
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: Column(
           children: [
-            SizedBox(height: getHeight(context) * 0.02),
+            SizedBox(height: getHeight(context) * 0.01),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -263,7 +271,7 @@ class _AttendanceState extends State<Attendance> {
                 ),
               ],
             ),
-            SizedBox(height: getHeight(context) * 0.04),
+            SizedBox(height: getHeight(context) * 0.01),
             Expanded(
               child: ListView.builder(
                 itemCount: contacts.length,
@@ -278,7 +286,7 @@ class _AttendanceState extends State<Attendance> {
                         child: Text(
                           letter,
                           style: const TextStyle(
-                            fontSize: 24,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

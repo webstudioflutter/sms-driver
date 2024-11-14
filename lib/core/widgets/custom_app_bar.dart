@@ -39,6 +39,7 @@
 //   );
 // }
 
+import 'package:driver_app/core/color_constant.dart';
 import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -83,7 +84,10 @@ PreferredSize customBar({
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.black),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: pageTitleColor,
+                    ),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -91,7 +95,7 @@ PreferredSize customBar({
                   Text(
                     title,
                     style: const TextStyle(
-                      color: Colors.black,
+                      color: pageTitleColor,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
