@@ -1,5 +1,6 @@
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/core/widgets/page_title_bar.dart';
+import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -29,12 +30,13 @@ class _StudentListState extends State<StudentList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(MediaQuery.sizeOf(context).height * 0.3),
+        preferredSize:
+            Size.fromHeight(MediaQuery.sizeOf(context).height * 0.28),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
             Container(
-              height: MediaQuery.sizeOf(context).height * 0.29,
+              height: MediaQuery.sizeOf(context).height * 0.28,
               decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Color(0xff6bccc1), Color(0xff6fcf99)],
@@ -46,7 +48,7 @@ class _StudentListState extends State<StudentList> {
                       bottomRight: Radius.circular(40))),
             ),
             Positioned(
-              top: MediaQuery.sizeOf(context).height * 0.07,
+              top: MediaQuery.sizeOf(context).height * 0.06,
               right: 10,
               left: 10,
               child: Column(
@@ -54,6 +56,13 @@ class _StudentListState extends State<StudentList> {
                   PageTitleBar(
                     firstIconAction: () {
                       Navigator.pop(context);
+                    },
+                    lastIconAction: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EmergencyMain(),
+                          ));
                     },
                     title: 'Student List',
                     firstIcon: Icons.arrow_back,
@@ -70,7 +79,7 @@ class _StudentListState extends State<StudentList> {
                       padding: EdgeInsets.symmetric(
                         horizontal: getWidth(context) * 0.06,
                       ),
-                      height: getHeight(context) * 0.11,
+                      height: getHeight(context) * 0.1,
                       child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -100,7 +109,7 @@ class _StudentListState extends State<StudentList> {
       ),
       body: Column(
         children: [
-          SizedBox(height: getHeight(context) * 0.02),
+          SizedBox(height: getHeight(context) * 0.01),
 
           ///Edit and Sort
           Row(
@@ -124,6 +133,7 @@ class _StudentListState extends State<StudentList> {
                           '10 A',
                           style: TextStyle(color: Colors.black),
                         ),
+//                         hint: const Text('Class'),
                         items: classDropdownItems.map((String item) {
                           return DropdownMenuItem<String>(
                             value: item,
@@ -170,7 +180,8 @@ class _StudentListState extends State<StudentList> {
               ),
             ],
           ),
-          // SizedBox(height: getHeight(context) * 0.04),
+//           SizedBox(height: getHeight(context) * 0.04),
+          SizedBox(height: getHeight(context) * 0.02),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),

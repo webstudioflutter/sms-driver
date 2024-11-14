@@ -1,3 +1,4 @@
+import 'package:driver_app/core/utils/util.dart';
 import 'package:flutter/material.dart';
 
 class UserInfoRow extends StatelessWidget {
@@ -9,7 +10,7 @@ class UserInfoRow extends StatelessWidget {
 
   const UserInfoRow({
     super.key,
-    this.leadingIcon = Icons.person_3_outlined,
+    this.leadingIcon = Icons.person_2_outlined,
     required this.title,
     required this.subtitle,
     this.suffixIcon,
@@ -21,7 +22,7 @@ class UserInfoRow extends StatelessWidget {
     return Row(
       children: [
         Icon(leadingIcon, color: const Color(0xff60bf8f)),
-        SizedBox(width: MediaQuery.of(context).size.width * 0.02),
+        SizedBox(width: getWidth(context) * 0.05),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -29,6 +30,7 @@ class UserInfoRow extends StatelessWidget {
               title,
               style: const TextStyle(fontSize: 12, color: Color(0xffbfbfbf)),
             ),
+            SizedBox(height: 2),
             Text(
               subtitle,
               style: const TextStyle(fontSize: 14, color: Color(0xff545454)),

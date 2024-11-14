@@ -102,24 +102,24 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           Positioned(
-                            right: -10,
-                            bottom: 10,
-                            child: Container(
-                              height: getHeight(context) * 0.05,
-                              width: getHeight(context) * 0.05,
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: IconButton(
-                                icon: const Icon(
+                            right: -15,
+                            bottom: 25,
+                            child: GestureDetector(
+                              onTap: () {
+                                _openModalBottomSheetForProfileEdit(context);
+                              },
+                              child: Container(
+                                height: getHeight(context) * 0.05,
+                                width: getHeight(context) * 0.05,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.green,
+                                ),
+                                child: const Icon(
                                   Icons.edit_square,
                                   size: 25,
                                   color: Colors.white,
                                 ),
-                                onPressed: () =>
-                                    _openModalBottomSheetForProfileEdit(
-                                        context),
                               ),
                             ),
                           ),

@@ -258,38 +258,73 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Icon(Icons.warning, color: Colors.red),
-          content: const Text('Are you sure you want to delete this file?'),
+//           title: const Icon(Icons.warning, color: Colors.red),
+//           content: const Text('Are you sure you want to delete this file?'),
           actionsAlignment: MainAxisAlignment.center,
-          actions: <Widget>[
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(10),
-                backgroundColor: const Color(0xffdddddd),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child:
-                  const Text('Cancel', style: TextStyle(color: Colors.black)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+          title: SvgPicture.asset('assets/svg_images/delete_confirm.svg'),
+          content: const Text(
+            'Are you sure you want to delete this file?',
+            style: TextStyle(
+              color: Color(0xff2b2b2b),
+              fontWeight: FontWeight.w500,
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(10),
-                backgroundColor: const Color(0xffff3333),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+          ),
+          actions: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(10),
+                    backgroundColor: const Color(0xffdddddd),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.close,
+                        color: Color(0xff545454),
+                      ),
+                      const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          color: Color(0xff545454),
+                        ),
+                      ),
+                    ],
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
-              ),
-              child:
-                  const Text('Delete', style: TextStyle(color: Colors.white)),
-              onPressed: () {
-                _deleteFile(file['fileName']);
-                Navigator.of(context).pop();
-              },
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(10),
+                    backgroundColor: const Color(0xffff3333),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
+                      const Text(
+                        'Delete',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  onPressed: () {
+                    _deleteFile(file['fileName']);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
             ),
           ],
         );

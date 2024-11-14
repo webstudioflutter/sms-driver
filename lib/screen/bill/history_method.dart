@@ -95,6 +95,18 @@ class _HistoryMethodState extends State<HistoryMethod> {
                       });
                     },
                   ),
+                  isExpanded: true,
+                  items: billTypes.map((type) {
+                    return DropdownMenuItem(
+                      value: type,
+                      child: Text(type),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedBillType = value;
+                    });
+                  },
                 ),
               ),
               const SizedBox(width: 8),
