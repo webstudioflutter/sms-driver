@@ -18,53 +18,98 @@ class FileUploadedWidget extends StatefulWidget {
 class _FileUploadedWidgetState extends State<FileUploadedWidget> {
   List<Map<String, dynamic>> files = [];
 
+  // Future<void> _pickImage() async {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       alignment: Alignment.center,
+  //       actionsAlignment: MainAxisAlignment.center,
+  //       actionsPadding:
+  //           const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+  //       actions: <Widget>[
+  //         TextButton(
+  //           onPressed: () async {
+  //             Navigator.pop(context);
+  //             final pickedFile =
+  //                 await ImagePicker().pickImage(source: ImageSource.camera);
+  //             if (pickedFile != null) {
+  //               _startFileUpload(File(pickedFile.path), pickedFile.name);
+  //             }
+  //           },
+  //           child: Row(
+  //             crossAxisAlignment: CrossAxisAlignment.center,
+  //             children: [
+  //               SvgPicture.asset('assets/svg_images/take_photo.svg'),
+  //               const SizedBox(width: 8),
+  //               const Text('Take Photograph'),
+  //             ],
+  //           ),
+  //         ),
+  //         TextButton(
+  //           onPressed: () async {
+  //             Navigator.pop(context);
+  //             final pickedFile =
+  //                 await ImagePicker().pickImage(source: ImageSource.gallery);
+  //             if (pickedFile != null) {
+  //               _startFileUpload(File(pickedFile.path), pickedFile.name);
+  //             }
+  //           },
+  //           child: Row(
+  //             crossAxisAlignment: CrossAxisAlignment.center,
+  //             children: [
+  //               SvgPicture.asset('assets/svg_images/select_album.svg'),
+  //               const SizedBox(width: 8),
+  //               const Text('Select from album'),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
   Future<void> _pickImage() async {
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AlertDialog(
-        alignment: Alignment.center,
-        actionsAlignment: MainAxisAlignment.center,
-        actionsPadding:
-            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              final pickedFile =
-                  await ImagePicker().pickImage(source: ImageSource.camera);
-              if (pickedFile != null) {
-                _startFileUpload(File(pickedFile.path), pickedFile.name);
-              }
-            },
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset('assets/svg_images/take_photo.svg'),
-                const SizedBox(width: 8),
-                const Text('Take Photograph'),
-              ],
-            ),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              final pickedFile =
-                  await ImagePicker().pickImage(source: ImageSource.gallery);
-              if (pickedFile != null) {
-                _startFileUpload(File(pickedFile.path), pickedFile.name);
-              }
-            },
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset('assets/svg_images/select_album.svg'),
-                const SizedBox(width: 8),
-                const Text('Select from album'),
-              ],
-            ),
-          ),
-        ],
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+          child: Column(
+            mainAxisSize:
+                MainAxisSize.min, // This makes it take up minimal space
+            children: [
+              ListTile(
+                leading: SvgPicture.asset('assets/svg_images/take_photo.svg'),
+                title: const Text('Take Photograph'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  final pickedFile =
+                      await ImagePicker().pickImage(source: ImageSource.camera);
+                  if (pickedFile != null) {
+                    _startFileUpload(File(pickedFile.path), pickedFile.name);
+                  }
+                },
+              ),
+              ListTile(
+                leading: SvgPicture.asset('assets/svg_images/select_album.svg'),
+                title: const Text('Select from album'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  final pickedFile = await ImagePicker()
+                      .pickImage(source: ImageSource.gallery);
+                  if (pickedFile != null) {
+                    _startFileUpload(File(pickedFile.path), pickedFile.name);
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -121,7 +166,10 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
                   const SizedBox(height: 10),
                   Text(
                     '${widget.Title}',
-                    style: const TextStyle(fontSize: 14, color: Colors.black54),
+                    style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 10),
                 ],
@@ -210,6 +258,9 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+//           title: const Icon(Icons.warning, color: Colors.red),
+//           content: const Text('Are you sure you want to delete this file?'),
+          actionsAlignment: MainAxisAlignment.center,
           title: SvgPicture.asset('assets/svg_images/delete_confirm.svg'),
           content: const Text(
             'Are you sure you want to delete this file?',

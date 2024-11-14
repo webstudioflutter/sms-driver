@@ -165,7 +165,8 @@ class _ServicingMainState extends State<ServicingMain> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(
+                    left: 16, right: 16, top: 8, bottom: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -197,7 +198,6 @@ class _ServicingMainState extends State<ServicingMain> {
                           fontSize: 14,
                           fontWeight: FontWeight.w500),
                     ),
-                    const SizedBox(height: 20),
                   ],
                 ),
               ),

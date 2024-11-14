@@ -423,6 +423,185 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+//   PreferredSize _appBarContent(BuildContext context) {
+//     return PreferredSize(
+//       preferredSize: Size.fromHeight(250),
+//       child: Stack(
+//         clipBehavior: Clip.none,
+//         children: [
+//           Container(
+//             height: MediaQuery.sizeOf(context).height * 0.25,
+//             decoration: const BoxDecoration(
+//                 gradient: LinearGradient(
+//                   colors: [Color(0xff59CDDA), Color(0xff60BF8F)],
+//                   begin: Alignment.topLeft,
+//                   end: Alignment.bottomRight,
+//                 ),
+//                 borderRadius: BorderRadius.only(
+//                     bottomLeft: Radius.circular(40),
+//                     bottomRight: Radius.circular(40))),
+//           ),
+//           Positioned(
+//             top: MediaQuery.sizeOf(context).height * 0.035,
+//             left: 10,
+//             right: 10,
+//             child: Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               crossAxisAlignment: CrossAxisAlignment.center,
+//               children: [
+//                 Padding(
+//                   padding: const EdgeInsets.all(8.0),
+//                   child: Container(
+//                     height: 50,
+//                     decoration: const BoxDecoration(
+//                         color: Color(0xffcdeede),
+//                         borderRadius: BorderRadius.all(Radius.circular(25))),
+//                     child: Padding(
+//                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
+//                       child: Row(
+//                         children: [
+//                           GestureDetector(
+//                             onTap: () {
+//                               _scaffoldKey.currentState?.openDrawer();
+//                             },
+//                             child: SvgPicture.asset(
+//                               'assets/svg_images/menu.svg',
+//                               height: 30,
+//                             ),
+//                           ),
+//                           const Spacer(),
+//                           SvgPicture.asset(
+//                             'assets/svg_images/notification.svg',
+//                             height: 20,
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//                 SizedBox(height: 10),
+//                 SizedBox(
+//                   height: getHeight(context) * 0.17,
+//                   child: Card(
+//                     color: const Color(0xffd8f3e1),
+//                     margin: EdgeInsets.symmetric(
+//                       horizontal: getWidth(context) * 0.021,
+//                     ),
+//                     child: Padding(
+//                       padding: EdgeInsets.symmetric(
+//                         horizontal: getWidth(context) * 0.07,
+//                       ),
+//                       child: Row(
+//                         mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                         children: [
+//                           ClipOval(
+//                             child: Image.asset(
+//                               'assets/images/fake_profile.jpg',
+//                               height: 100,
+//                               width: 100,
+//                               fit: BoxFit.cover,
+//                             ),
+//                           ),
+//                           Column(
+//                             mainAxisAlignment: MainAxisAlignment.center,
+//                             crossAxisAlignment: CrossAxisAlignment.center,
+//                             children: [
+//                               const Text(
+//                                 'Lal Bahadur Ojha',
+//                                 style: TextStyle(
+//                                   fontSize: 16,
+//                                   fontWeight: FontWeight.w400,
+//                                   color: Color(0xff221F1F),
+//                                   height: 1.2,
+//                                 ),
+//                               ),
+//                               SizedBox(height: getHeight(context) * 0.01),
+//                               const Padding(
+//                                 padding: EdgeInsets.only(left: 5.0),
+//                                 child: Text(
+//                                   'Bus No:Ba2 cha 9820',
+//                                   style: TextStyle(
+//                                     fontSize: 14,
+//                                     fontWeight: FontWeight.w400,
+//                                     color: Color(0xff221F1F),
+//                                     height: 1.2,
+//                                   ),
+//                                 ),
+//                               ),
+//                               SizedBox(height: getHeight(context) * 0.01),
+//                               // InkWell(
+//                               //   onTap: () {
+//                               //     Navigator.push(
+//                               //       context,
+//                               //       MaterialPageRoute(
+//                               //           builder: (context) =>
+//                               //               const BusRouteMain()),
+//                               //     );
+//                               //   },
+//                               //   child: Container(
+//                               //     width: getWidth(context) * 0.4,
+//                               //     height: 40,
+//                               //     padding: const EdgeInsets.symmetric(
+//                               //         vertical: 8, horizontal: 12),
+//                               //     decoration: BoxDecoration(
+//                               //       color: const Color(0xffff6448),
+//                               //       borderRadius: BorderRadius.circular(12),
+//                               //     ),
+//                               //     child: const Center(
+//                               //       child: Text(
+//                               //         'Start Route',
+//                               //         style: TextStyle(
+//                               //             color: Color(0xffFEFEFE),
+//                               //             fontSize: 16,
+//                               //             fontWeight: FontWeight.w400),
+//                               //       ),
+//                               //     ),
+//                               //   ),
+//                               // ),
+//                               ElevatedButton(
+//                                 onPressed: () {
+//                                   Navigator.push(
+//                                     context,
+//                                     MaterialPageRoute(
+//                                         builder: (context) =>
+//                                             const BusRouteMain()),
+//                                   );
+//                                 },
+//                                 style: ElevatedButton.styleFrom(
+//                                   padding: const EdgeInsets.all(12),
+//                                   backgroundColor: const Color(0xffFF6448),
+//                                   shape: RoundedRectangleBorder(
+//                                     borderRadius: BorderRadius.circular(12),
+//                                   ),
+//                                 ),
+//                                 child: SizedBox(
+//                                   // width: getWidth(context) * 0.35,
+//                                   width: getWidth(context) * 0.4,
+//                                   child: const Text(
+//                                     textAlign: TextAlign.center,
+//                                     'Start Route',
+//                                     style: TextStyle(
+//                                         color: Color(0xffFEFEFE),
+//                                         fontSize: 16,
+//                                         fontWeight: FontWeight.w400),
+//                                   ),
+//                                 ),
+//                               ),
+//                             ],
+//                           )
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
   void _openModalBottomSheetForStartRoute(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -485,11 +664,11 @@ class _HomePageState extends State<HomePage> {
                           height: MediaQuery.sizeOf(context).height * 0.03),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const BusRouteMain()),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) => const BusRouteMain()),
+                          // );
                         },
                         child: Container(
                           margin: const EdgeInsets.symmetric(horizontal: 20),

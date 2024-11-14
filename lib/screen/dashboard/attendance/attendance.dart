@@ -152,7 +152,7 @@ class _AttendanceState extends State<Attendance> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Card(
-                        elevation: 5,
+                        elevation: 2,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6.0),
                         ),
@@ -177,7 +177,7 @@ class _AttendanceState extends State<Attendance> {
                         ),
                       ),
                       Card(
-                        elevation: 5,
+                        elevation: 2,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6.0),
                         ),
@@ -218,7 +218,7 @@ class _AttendanceState extends State<Attendance> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Card(
-                  elevation: 3,
+                  elevation: 1,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(6.0),
                   ),
@@ -246,7 +246,7 @@ class _AttendanceState extends State<Attendance> {
                     showSortDialog(context);
                   },
                   child: Card(
-                    elevation: 3,
+                    elevation: 1,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6.0),
                     ),
@@ -293,8 +293,9 @@ class _AttendanceState extends State<Attendance> {
                       ),
                       ...names.map((contact) => Card(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 5.0, vertical: 8),
+                              // padding: const EdgeInsets.symmetric(
+                              //     horizontal: 5.0, vertical: 8),
+                              padding: const EdgeInsets.all(16),
                               child: Row(
                                 children: [
                                   ClipOval(
@@ -321,14 +322,14 @@ class _AttendanceState extends State<Attendance> {
                                         'Class: ${contact['class']}',
                                         style: const TextStyle(
                                           fontSize: 12,
-                                          color: Color(0xff345326),
+                                          color: Color(0xff676767),
                                         ),
                                       ),
                                       Text(
                                         'Location: ${contact['location']}',
                                         style: const TextStyle(
                                           fontSize: 12,
-                                          color: Color(0xff345326),
+                                          color: Color(0xff676767),
                                         ),
                                       ),
                                     ],

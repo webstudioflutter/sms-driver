@@ -62,6 +62,19 @@ class _LogServicingFormState extends State<LogServicingForm> {
             const SizedBox(height: 25),
             _buildTotalAmountSection(),
             const SizedBox(height: 15),
+            Row(
+              children: [
+                const Text(
+                  'Servicing Date',
+                  style: TextStyle(
+                      color: Color(0xff676767),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(width: 8),
+                SvgPicture.asset('assets/svg_images/bill_receipt.svg'),
+              ],
+            ),
             const FileUploadedWidget(
               svgname: "assets/svg_images/upload_image_receipt.svg",
               Title: "Tap to Upload Image of Receipt ",
@@ -135,7 +148,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
             const Text(
               'Servicing Date',
               style: TextStyle(
-                  color: Colors.black,
+                  color: Color(0xff676767),
                   fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
@@ -153,7 +166,13 @@ class _LogServicingFormState extends State<LogServicingForm> {
               ),
               suffixIcon: const Icon(Icons.calendar_month_outlined),
             ),
-            child: Text(_selectedDate),
+            child: Text(
+              _selectedDate,
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w500),
+            ),
           ),
         ),
       ],
@@ -211,12 +230,15 @@ class _LogServicingFormState extends State<LogServicingForm> {
             const Text(
               'Total Amount',
               style: TextStyle(
-                  color: Colors.black,
+                  color: Color(0xff676767),
                   fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
             const SizedBox(width: 5),
-            SvgPicture.asset('assets/svg_images/total_amt.svg'),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: SvgPicture.asset('assets/svg_images/total_amt.svg'),
+            ),
           ],
         ),
         const SizedBox(height: 5),
@@ -247,7 +269,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
             const Text(
               'Parts Replaced',
               style: TextStyle(
-                  color: Colors.black,
+                  color: Color(0xff676767),
                   fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
