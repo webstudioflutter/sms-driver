@@ -62,7 +62,7 @@ class _StudentListState extends State<StudentList> {
                         height: 20),
                   ),
                   Card(
-                    elevation: 5,
+                    elevation: 2,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6.0),
                     ),
