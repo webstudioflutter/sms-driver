@@ -167,11 +167,19 @@ class _AttendanceState extends State<Attendance> {
                               Text(
                                 '25',
                                 style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xff0b835c)),
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xff0b835c),
+                                ),
                               ),
-                              Text('Present'),
+                              Text(
+                                'Present',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xff1d1d1d),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -192,11 +200,19 @@ class _AttendanceState extends State<Attendance> {
                               Text(
                                 '05',
                                 style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xffe01e31)),
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xffe01e31),
+                                ),
                               ),
-                              Text('Absent'),
+                              Text(
+                                'Absent',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xff1d1d1d),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -224,17 +240,22 @@ class _AttendanceState extends State<Attendance> {
                   ),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
                     height: getHeight(context) * 0.06,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.edit_square),
+                        const Icon(Icons.edit_square, color: Color(0xff221f1f)),
                         SizedBox(width: getWidth(context) * 0.01),
                         const Text(
                           'Edit',
                           style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w500),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xff363636),
+                          ),
                         ),
                       ],
                     ),
@@ -257,12 +278,16 @@ class _AttendanceState extends State<Attendance> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.swap_vert, size: 30),
+                          const Icon(Icons.swap_vert,
+                              size: 30, color: Color(0xff221f1f)),
                           SizedBox(width: getWidth(context) * 0.01),
                           const Text(
                             'Sort',
                             style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w500),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xff363636),
+                            ),
                           ),
                         ],
                       ),
@@ -286,65 +311,78 @@ class _AttendanceState extends State<Attendance> {
                         child: Text(
                           letter,
                           style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      ...names.map((contact) => Card(
-                            child: Padding(
-                              // padding: const EdgeInsets.symmetric(
-                              //     horizontal: 5.0, vertical: 8),
-                              padding: const EdgeInsets.all(16),
-                              child: Row(
-                                children: [
-                                  ClipOval(
-                                    child: Image.asset(
-                                      'assets/images/fake_profile.jpg',
-                                      width: getHeight(context) * 0.07,
-                                      height: getHeight(context) * 0.07,
-                                      fit: BoxFit.cover,
-                                    ),
+                      ...names.map(
+                        (contact) => Card(
+                          child: Padding(
+                            // padding: const EdgeInsets.symmetric(
+                            //     horizontal: 5.0, vertical: 8),
+                            padding: const EdgeInsets.all(16),
+                            child: Row(
+                              children: [
+                                ClipOval(
+                                  child: Image.asset(
+                                    'assets/images/fake_profile.jpg',
+                                    width: 42,
+                                    height: 42,
+                                    fit: BoxFit.cover,
                                   ),
-                                  SizedBox(width: getHeight(context) * 0.01),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        contact['name']!,
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                ),
+                                SizedBox(width: getHeight(context) * 0.01),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      contact['name']!,
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xff2b2b2b),
                                       ),
-                                      Text(
-                                        'Class: ${contact['class']}',
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Color(0xff676767),
-                                        ),
+                                    ),
+                                    Text(
+                                      'Class: ${contact['class']}',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Color(0xff345326),
                                       ),
-                                      Text(
+                                    ),
+                                    SizedBox(
+                                      width: getWidth(context) * 0.38,
+                                      child: Text(
                                         'Location: ${contact['location']}',
                                         style: const TextStyle(
                                           fontSize: 12,
-                                          color: Color(0xff676767),
+                                          color: Color(0xff345326),
                                         ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
                                       ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  SvgPicture.asset(
-                                      'assets/svg_images/present.svg'),
-                                  SizedBox(width: getHeight(context) * 0.01),
-                                  SvgPicture.asset(
-                                      'assets/svg_images/absent.svg'),
-                                ],
-                              ),
+                                    ),
+                                  ],
+                                ),
+                                const Spacer(),
+                                SvgPicture.asset(
+                                  'assets/svg_images/present.svg',
+                                  height: 44,
+                                  width: 44,
+                                ),
+                                SizedBox(width: getHeight(context) * 0.01),
+                                SvgPicture.asset(
+                                  'assets/svg_images/absent.svg',
+                                  height: 44,
+                                  width: 44,
+                                ),
+                              ],
                             ),
-                          )),
-                      SizedBox(height: getHeight(context) * 0.015),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: getHeight(context) * 0.02),
                     ],
                   );
                 },

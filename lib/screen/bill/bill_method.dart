@@ -116,7 +116,7 @@ class _BillMethodState extends State<BillMethod> {
             const Text(
               'Bill Type',
               style: TextStyle(
-                  color: Colors.black,
+                  color: Color(0xff676767),
                   fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
@@ -137,6 +137,15 @@ class _BillMethodState extends State<BillMethod> {
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: Color(0xffc8c8c8),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: Color(0xffc8c8c8),
+              ),
             ),
           ),
         ),
@@ -155,7 +164,7 @@ class _BillMethodState extends State<BillMethod> {
               const Text(
                 'Bill Date',
                 style: TextStyle(
-                    color: Colors.black,
+                    color: Color(0xff676767),
                     fontSize: 16,
                     fontWeight: FontWeight.w500),
               ),
@@ -169,10 +178,16 @@ class _BillMethodState extends State<BillMethod> {
           onTap: () => _selectDate(context),
           child: InputDecorator(
             decoration: InputDecoration(
-              border: OutlineInputBorder(
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xffc8c8c8)),
                 borderRadius: BorderRadius.circular(8),
               ),
-              suffixIcon: const Icon(Icons.calendar_month_outlined),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xffc8c8c8)),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              suffixIcon: const Icon(Icons.calendar_month_outlined,
+                  color: Color(0xffc8c8c8)),
             ),
             child: Text(
               _selectedDate,
@@ -197,7 +212,7 @@ class _BillMethodState extends State<BillMethod> {
             const Text(
               'Total Amount',
               style: TextStyle(
-                  color: Colors.black,
+                  color: Color(0xff676767),
                   fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
@@ -219,6 +234,15 @@ class _BillMethodState extends State<BillMethod> {
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: Color(0xffc8c8c8),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: Color(0xffc8c8c8),
+              ),
             ),
           ),
         ),

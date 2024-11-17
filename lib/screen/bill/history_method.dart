@@ -69,12 +69,27 @@ class _HistoryMethodState extends State<HistoryMethod> {
                 child: Container(
                   height: getHeight(context) * 0.08,
                   child: DropdownButtonFormField<String>(
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Color(0xff545454),
+                      fontWeight: FontWeight.w900,
+                    ),
                     value: selectedBillType,
-                    hint:
-                        const Text('Bill Type', style: TextStyle(fontSize: 14)),
-                    decoration: const InputDecoration(
+                    hint: const Text(
+                      'Bill Type',
+                      style: TextStyle(
+                        fontSize: 19,
+                        color: Color(0xff545454),
+                      ),
+                    ),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xffe0e0e0)),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
+                        borderSide: BorderSide(color: Color(0xffe0e0e0)),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     items: billTypes.map((type) {
@@ -117,10 +132,10 @@ class _HistoryMethodState extends State<HistoryMethod> {
                   child: Container(
                     height: getHeight(context) * 0.08,
                     child: InputDecorator(
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Color(0xffe0e0e0))),
                         border: OutlineInputBorder(),
                       ),
                       child: Row(
@@ -131,7 +146,7 @@ class _HistoryMethodState extends State<HistoryMethod> {
                                 ? 'Choose Date'
                                 : formatDate(selectedDate!),
                             style: const TextStyle(
-                                color: Colors.black, fontSize: 16),
+                                color: Color(0xff545454), fontSize: 16),
                           ),
                           Visibility(
                             visible: selectedDate == null,
@@ -199,7 +214,7 @@ class _HistoryMethodState extends State<HistoryMethod> {
                               style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: Color(0xff787878)),
+                                  color: Color(0xffadadad)),
                             ),
                           ],
                         ),
@@ -207,13 +222,16 @@ class _HistoryMethodState extends State<HistoryMethod> {
                         Text(
                           'Bill Type : ${item['bill_type'] ?? ''}',
                           style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xff545454),
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           '${item['price']}',
                           style: const TextStyle(
-                              color: Color(0xff787878),
+                              color: Color(0xff545454),
                               fontSize: 14,
                               fontWeight: FontWeight.w500),
                         ),
