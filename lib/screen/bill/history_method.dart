@@ -66,40 +66,24 @@ class _HistoryMethodState extends State<HistoryMethod> {
           child: Row(
             children: [
               Expanded(
-                child: Container(
-                  height: getHeight(context) * 0.08,
-                  child: DropdownButtonFormField<String>(
-                    value: selectedBillType,
-                    hint:
-                        const Text('Bill Type', style: TextStyle(fontSize: 14)),
-                    decoration: const InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
+                child: DropdownButtonFormField<String>(
+                  value: selectedBillType,
+                  hint: const Text('Bill Type', style: TextStyle(fontSize: 14)),
+                  decoration: const InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
                     ),
-                    items: billTypes.map((type) {
-                      return DropdownMenuItem(
-                        value: type,
-                        child: Text(
-                          type,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedBillType = value;
-                      });
-                    },
                   ),
-                  isExpanded: true,
                   items: billTypes.map((type) {
                     return DropdownMenuItem(
                       value: type,
-                      child: Text(type),
+                      child: Text(
+                        type,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                        ),
+                      ),
                     );
                   }).toList(),
                   onChanged: (value) {
