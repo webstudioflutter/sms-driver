@@ -46,7 +46,7 @@ class _ServicingMainState extends State<ServicingMain> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xff363636),
+                      color: Color(0xff545454),
                     ),
                   ),
                   const SizedBox(width: 15),
@@ -54,6 +54,7 @@ class _ServicingMainState extends State<ServicingMain> {
                     'assets/svg_images/history.svg',
                     height: 25,
                     width: 25,
+                    color: Color(0xff545454),
                   ),
                 ],
               ),
@@ -68,7 +69,7 @@ class _ServicingMainState extends State<ServicingMain> {
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(10),
-                  backgroundColor: Colors.red,
+                  backgroundColor: Color(0xffff6448),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -103,7 +104,7 @@ class _ServicingMainState extends State<ServicingMain> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xff363636),
+                  color: Color(0xff545454),
                 ),
               ),
               const SizedBox(width: 10),
@@ -111,6 +112,7 @@ class _ServicingMainState extends State<ServicingMain> {
                 'assets/svg_images/scheduled-maintenance.svg',
                 height: 25,
                 width: 25,
+                color: Color(0xff545454),
               ),
             ],
           ),
@@ -124,7 +126,7 @@ class _ServicingMainState extends State<ServicingMain> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xff221f1f),
+                  color: Color(0xff363636),
                 ),
               ),
               SizedBox(width: MediaQuery.sizeOf(context).width * 0.04),
@@ -178,9 +180,10 @@ class _ServicingMainState extends State<ServicingMain> {
                         Text(
                           item['date'] ?? '',
                           style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xff787878)),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xffadadad),
+                          ),
                         ),
                       ],
                     ),
@@ -188,15 +191,19 @@ class _ServicingMainState extends State<ServicingMain> {
                     Text(
                       '${item['items']}',
                       style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w500),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xff545454),
+                      ),
                     ),
                     const SizedBox(height: 6),
                     Text(
                       '${item['price']}',
                       style: const TextStyle(
-                          color: Color(0xff787878),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
+                        color: Color(0xff545454),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),

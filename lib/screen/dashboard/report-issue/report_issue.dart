@@ -66,26 +66,30 @@ class _ReportIssueState extends State<ReportIssue> {
     );
   }
 
-  Container submitButton(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      decoration: BoxDecoration(
-        color: const Color(0xffff6448),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Center(
+  Widget submitButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 31.0),
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color(0xffff6448),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          minimumSize: const Size(double.infinity, 48),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
               'SUBMIT ISSUE',
               style: TextStyle(
-                  color: Color(0xffFEFEFE),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400),
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-            SizedBox(width: MediaQuery.sizeOf(context).width * 0.03),
+            const SizedBox(width: 8),
             const Icon(
               Icons.warning_amber_rounded,
               color: Colors.white,
@@ -138,7 +142,7 @@ class _ReportIssueState extends State<ReportIssue> {
         const Text(
           'Add Photo',
           style: TextStyle(
-            fontSize: 15,
+            fontSize: 16,
             fontWeight: FontWeight.w500,
             color: Color(0xff545454),
           ),
@@ -249,7 +253,7 @@ class _ReportIssueState extends State<ReportIssue> {
         const Text(
           'Select Issue',
           style: TextStyle(
-            fontSize: 15,
+            fontSize: 16,
             fontWeight: FontWeight.w500,
             color: Color(0xff545454),
           ),
