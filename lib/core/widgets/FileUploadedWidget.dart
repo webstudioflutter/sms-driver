@@ -1,73 +1,29 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FileUploadedWidget extends StatefulWidget {
   final String? svgname;
-  final String? Title;
-  const FileUploadedWidget({super.key, this.svgname, this.Title});
+  final String? title;
+  final List<Map<String, dynamic>> files; // File state passed from parent
+  final void Function(Map<String, dynamic>) onFileUpload; // Callback for parent
+
+  const FileUploadedWidget({
+    super.key,
+    this.svgname,
+    this.title,
+    required this.files,
+    required this.onFileUpload,
+  });
 
   @override
   State<FileUploadedWidget> createState() => _FileUploadedWidgetState();
 }
 
 class _FileUploadedWidgetState extends State<FileUploadedWidget> {
-  List<Map<String, dynamic>> files = [];
-
-  // Future<void> _pickImage() async {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       alignment: Alignment.center,
-  //       actionsAlignment: MainAxisAlignment.center,
-  //       actionsPadding:
-  //           const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
-  //       actions: <Widget>[
-  //         TextButton(
-  //           onPressed: () async {
-  //             Navigator.pop(context);
-  //             final pickedFile =
-  //                 await ImagePicker().pickImage(source: ImageSource.camera);
-  //             if (pickedFile != null) {
-  //               _startFileUpload(File(pickedFile.path), pickedFile.name);
-  //             }
-  //           },
-  //           child: Row(
-  //             crossAxisAlignment: CrossAxisAlignment.center,
-  //             children: [
-  //               SvgPicture.asset('assets/svg_images/take_photo.svg'),
-  //               const SizedBox(width: 8),
-  //               const Text('Take Photograph'),
-  //             ],
-  //           ),
-  //         ),
-  //         TextButton(
-  //           onPressed: () async {
-  //             Navigator.pop(context);
-  //             final pickedFile =
-  //                 await ImagePicker().pickImage(source: ImageSource.gallery);
-  //             if (pickedFile != null) {
-  //               _startFileUpload(File(pickedFile.path), pickedFile.name);
-  //             }
-  //           },
-  //           child: Row(
-  //             crossAxisAlignment: CrossAxisAlignment.center,
-  //             children: [
-  //               SvgPicture.asset('assets/svg_images/select_album.svg'),
-  //               const SizedBox(width: 8),
-  //               const Text('Select from album'),
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
   Future<void> _pickImage() async {
     showModalBottomSheet(
       context: context,
@@ -79,8 +35,7 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
           child: Column(
-            mainAxisSize:
-                MainAxisSize.min, // This makes it take up minimal space
+            mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
                 leading: SvgPicture.asset('assets/svg_images/take_photo.svg'),
@@ -90,7 +45,14 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
                   final pickedFile =
                       await ImagePicker().pickImage(source: ImageSource.camera);
                   if (pickedFile != null) {
-                    _startFileUpload(File(pickedFile.path), pickedFile.name);
+                    final fileData = {
+                      'fileName': pickedFile.name,
+                      'file': File(pickedFile.path),
+                      'progress': 0.0,
+                      'isUploaded': false,
+                    };
+                    widget.onFileUpload(fileData);
+                    _simulateUpload(fileData);
                   }
                 },
               ),
@@ -102,7 +64,14 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
                   final pickedFile = await ImagePicker()
                       .pickImage(source: ImageSource.gallery);
                   if (pickedFile != null) {
-                    _startFileUpload(File(pickedFile.path), pickedFile.name);
+                    final fileData = {
+                      'fileName': pickedFile.name,
+                      'file': File(pickedFile.path),
+                      'progress': 0.0,
+                      'isUploaded': false,
+                    };
+                    widget.onFileUpload(fileData);
+                    _simulateUpload(fileData);
                   }
                 },
               ),
@@ -113,25 +82,17 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
     );
   }
 
-  void _startFileUpload(File file, String fileName) {
-    setState(() {
-      files.add({
-        'fileName': fileName,
-        'file': file,
-        'progress': 0.0,
-        'isUploaded': false,
-      });
-    });
-
-    Timer.periodic(const Duration(milliseconds: 500), (timer) {
+  void _simulateUpload(Map<String, dynamic> fileData) {
+    Timer.periodic(const Duration(milliseconds: 100), (timer) {
       setState(() {
-        int index = files.indexWhere((f) => f['fileName'] == fileName);
+        int index = widget.files
+            .indexWhere((f) => f['fileName'] == fileData['fileName']);
         if (index != -1) {
-          if (files[index]['progress'] < 1.0) {
-            files[index]['progress'] += 0.1;
+          if (widget.files[index]['progress'] < 1.0) {
+            widget.files[index]['progress'] += 0.1;
           } else {
-            files[index]['progress'] = 1.0;
-            files[index]['isUploaded'] = true;
+            widget.files[index]['progress'] = 1.0;
+            widget.files[index]['isUploaded'] = true;
             timer.cancel();
           }
         }
@@ -165,11 +126,12 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    '${widget.Title}',
+                    '${widget.title}',
                     style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w500),
+                      fontSize: 14,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   const SizedBox(height: 10),
                 ],
@@ -178,7 +140,7 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
           ),
         ),
         const SizedBox(height: 15),
-        if (files.isNotEmpty) _buildUploadingSection(),
+        if (widget.files.isNotEmpty) _buildUploadingSection(),
       ],
     );
   }
@@ -199,7 +161,7 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
           ),
         ),
         const SizedBox(height: 10),
-        ...files.map((file) => _buildFileItem(file)),
+        ...widget.files.map((file) => _buildFileItem(file)),
       ],
     );
   }
@@ -210,8 +172,9 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
       children: [
         Container(
           decoration: BoxDecoration(
-              border: Border.all(color: Colors.green),
-              borderRadius: BorderRadius.circular(8)),
+            border: Border.all(color: Colors.green),
+            borderRadius: BorderRadius.circular(8),
+          ),
           padding: const EdgeInsets.all(8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -247,19 +210,11 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
     );
   }
 
-  void _deleteFile(String fileName) {
-    setState(() {
-      files.removeWhere((file) => file['fileName'] == fileName);
-    });
-  }
-
   void _showDeleteConfirmationDialog(Map<String, dynamic> file) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-//           title: const Icon(Icons.warning, color: Colors.red),
-//           content: const Text('Are you sure you want to delete this file?'),
           actionsAlignment: MainAxisAlignment.center,
           title: SvgPicture.asset('assets/svg_images/delete_confirm.svg'),
           content: const Text(
@@ -283,16 +238,9 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
                   ),
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.close,
-                        color: Color(0xff545454),
-                      ),
-                      const Text(
-                        'Cancel',
-                        style: TextStyle(
-                          color: Color(0xff545454),
-                        ),
-                      ),
+                      Icon(Icons.close, color: Color(0xff545454)),
+                      const Text('Cancel',
+                          style: TextStyle(color: Color(0xff545454))),
                     ],
                   ),
                   onPressed: () {
@@ -309,18 +257,16 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
                   ),
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                      ),
-                      const Text(
-                        'Delete',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      Icon(Icons.delete, color: Colors.white),
+                      const Text('Delete',
+                          style: TextStyle(color: Colors.white)),
                     ],
                   ),
                   onPressed: () {
-                    _deleteFile(file['fileName']);
+                    setState(() {
+                      widget.files.removeWhere(
+                          (f) => f['fileName'] == file['fileName']);
+                    });
                     Navigator.of(context).pop();
                   },
                 ),
