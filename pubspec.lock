@@ -133,10 +133,10 @@ packages:
     dependency: transitive
     description:
       name: file_selector_linux
-      sha256: "712ce7fab537ba532c8febdb1a8f167b32441e74acd68c3ccb2e36dcb52c4ab2"
+      sha256: b2b91daf8a68ecfa4a01b778a6f52edef9b14ecd506e771488ea0f2e0784198b
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.3"
+    version: "0.9.3+1"
   file_selector_macos:
     dependency: transitive
     description:
@@ -199,10 +199,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_svg
-      sha256: de82e6bf958cec7190fbc1c5298282c851228e35ae2b14e2b103e7f777818c64
+      sha256: "578bd8c508144fdaffd4f77b8ef2d8c523602275cd697cc3db284dbd762ef4ce"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.13"
+    version: "2.0.14"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -225,10 +225,10 @@ packages:
     dependency: transitive
     description:
       name: go_router
-      sha256: ce89c5a993ca5eea74535f798478502c30a625ecb10a1de4d7fef5cd1bcac2a4
+      sha256: "8ae664a70174163b9f65ea68dd8673e29db8f9095de7b5cd00e167c621f4fef5"
       url: "https://pub.dev"
     source: hosted
-    version: "14.4.1"
+    version: "14.6.0"
   google_maps:
     dependency: transitive
     description:
@@ -241,10 +241,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_maps_flutter
-      sha256: "2e302fa3aaf4e2a297f0342d83ebc5e8e9f826e9a716aef473fe7f404ec630a7"
+      sha256: "209856c8e5571626afba7182cf634b2910069dc567954e76ec3e3fb37f5e9db3"
       url: "https://pub.dev"
     source: hosted
-    version: "2.9.0"
+    version: "2.10.0"
   google_maps_flutter_android:
     dependency: transitive
     description:
@@ -433,10 +433,10 @@ packages:
     dependency: transitive
     description:
       name: logger
-      sha256: "697d067c60c20999686a0add96cf6aba723b3aa1f83ecf806a8097231529ec32"
+      sha256: be4b23575aac7ebf01f225a241eb7f6b5641eeaf43c6a8613510fc2f8cf187d1
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0"
+    version: "2.5.0"
   logging:
     dependency: transitive
     description:
@@ -766,10 +766,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_linux
-      sha256: e2b9622b4007f97f504cd64c0128309dfb978ae66adbe944125ed9e1750f06af
+      sha256: "4e9ba368772369e3e08f231d2301b4ef72b9ff87c31192ef471b380ef29a4935"
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.0"
+    version: "3.2.1"
   url_launcher_macos:
     dependency: transitive
     description:
@@ -806,10 +806,10 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics
-      sha256: "0b9149c6ddb013818075b072b9ddc1b89a5122fff1275d4648d297086b46c4f0"
+      sha256: "773c9522d66d523e1c7b25dfb95cc91c26a1e17b107039cfe147285e92de7878"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.12"
+    version: "1.1.14"
   vector_graphics_codec:
     dependency: transitive
     description:
@@ -822,10 +822,10 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics_compiler
-      sha256: f3b9b6e4591c11394d4be4806c63e72d3a41778547b2c1e2a8a04fadcfd7d173
+      sha256: ab9ff38fc771e9ee1139320adbe3d18a60327370c218c60752068ebee4b49ab1
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.12"
+    version: "1.1.15"
   vector_math:
     dependency: transitive
     description:
