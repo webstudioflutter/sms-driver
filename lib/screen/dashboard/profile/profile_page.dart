@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:driver_app/Repository/auth/AuthenticationRepository.dart';
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/core/widgets/page_title_bar.dart';
 import 'package:driver_app/screen/dashboard/profile/my_account.dart';
@@ -159,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             Card(
               child: Padding(
-                padding: const EdgeInsets.only(left: 5.0),
+                padding: const EdgeInsets.all(5.0),
                 child: Column(
                   children: [
                     Padding(
@@ -213,6 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ),
+                    Divider(),
                     Padding(
                       padding: const EdgeInsets.only(top: 20.0),
                       child: Row(
@@ -247,55 +249,56 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0, bottom: 20),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset('assets/svg_images/logout.svg'),
-                          const SizedBox(width: 10),
-                          SizedBox(
-                            width: getWidth(context) * 0.6,
-                            child: const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                    Divider(),
+                    GestureDetector(
+                      onTap: () {
+                        showLogoutConfirmation(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10.0, bottom: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
                               children: [
-                                Text(
-                                  'Log out',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xff545454),
-                                  ),
-                                ),
-                                Text(
-                                  'Further secure your account for safety',
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Color(0xffababab),
+                                SvgPicture.asset(
+                                    'assets/svg_images/logout.svg'),
+                                const SizedBox(width: 10),
+                                SizedBox(
+                                  width: getWidth(context) * 0.6,
+                                  child: const Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Log out',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xff545454),
+                                        ),
+                                      ),
+                                      Text(
+                                        'Further secure your account for safety',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Color(0xffababab),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const DriverLoginScreen(),
-                                ),
-                              );
-                            },
-                            child: const Icon(
+                            const Icon(
                               Icons.chevron_right,
                               size: 35,
                               color: Color(0xff999999),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -338,13 +341,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     const SizedBox(width: 5),
                     const Spacer(),
-                    GestureDetector(
-                      onTap: () {},
-                      child: const Icon(
-                        Icons.chevron_right,
-                        size: 35,
-                        color: Color(0xff999999),
-                      ),
+                    const Icon(
+                      Icons.chevron_right,
+                      size: 35,
+                      color: Color(0xff999999),
                     ),
                   ],
                 ),
@@ -464,7 +464,7 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Icon(Icons.logout, color: Colors.green),
+          title: const Icon(Icons.logout, color: Colors.red),
           content: const Text('Are you sure you want to log out?'),
           actions: <Widget>[
             ElevatedButton(
@@ -484,17 +484,18 @@ class _ProfilePageState extends State<ProfilePage> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(10),
-                backgroundColor: Colors.green,
+                backgroundColor: Colors.red,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
               child: const Text('Yes', style: TextStyle(color: Colors.white)),
-              onPressed: () {
+              onPressed: () async {
+                await authenticationRepository.logout();
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const DriverLoginScreen()));
+                        builder: (context) => DriverLoginScreen()));
               },
             ),
           ],

@@ -12,6 +12,7 @@ analyzer:
     library_private_types_in_public_api: ignore
     file_names: ignore
     deprecated_member_use: ignore
+    unused_local_variable: ignore
 include: package:flutter_lints/flutter.yaml
 
 linter:
