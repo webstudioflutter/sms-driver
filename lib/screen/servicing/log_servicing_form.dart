@@ -17,9 +17,13 @@ class LogServicingForm extends StatefulWidget {
 
 class _LogServicingFormState extends State<LogServicingForm> {
   String _selectedDate = 'Select Date';
-  List<Map<String, dynamic>> files = [];
-  File? _selectedImage;
-  String? _fileName;
+  // List<Map<String, dynamic>> files = [];
+  // File? _selectedImage;
+  // String? _fileName;
+  List<Map<String, dynamic>> servicingFiles = [];
+  List<Map<String, dynamic>> damagedFiles = [];
+  List<Map<String, dynamic>> replacedFiles = [];
+
   List<String> checkboxLabels = [
     "Brake Pads",
     "Battery",
@@ -75,10 +79,72 @@ class _LogServicingFormState extends State<LogServicingForm> {
                 SvgPicture.asset('assets/svg_images/bill_receipt.svg'),
               ],
             ),
-            const FileUploadedWidget(
+            SizedBox(height: 5),
+            FileUploadedWidget(
               svgname: "assets/svg_images/upload_image_receipt.svg",
-              Title: "Tap to Upload Image of Receipt ",
+              title: "Tap to Upload Image of Receipt ",
+              files: servicingFiles,
+              onFileUpload: (file) {
+                setState(() {
+                  servicingFiles.add(file);
+                });
+              },
             ),
+
+            ///Damaged Part
+            Row(
+              children: [
+                const Text(
+                  'Damaged Part',
+                  style: TextStyle(
+                      color: Color(0xff676767),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(width: 8),
+                SvgPicture.asset('assets/svg_images/bill_receipt.svg'),
+              ],
+            ),
+            SizedBox(height: 5),
+
+            FileUploadedWidget(
+              svgname: "assets/svg_images/upload_image_receipt.svg",
+              title: "Tap to Upload Image of Receipt ",
+              files: damagedFiles,
+              onFileUpload: (file) {
+                setState(() {
+                  damagedFiles.add(file);
+                });
+              },
+            ),
+
+            ///Replaced Part
+            Row(
+              children: [
+                const Text(
+                  'Replaced Part',
+                  style: TextStyle(
+                      color: Color(0xff676767),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(width: 8),
+                SvgPicture.asset('assets/svg_images/bill_receipt.svg'),
+              ],
+            ),
+            SizedBox(height: 5),
+
+            FileUploadedWidget(
+              svgname: "assets/svg_images/upload_image_receipt.svg",
+              title: "Tap to Upload Image of Receipt ",
+              files: replacedFiles,
+              onFileUpload: (file) {
+                setState(() {
+                  replacedFiles.add(file);
+                });
+              },
+            ),
+            SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

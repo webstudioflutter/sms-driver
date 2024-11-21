@@ -15,8 +15,8 @@ class BillMethod extends StatefulWidget {
 
 class _BillMethodState extends State<BillMethod> {
   String _selectedDate = 'Select Date';
-  File? _selectedImage;
-  String? _fileName;
+  // File? _selectedImage;
+  List<Map<String, dynamic>> uploadedFiles = [];
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -43,9 +43,15 @@ class _BillMethodState extends State<BillMethod> {
           const SizedBox(height: 10),
           _buildTotalAmountSection(),
           const SizedBox(height: 15),
-          const FileUploadedWidget(
+          FileUploadedWidget(
             svgname: "assets/svg_images/upload_icon.svg",
-            Title: "Tap to upload your bill",
+            title: "Tap to upload your bill",
+            files: uploadedFiles,
+            onFileUpload: (file) {
+              setState(() {
+                uploadedFiles.add(file);
+              });
+            },
           ),
           const SizedBox(height: 15),
           Row(
