@@ -101,11 +101,7 @@ class AuthenticationRepository {
   /// Logs the user out by clearing all stored data.
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
-
-    // Remove token from shared preferences
     await prefs.remove('token');
-
-    // Clear secure storage data
     await _secureStorage.delete(key: 'driverId');
     await _secureStorage.delete(key: 'schoolId');
     await _secureStorage.delete(key: 'transportationId');

@@ -13,6 +13,12 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
   final controller = Get.put(LoginController());
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
