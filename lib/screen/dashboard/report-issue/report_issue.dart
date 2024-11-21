@@ -17,6 +17,7 @@ class ReportIssue extends StatefulWidget {
 class _ReportIssueState extends State<ReportIssue> {
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
+  List<Map<String, dynamic>> imageReceipt = [];
 
   // Function to pick image from camera or gallery
   Future<void> _pickImage(ImageSource source) async {
@@ -53,9 +54,15 @@ class _ReportIssueState extends State<ReportIssue> {
             addPhotoTitle(context),
             SizedBox(height: getHeight(context) * 0.01),
             // imageUploadSection(context),
-            const FileUploadedWidget(
+            FileUploadedWidget(
               svgname: "assets/svg_images/upload_icon.svg",
-              Title: "Tap to Upload Image of Fuel Receipt",
+              title: "Tap to Upload Image of Fuel Receipt",
+              files: imageReceipt,
+              onFileUpload: (file) {
+                setState(() {
+                  imageReceipt.add(file);
+                });
+              },
             ),
             SizedBox(height: getHeight(context) * 0.04),
             submitButton(context),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:driver_app/core/widgets/FileUploadedWidget.dart';
 import 'package:driver_app/core/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,8 @@ class FuelTrackingMain extends StatefulWidget {
 
 class _FuelTrackingMainState extends State<FuelTrackingMain> {
   double _currentSliderValue = 1;
+  List<Map<String, dynamic>> petrolPumpReadingReceipt = [];
+  List<Map<String, dynamic>> fuelReceipt = [];
 
   @override
   Widget build(BuildContext context) {
@@ -154,9 +158,15 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
                 ],
               ),
               const SizedBox(height: 15),
-              const FileUploadedWidget(
+              FileUploadedWidget(
                 svgname: "assets/svg_images/upload_icon.svg",
-                Title: "Tap to Upload Image of Pump Reading",
+                title: "Tap to Upload Image of Pump Reading",
+                files: petrolPumpReadingReceipt,
+                onFileUpload: (file) {
+                  setState(() {
+                    petrolPumpReadingReceipt.add(file);
+                  });
+                },
               ),
               const SizedBox(height: 5),
               Row(
@@ -173,9 +183,16 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
                 ],
               ),
               const SizedBox(height: 15),
-              const FileUploadedWidget(
+              FileUploadedWidget(
                 svgname: "assets/svg_images/upload_icon.svg",
-                Title: "Tap to Upload Image of Fuel Receipt",
+                title: "Tap to Upload Image of Fuel Receipt",
+                files: fuelReceipt,
+                onFileUpload: (file) {
+                  setState(() {
+                    fuelReceipt.add(file);
+                  });
+                  log("Fuel Receipt:$fuelReceipt");
+                },
               ),
               const SizedBox(height: 15),
               Padding(
