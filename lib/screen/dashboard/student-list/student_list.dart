@@ -95,6 +95,7 @@ class _StudentListState extends State<StudentList> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
+                              color: Color(0xff221f1f),
                             ),
                           ),
                         ],
@@ -130,10 +131,12 @@ class _StudentListState extends State<StudentList> {
                       child: DropdownButton<String>(
                         value: classSelectedValue,
                         hint: const Text(
-                          '10 A',
-                          style: TextStyle(color: Colors.black),
+                          'Class',
+                          style: TextStyle(
+                            color: Color(0xff221f1f),
+                          ),
                         ),
-//                         hint: const Text('Class'),
+                        iconEnabledColor: Color(0xff221f1f),
                         items: classDropdownItems.map((String item) {
                           return DropdownMenuItem<String>(
                             value: item,
@@ -160,8 +163,13 @@ class _StudentListState extends State<StudentList> {
                       height: getHeight(context) * 0.06,
                       child: DropdownButton<String>(
                         value: locationSelectedValue,
-                        hint: const Text('Location',
-                            style: TextStyle(color: Colors.black)),
+                        hint: const Text(
+                          'Location',
+                          style: TextStyle(
+                            color: Color(0xff221f1f),
+                          ),
+                        ),
+                        iconEnabledColor: Color(0xff221f1f),
                         items: locationDropdownItems.map((String item) {
                           return DropdownMenuItem<String>(
                             value: item,
@@ -180,7 +188,6 @@ class _StudentListState extends State<StudentList> {
               ),
             ],
           ),
-//           SizedBox(height: getHeight(context) * 0.04),
           SizedBox(height: getHeight(context) * 0.02),
           Expanded(
             child: Padding(
@@ -190,9 +197,8 @@ class _StudentListState extends State<StudentList> {
                 itemBuilder: (context, index) {
                   return Card(
                     child: Padding(
-                      // padding: const EdgeInsets.symmetric(
-                      //     horizontal: 8.0, vertical: 8),
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 7.0, vertical: 16),
                       child: Row(
                         children: [
                           ClipOval(
@@ -212,8 +218,10 @@ class _StudentListState extends State<StudentList> {
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
+                                  color: Color(0xff221f1f),
                                 ),
                               ),
+                              SizedBox(height: 2),
                               Row(
                                 children: [
                                   Text(
@@ -232,6 +240,7 @@ class _StudentListState extends State<StudentList> {
                                   ),
                                 ],
                               ),
+                              SizedBox(height: 2),
                               Text(
                                 'Gender: Male',
                                 style: TextStyle(
@@ -245,7 +254,6 @@ class _StudentListState extends State<StudentList> {
                           IconButton(
                               onPressed: () {},
                               icon: const Icon(Icons.arrow_forward_sharp)),
-                          SizedBox(width: getHeight(context) * 0.01),
                         ],
                       ),
                     ),

@@ -130,10 +130,16 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
+                          color: Color(0xff545454),
                         ),
                       ),
                       const SizedBox(height: 2),
-                      const Text('License No: 4048683576'),
+                      const Text(
+                        'License No: 4048683576',
+                        style: TextStyle(
+                          color: Color(0xff676767),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -181,13 +187,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                       overflow: TextOverflow.ellipsis,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
+                                      color: Color(0xff545454),
                                     ),
                                   ),
                                   Text(
                                     'View your personal and work details',
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
-                                    style: TextStyle(fontSize: 12),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xffababab),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -217,6 +227,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
+                                  color: Color(0xff545454),
                                 ),
                               ),
                               Text(
@@ -225,6 +236,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 maxLines: 1,
                                 style: TextStyle(
                                   fontSize: 12,
+                                  color: Color(0xffababab),
                                 ),
                               ),
                             ],
@@ -251,6 +263,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
+                                    color: Color(0xff545454),
                                   ),
                                 ),
                                 Text(
@@ -259,6 +272,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   maxLines: 1,
                                   style: TextStyle(
                                     fontSize: 12,
+                                    color: Color(0xffababab),
                                   ),
                                 ),
                               ],
@@ -295,6 +309,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
+                  color: Color(0xff454951),
                 ),
               ),
             ),
@@ -318,6 +333,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
+                        color: Color(0xff545454),
                       ),
                     ),
                     const SizedBox(width: 5),

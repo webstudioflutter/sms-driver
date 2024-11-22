@@ -140,10 +140,14 @@ class _ReportIssueState extends State<ReportIssue> {
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w500,
+            color: Color(0xff545454),
           ),
         ),
         SizedBox(width: MediaQuery.sizeOf(context).height * 0.01),
-        const Icon(Icons.camera_alt_outlined),
+        const Icon(
+          Icons.camera_alt_outlined,
+          color: Color(0xff545454),
+        ),
       ],
     );
   }
@@ -247,10 +251,14 @@ class _ReportIssueState extends State<ReportIssue> {
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w500,
+            color: Color(0xff545454),
           ),
         ),
         SizedBox(width: MediaQuery.sizeOf(context).height * 0.01),
-        const Icon(Icons.warning_amber_rounded),
+        const Icon(
+          Icons.warning_amber_rounded,
+          color: Color(0xff545454),
+        ),
       ],
     );
   }
