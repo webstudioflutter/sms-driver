@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:driver_app/core/widgets/FileUploadedWidget.dart';
 import 'package:driver_app/core/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,8 @@ class FuelTrackingMain extends StatefulWidget {
 
 class _FuelTrackingMainState extends State<FuelTrackingMain> {
   double _currentSliderValue = 1;
+  List<Map<String, dynamic>> petrolPumpReadingReceipt = [];
+  List<Map<String, dynamic>> fuelReceipt = [];
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +35,10 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
                   const Text(
                     'Quantity',
                     style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
+                      color: Color(0xff545454),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   const SizedBox(width: 8),
                   SvgPicture.asset('assets/svg_images/quantity_fuel.svg',
@@ -74,12 +79,30 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('1L'),
-                  Text('10L'),
-                  Text('20L'),
-                  Text('30L'),
-                  Text('40L'),
-                  Text('50L'),
+                  Text(
+                    '1L',
+                    style: TextStyle(color: Color(0xff545454)),
+                  ),
+                  Text(
+                    '10L',
+                    style: TextStyle(color: Color(0xff545454)),
+                  ),
+                  Text(
+                    '20L',
+                    style: TextStyle(color: Color(0xff545454)),
+                  ),
+                  Text(
+                    '30L',
+                    style: TextStyle(color: Color(0xff545454)),
+                  ),
+                  Text(
+                    '40L',
+                    style: TextStyle(color: Color(0xff545454)),
+                  ),
+                  Text(
+                    '50L',
+                    style: TextStyle(color: Color(0xff545454)),
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -88,7 +111,7 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
                   const Text(
                     'Odometer Reading',
                     style: TextStyle(
-                        color: Colors.black,
+                        color: Color(0xff545454),
                         fontSize: 16,
                         fontWeight: FontWeight.w500),
                   ),
@@ -103,10 +126,19 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
                   hintText: 'Enter Reading on Odometer',
                   hintStyle: const TextStyle(
                     fontSize: 14,
-                    color: Colors.grey,
+                    color: Color(0xffc8c8c8),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xffd1d1d1),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Color(0xffd1d1d1),
+                    ),
                   ),
                 ),
               ),
@@ -116,18 +148,25 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
                   const Text(
                     'Petrol Pump Reading',
                     style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
+                      color: Color(0xff545454),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   const SizedBox(width: 8),
                   SvgPicture.asset('assets/svg_images/fuel_reading.svg'),
                 ],
               ),
               const SizedBox(height: 15),
-              const FileUploadedWidget(
+              FileUploadedWidget(
                 svgname: "assets/svg_images/upload_icon.svg",
-                Title: "Tap to Upload Image of Pump Reading",
+                title: "Tap to Upload Image of Pump Reading",
+                files: petrolPumpReadingReceipt,
+                onFileUpload: (file) {
+                  setState(() {
+                    petrolPumpReadingReceipt.add(file);
+                  });
+                },
               ),
               const SizedBox(height: 5),
               Row(
@@ -135,7 +174,7 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
                   const Text(
                     'Fuel Receipt',
                     style: TextStyle(
-                        color: Colors.black,
+                        color: Color(0xff545454),
                         fontSize: 16,
                         fontWeight: FontWeight.w500),
                   ),
@@ -144,34 +183,47 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
                 ],
               ),
               const SizedBox(height: 15),
-              const FileUploadedWidget(
+              FileUploadedWidget(
                 svgname: "assets/svg_images/upload_icon.svg",
-                Title: "Tap to Upload Image of Fuel Receipt",
+                title: "Tap to Upload Image of Fuel Receipt",
+                files: fuelReceipt,
+                onFileUpload: (file) {
+                  setState(() {
+                    fuelReceipt.add(file);
+                  });
+                  log("Fuel Receipt:$fuelReceipt");
+                },
               ),
               const SizedBox(height: 15),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xff60BF8F),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 31.0),
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xffff6448),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    minimumSize: const Size(double.infinity, 48),
                   ),
-                  minimumSize: const Size(double.infinity, 48),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'ADD FUEL RECORD',
-                      style: TextStyle(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'ADD FUEL RECORD',
+                        style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    const SizedBox(width: 8),
-                    SvgPicture.asset('assets/svg_images/fuel_reading.svg',
-                        color: Colors.white),
-                  ],
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      SvgPicture.asset(
+                        'assets/svg_images/fuel_reading.svg',
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

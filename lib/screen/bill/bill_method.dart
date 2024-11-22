@@ -15,8 +15,8 @@ class BillMethod extends StatefulWidget {
 
 class _BillMethodState extends State<BillMethod> {
   String _selectedDate = 'Select Date';
-  File? _selectedImage;
-  String? _fileName;
+  // File? _selectedImage;
+  List<Map<String, dynamic>> uploadedFiles = [];
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -43,9 +43,15 @@ class _BillMethodState extends State<BillMethod> {
           const SizedBox(height: 10),
           _buildTotalAmountSection(),
           const SizedBox(height: 15),
-          const FileUploadedWidget(
+          FileUploadedWidget(
             svgname: "assets/svg_images/upload_icon.svg",
-            Title: "Tap to upload your bill",
+            title: "Tap to upload your bill",
+            files: uploadedFiles,
+            onFileUpload: (file) {
+              setState(() {
+                uploadedFiles.add(file);
+              });
+            },
           ),
           const SizedBox(height: 15),
           Row(
@@ -116,7 +122,7 @@ class _BillMethodState extends State<BillMethod> {
             const Text(
               'Bill Type',
               style: TextStyle(
-                  color: Colors.black,
+                  color: Color(0xff676767),
                   fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
@@ -137,6 +143,15 @@ class _BillMethodState extends State<BillMethod> {
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: Color(0xffc8c8c8),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: Color(0xffc8c8c8),
+              ),
             ),
           ),
         ),
@@ -155,7 +170,7 @@ class _BillMethodState extends State<BillMethod> {
               const Text(
                 'Bill Date',
                 style: TextStyle(
-                    color: Colors.black,
+                    color: Color(0xff676767),
                     fontSize: 16,
                     fontWeight: FontWeight.w500),
               ),
@@ -169,10 +184,16 @@ class _BillMethodState extends State<BillMethod> {
           onTap: () => _selectDate(context),
           child: InputDecorator(
             decoration: InputDecoration(
-              border: OutlineInputBorder(
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xffc8c8c8)),
                 borderRadius: BorderRadius.circular(8),
               ),
-              suffixIcon: const Icon(Icons.calendar_month_outlined),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xffc8c8c8)),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              suffixIcon: const Icon(Icons.calendar_month_outlined,
+                  color: Color(0xffc8c8c8)),
             ),
             child: Text(
               _selectedDate,
@@ -197,7 +218,7 @@ class _BillMethodState extends State<BillMethod> {
             const Text(
               'Total Amount',
               style: TextStyle(
-                  color: Colors.black,
+                  color: Color(0xff676767),
                   fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),
@@ -219,6 +240,15 @@ class _BillMethodState extends State<BillMethod> {
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: Color(0xffc8c8c8),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: Color(0xffc8c8c8),
+              ),
             ),
           ),
         ),

@@ -81,6 +81,7 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.white,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 Text(
@@ -88,6 +89,7 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.white,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],
@@ -121,6 +123,8 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
                 'Logout',
                 style: TextStyle(
                   color: Color(0xfff24b3f),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],

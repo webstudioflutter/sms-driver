@@ -86,9 +86,10 @@ class _StudentListState extends State<StudentList> {
                           Text(
                             '25',
                             style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xff0b835c)),
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff0b835c),
+                            ),
                           ),
                           Text(
                             'Total Student',
@@ -214,7 +215,7 @@ class _StudentListState extends State<StudentList> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Sahadev Kunwar',
+                                'Hari Bahadur',
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,

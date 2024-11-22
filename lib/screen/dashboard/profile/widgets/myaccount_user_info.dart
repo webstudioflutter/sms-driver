@@ -1,8 +1,9 @@
 import 'package:driver_app/core/utils/util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class UserInfoRow extends StatelessWidget {
-  final IconData leadingIcon;
+  final String leadingIcon;
   final String title;
   final String subtitle;
   final IconData? suffixIcon;
@@ -10,7 +11,7 @@ class UserInfoRow extends StatelessWidget {
 
   const UserInfoRow({
     super.key,
-    this.leadingIcon = Icons.person_2_outlined,
+    required this.leadingIcon,
     required this.title,
     required this.subtitle,
     this.suffixIcon,
@@ -21,7 +22,8 @@ class UserInfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(leadingIcon, color: const Color(0xff60bf8f)),
+        SvgPicture.asset(leadingIcon,
+            width: 24.0, height: 24.0, color: const Color(0xff60bf8f)),
         SizedBox(width: getWidth(context) * 0.05),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
