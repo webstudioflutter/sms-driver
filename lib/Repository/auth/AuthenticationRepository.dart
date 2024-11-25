@@ -34,8 +34,10 @@ class AuthenticationRepository {
       if (authResponse.token != null) {
         await _saveAuthToken(authResponse.token!);
         await _saveDriverId(authResponse.result!.id);
+        await _saveDrivename(authResponse.result!.fullName);
         await _saveSchoolId(authResponse.result!.username);
         await _saveTransportationId(authResponse.result!.transporation?.id);
+        await _saveTransportationName(authResponse.result!.transporation!.name);
       } else {
         throw Exception("Authentication failed");
       }
@@ -70,6 +72,12 @@ class AuthenticationRepository {
     }
   }
 
+  Future<void> _saveDrivename(String? name) async {
+    if (name != null) {
+      await _secureStorage.write(key: 'drivername', value: name);
+    }
+  }
+
   /// Saves school ID to secure storage.
   Future<void> _saveSchoolId(String? id) async {
     if (id != null) {
@@ -81,6 +89,12 @@ class AuthenticationRepository {
   Future<void> _saveTransportationId(String? id) async {
     if (id != null) {
       await _secureStorage.write(key: 'transportationId', value: id);
+    }
+  }
+
+  Future<void> _saveTransportationName(String? name) async {
+    if (name != null) {
+      await _secureStorage.write(key: 'transporationName', value: name);
     }
   }
 
