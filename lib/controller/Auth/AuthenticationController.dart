@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final emailController = TextEditingController(text:"driver2@gmail.com");
+  final passwordController = TextEditingController(text:"12345678");
 
   var isPasswordVisible = false.obs;
   var isLoading = false.obs;
