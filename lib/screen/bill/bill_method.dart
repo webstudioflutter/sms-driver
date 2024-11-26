@@ -1,19 +1,22 @@
 import 'dart:async';
 
+import 'package:driver_app/controller/postBillController.dart';
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/core/widgets/FileUploadedWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class BillMethod extends StatefulWidget {
-  const BillMethod({super.key});
+  BillMethod({super.key});
 
   @override
   _BillMethodState createState() => _BillMethodState();
 }
 
 class _BillMethodState extends State<BillMethod> {
+  final _controller = Get.put(PostBill());
   String _selectedDate = 'Select Date';
   String _billType = '';
   double _totalAmount = 0.0;
@@ -55,115 +58,117 @@ class _BillMethodState extends State<BillMethod> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _buildBillTypeSection(),
-          const SizedBox(height: 10),
-          _buildBillDateSection(),
-          const SizedBox(height: 10),
-          _buildTotalAmountSection(),
-          const SizedBox(height: 15),
-          FileUploadedWidget(
-            svgname: "assets/svg_images/upload_icon.svg",
-            title: "Tap to upload your bill",
-            files: uploadedFiles,
-            onFileUpload: (file) {
-              setState(() {
-                uploadedFiles.add(file);
-              });
-            },
-          ),
-          const SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.all(10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+    return Scaffold(body: Obx(() {
+      return _controller.isLoading.value
+          ? const Center(child: CircularProgressIndicator())
+          : ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                _buildBillTypeSection(),
+                const SizedBox(height: 10),
+                _buildBillDateSection(),
+                const SizedBox(height: 10),
+                _buildTotalAmountSection(),
+                const SizedBox(height: 15),
+                FileUploadedWidget(
+                  svgname: "assets/svg_images/upload_icon.svg",
+                  title: "Tap to upload your bill",
+                  files: uploadedFiles,
+                  onFileUpload: (file) {
+                    setState(() {
+                      uploadedFiles.add(file);
+                    });
+                  },
                 ),
-                child: SizedBox(
-                  width: getWidth(context) * 0.39,
-                  child: const Text(
-                    textAlign: TextAlign.center,
-                    'Cancel',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    final FlutterSecureStorage _secureStorage =
-                        const FlutterSecureStorage();
-                    String? driverId =
-                        await _secureStorage.read(key: 'driverId');
-                    String? drivername =
-                        await _secureStorage.read(key: 'drivername');
-                    String? schoolname =
-                        await _secureStorage.read(key: 'schoolId');
-                    String? transportationId =
-                        await _secureStorage.read(key: 'transportationId');
-                    String? transporationName =
-                        await _secureStorage.read(key: 'transporationName');
-
-                    final Map<String, dynamic> requestBody = {
-                      "schoolId": schoolname,
-                      "date": _selectedDate,
-                      "expenseType": "",
-                      "billType": _billType,
-                      "billTitle": "",
-                      "billAmount": amountcontroller.text,
-                      "nextServiceDate": "",
-                      "partsUsed": [],
-                      "billImage": [uploadedFiles],
-                      "oldPartsImages": [],
-                      "newPartsImages": [],
-                      "driverInfo": {"_id": driverId, "name": drivername},
-                      "vehicleInfo": {
-                        "_id": transportationId,
-                        "name": transporationName
+                const SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
                       },
-                      "status": true
-                    };
-                  } catch (e) {
-                    _showSubmitDialog("Error: $e");
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(10),
-                  backgroundColor: const Color(0xff60BF8F),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.all(10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: SizedBox(
+                        width: getWidth(context) * 0.39,
+                        child: const Text(
+                          textAlign: TextAlign.center,
+                          'Cancel',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          final FlutterSecureStorage _secureStorage =
+                              const FlutterSecureStorage();
+                          String? driverId =
+                              await _secureStorage.read(key: 'driverId');
+                          String? drivername =
+                              await _secureStorage.read(key: 'drivername');
+                          String? schoolname =
+                              await _secureStorage.read(key: 'schoolId');
+                          String? transportationId = await _secureStorage.read(
+                              key: 'transportationId');
+                          String? transporationName = await _secureStorage.read(
+                              key: 'transporationName');
+
+                          final Map<String, dynamic> requestBody = {
+                            "schoolId": schoolname,
+                            "date": _selectedDate,
+                            "expenseType": "",
+                            "billType": _billType,
+                            "billTitle": "",
+                            "billAmount": amountcontroller.text,
+                            "nextServiceDate": "",
+                            "partsUsed": [],
+                            "billImage": [uploadedFiles],
+                            "oldPartsImages": [],
+                            "newPartsImages": [],
+                            "driverInfo": {"_id": driverId, "name": drivername},
+                            "vehicleInfo": {
+                              "_id": transportationId,
+                              "name": transporationName
+                            },
+                            "status": true
+                          };
+                        } catch (e) {
+                          _showSubmitDialog("Error: $e");
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(10),
+                        backgroundColor: const Color(0xff60BF8F),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: SizedBox(
+                        width: getWidth(context) * 0.39,
+                        child: const Text(
+                          textAlign: TextAlign.center,
+                          'Submit',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                child: SizedBox(
-                  width: getWidth(context) * 0.39,
-                  child: const Text(
-                    textAlign: TextAlign.center,
-                    'Submit',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+              ],
+            );
+    }));
   }
 
   // Bill Type section with dropdown inside a border

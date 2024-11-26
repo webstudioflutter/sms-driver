@@ -65,6 +65,8 @@ class BillRepository {
   }
 
   postBillData(Map<String, dynamic> data) {}
+
+  submitBill(BillModel bill) {}
 }
 
 final billRepository = BillRepository();
