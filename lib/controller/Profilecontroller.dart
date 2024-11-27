@@ -15,14 +15,12 @@ class ProfileController extends GetxController {
     isLoading.value = true;
     final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
     String? profileId = await _secureStorage.read(key: 'driverId');
-
     try {
       final Response =
           await profileRepository.ProfileData(profileId.toString());
       if (Response.result != null) {
         profile.value = Response; // Assign the fetched profile
       } else {
-        log("Profile data not found");
         profile.value = AuthenticationModel.withError(
             baseController.handleError(Response.error));
       }

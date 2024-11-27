@@ -58,7 +58,7 @@ class BaseController {
           errorDescription = 'Connection timeout with API server';
           break;
         case DioExceptionType.unknown:
-          errorDescription = 'No internet connection';
+          errorDescription = 'unknown';
           break;
         case DioExceptionType.receiveTimeout:
           errorDescription = 'Receive timeout in connection with API server';

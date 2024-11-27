@@ -377,18 +377,46 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                 ),
                                 child: ClipOval(
-                                  child: _image == null
+                                  child: profile.profileImage == null ||
+                                          profile.profileImage!.isEmpty
                                       ? Image.asset(
                                           'assets/images/fake_profile.jpg',
                                           height: getHeight(context) * 0.14,
                                           width: getHeight(context) * 0.14,
                                           fit: BoxFit.cover,
                                         )
-                                      : Image.file(
-                                          File(_image!.path),
+                                      : Image.network(
+                                          profile.profileImage!,
                                           height: getHeight(context) * 0.14,
                                           width: getHeight(context) * 0.14,
                                           fit: BoxFit.cover,
+                                          loadingBuilder: (context, child,
+                                              loadingProgress) {
+                                            if (loadingProgress == null)
+                                              return child;
+                                            return Center(
+                                              child: CircularProgressIndicator(
+                                                value: loadingProgress
+                                                            .expectedTotalBytes !=
+                                                        null
+                                                    ? loadingProgress
+                                                            .cumulativeBytesLoaded /
+                                                        (loadingProgress
+                                                                .expectedTotalBytes ??
+                                                            1)
+                                                    : null,
+                                              ),
+                                            );
+                                          },
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            return Image.asset(
+                                              'assets/images/fake_profile.jpg',
+                                              height: getHeight(context) * 0.14,
+                                              width: getHeight(context) * 0.14,
+                                              fit: BoxFit.cover,
+                                            );
+                                          },
                                         ),
                                 ),
                               ),

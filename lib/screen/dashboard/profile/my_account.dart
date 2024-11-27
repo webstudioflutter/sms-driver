@@ -115,7 +115,7 @@ class _MyAccountState extends State<MyAccount> {
                             UserInfoRow(
                               leadingIcon: 'assets/svg_images/bus.svg',
                               title: 'Assigned Vehicle',
-                              subtitle: profile.transporation!.name ?? 'N/A',
+                              subtitle: profile.transporation?.name ?? 'N/A',
                             ),
                             SizedBox(height: getHeight(context) * 0.025),
                             UserInfoRow(

@@ -63,10 +63,6 @@ class BillRepository {
       return BillModel.withError(baseController.handleError(error));
     }
   }
-
-  postBillData(Map<String, dynamic> data) {}
-
-  submitBill(BillModel bill) {}
 }
 
 final billRepository = BillRepository();
