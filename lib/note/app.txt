@@ -1,0 +1,95 @@
+Declaring a reactive variable
+You have 3 ways to turn a variable into an "observable".
+
+1 - The first is using Rx{Type}.
+
+// initial value is recommended, but not mandatory
+final name = RxString('');
+final isLogged = RxBool(false);
+final count = RxInt(0);
+final balance = RxDouble(0.0);
+final items = RxList<String>([]);
+final myMap = RxMap<String, int>({});
+
+2 - The second is to use Rx and use Darts Generics, Rx<Type>
+
+final name = Rx<String>('');
+final isLogged = Rx<Bool>(false);
+final count = Rx<Int>(0);
+final balance = Rx<Double>(0.0);
+final number = Rx<Num>(0);
+final items = Rx<List<String>>([]);
+final myMap = Rx<Map<String, int>>({});
+
+// Custom classes - it can be any class, literally
+final user = Rx<User>();
+
+3 - The third, more practical, easier and preferred approach, just add .obs as a property of your value :
+
+final name = ''.obs;
+final isLogged = false.obs;
+final count = 0.obs;
+final balance = 0.0.obs;
+final number = 0.obs;
+final items = <String>[].obs;
+final myMap = <String, int>{}.obs;
+
+// Custom classes - it can be any class, literally
+final user = User().obs;
+//////
+///////////////////////
+Using the values in the view
+// controller file
+final count1 = 0.obs;
+final count2 = 0.obs;
+int get sum => count1.value + count2.value;
+
+// view file
+GetX<Controller>(
+  builder: (controller) {
+    print("count 1 rebuild");
+    return Text('${controller.count1.value}');
+  },
+),
+GetX<Controller>(
+  builder: (controller) {
+    print("count 2 rebuild");
+    return Text('${controller.count2.value}');
+  },
+),
+GetX<Controller>(
+  builder: (controller) {
+    print("count 3 rebuild");
+    return Text('${controller.sum}');
+  },
+),
+
+////////////////////////////////
+
+list
+final String title = 'User Info:'.obs
+final list = List<User>().obs;
+
+// on the view
+Text(controller.title.value), // String need to have .value in front of it
+ListView.builder (
+  itemCount: controller.list.length // lists don't need it
+)
+//////////////////
+Usage
+// Create controller class and extends GetxController
+class Controller extends GetxController {
+  int counter = 0;
+  void increment() {
+    counter++;
+    update(); // use update() to update counter variable on UI when increment be called
+  }
+}
+// On your Stateless/Stateful class, use GetBuilder to update Text when increment be called
+GetBuilder<Controller>(
+  init: Controller(), // INIT IT ONLY THE FIRST TIME
+  builder: (_) => Text(
+    '${_.counter}',
+  ),
+)
+//Initialize your controller only the first time. The second time you are using ReBuilder for the same 
