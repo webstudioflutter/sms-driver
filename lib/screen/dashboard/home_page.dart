@@ -1,3 +1,4 @@
+import 'package:driver_app/controller/Profilecontroller.dart';
 import 'package:driver_app/core/constants/string_constants.dart';
 import 'package:driver_app/core/utils/asset_provider.dart';
 import 'package:driver_app/core/utils/util.dart';
@@ -8,10 +9,10 @@ import 'package:driver_app/screen/dashboard/report-issue/report_issue.dart';
 import 'package:driver_app/screen/dashboard/student-list/student_list.dart';
 import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:driver_app/screen/fuel/fuel_tracking.dart';
-import 'package:driver_app/screen/location/bus_route_main.dart';
 import 'package:driver_app/screen/servicing/servicing_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +24,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _routeController = TextEditingController();
+  final ProfileController controller = Get.put(ProfileController());
+
+  @override
+  void initState() {
+    super.initState();
+    controller.getProfile();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,72 +147,84 @@ class _HomePageState extends State<HomePage> {
                       padding: EdgeInsets.symmetric(
                         horizontal: getWidth(context) * 0.07,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ClipOval(
-                            child: Image.asset(
-                              'assets/images/fake_profile.jpg',
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                      child: Obx(() {
+                        if (controller.isLoading.value) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (controller.profile.value == null) {
+                          return const Center(child: Text("Data not found"));
+                        } else {
+                          final profile = controller.profile.value!.result!;
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              const Text(
-                                'Lal Bahadur Ojha',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xff221F1F),
-                                  height: 1.2,
+                              ClipOval(
+                                child: Image.asset(
+                                  'assets/images/fake_profile.jpg',
+                                  height: 100,
+                                  width: 100,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-                              SizedBox(height: getHeight(context) * 0.01),
-                              const Padding(
-                                padding: EdgeInsets.only(left: 5.0),
-                                child: Text(
-                                  'Bus No:Ba2 cha 9820',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff221F1F),
-                                    height: 1.2,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: getHeight(context) * 0.01),
-                              GestureDetector(
-                                onTap: () {
-                                  _openModalBottomSheetForStartRoute(context);
-                                },
-                                child: Container(
-                                  width: getWidth(context) * 0.4,
-                                  height: 40,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 12),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xffff6448),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      'Start Route',
-                                      style: TextStyle(
-                                          color: Color(0xffFEFEFE),
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "${profile.fullName}" ?? 'N/A',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xff221F1F),
+                                      height: 1.2,
                                     ),
                                   ),
-                                ),
-                              ),
+                                  SizedBox(height: getHeight(context) * 0.01),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 5.0),
+                                    child: Text(
+                                      "License No: ${profile.lisenceNo}" ??
+                                          'N/A',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: Color(0xff221F1F),
+                                        height: 1.2,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: getHeight(context) * 0.01),
+                                  GestureDetector(
+                                    onTap: () {
+                                      _openModalBottomSheetForStartRoute(
+                                          context);
+                                    },
+                                    child: Container(
+                                      width: getWidth(context) * 0.4,
+                                      height: 40,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 12),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xffff6448),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          'Start Route',
+                                          style: TextStyle(
+                                              color: Color(0xffFEFEFE),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
-                          )
-                        ],
-                      ),
+                          );
+                        }
+                      }),
                     ),
                   ),
                 ),
@@ -244,7 +264,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const FuelTrackingMain(),
+                  builder: (context) =>  FuelTrackingMain(),
                 ),
               );
             },
@@ -627,6 +647,7 @@ Widget buildStdQuickAccessItem(
     ),
   );
 }
+
 class BottomClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {

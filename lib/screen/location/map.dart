@@ -210,6 +210,7 @@
 import 'dart:async';
 
 import 'package:driver_app/core/utils/util.dart';
+import 'package:driver_app/screen/dashboard/home_drawer.dart';
 import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -285,9 +286,14 @@ class _LiveTrackingMapPageState extends State<LiveTrackingMapPage> {
     super.dispose();
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
+      key: _scaffoldKey,
+      drawer: const HomePageDrawer(),
       body: Stack(
         children: [
           FlutterMap(
@@ -356,7 +362,7 @@ class _LiveTrackingMapPageState extends State<LiveTrackingMapPage> {
             ],
           ),
           Positioned(
-            top: 50,
+            top: 30,
             left: 10,
             right: 10,
             child: Column(
@@ -373,12 +379,17 @@ class _LiveTrackingMapPageState extends State<LiveTrackingMapPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back,
-                              color: Color(0xff155037)),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              _scaffoldKey.currentState?.openDrawer();
+                            },
+                            child: SvgPicture.asset(
+                              'assets/svg_images/menu.svg',
+                              height: 30,
+                            ),
+                          ),
                         ),
                         const Text(
                           "Route Map",

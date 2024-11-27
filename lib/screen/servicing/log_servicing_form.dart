@@ -1,12 +1,11 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:driver_app/core/utils/util.dart';
+import 'package:driver_app/controller/Home/ServicingController.dart';
 import 'package:driver_app/core/widgets/FileUploadedWidget.dart';
 import 'package:driver_app/core/widgets/custom_app_bar.dart';
-import 'package:driver_app/screen/servicing/servicing_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class LogServicingForm extends StatefulWidget {
   const LogServicingForm({super.key});
@@ -16,13 +15,19 @@ class LogServicingForm extends StatefulWidget {
 }
 
 class _LogServicingFormState extends State<LogServicingForm> {
+  final ServicingController servicingController =
+      Get.put(ServicingController());
+
   String _selectedDate = 'Select Date';
-  // List<Map<String, dynamic>> files = [];
-  // File? _selectedImage;
-  // String? _fileName;
+
   List<Map<String, dynamic>> servicingFiles = [];
+  final List<String> base64servicingImage = [];
+
   List<Map<String, dynamic>> damagedFiles = [];
+  final List<String> base64DamageImage = [];
+
   List<Map<String, dynamic>> replacedFiles = [];
+  final List<String> base64ReplaceImage = [];
 
   List<String> checkboxLabels = [
     "Brake Pads",
@@ -35,17 +40,27 @@ class _LogServicingFormState extends State<LogServicingForm> {
     "Others",
   ];
   List<bool> checkboxValues = List.filled(8, false);
+// Update the controller's partsUsed list
+  void updatePartsUsed() {
+    servicingController.partsUsed.clear();
+    servicingController.partsUsed.value = [
+      for (int i = 0; i < checkboxLabels.length; i++)
+        if (checkboxValues[i]) checkboxLabels[i],
+    ];
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
-      lastDate: DateTime(2101),
+      lastDate: DateTime.now(),
     );
     if (picked != null) {
       setState(() {
+        servicingController.servicingDate.value = '';
         _selectedDate = "${picked.day}/${picked.month}/${picked.year}";
+        servicingController.servicingDate.value = _selectedDate;
       });
     }
   }
@@ -53,11 +68,12 @@ class _LogServicingFormState extends State<LogServicingForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: customBar(
-          context: context,
-          title: 'Servicing',
-        ),
-        body: ListView(
+      appBar: customBar(
+        context: context,
+        title: 'Servicing',
+      ),
+      body: Obx(
+        () => ListView(
           padding: const EdgeInsets.all(16),
           children: [
             _buildServiceDateSection(),
@@ -66,10 +82,12 @@ class _LogServicingFormState extends State<LogServicingForm> {
             const SizedBox(height: 25),
             _buildTotalAmountSection(),
             const SizedBox(height: 15),
+
+            //Servicing File
             Row(
               children: [
                 const Text(
-                  'Servicing Date',
+                  'Servicing Bill',
                   style: TextStyle(
                       color: Color(0xff676767),
                       fontSize: 16,
@@ -80,18 +98,18 @@ class _LogServicingFormState extends State<LogServicingForm> {
               ],
             ),
             SizedBox(height: 5),
-            FileUploadedWidget(
-              svgname: "assets/svg_images/upload_image_receipt.svg",
-              title: "Tap to Upload Image of Receipt ",
-              files: servicingFiles,
-              onFileUpload: (file) {
-                setState(() {
-                  servicingFiles.add(file);
-                });
-              },
-            ),
 
-            ///Damaged Part
+            FileUploadedWidget(
+                svgname: "assets/svg_images/upload_image_receipt.svg",
+                title: "Tap to Upload Image of Receipt",
+                files: servicingFiles,
+                onSubmitImages: (base64ImagesList) {
+                  setState(() {
+                    servicingController.billImage.clear();
+                    servicingController.billImage.addAll(base64ImagesList);
+                  });
+                }),
+
             Row(
               children: [
                 const Text(
@@ -107,16 +125,30 @@ class _LogServicingFormState extends State<LogServicingForm> {
             ),
             SizedBox(height: 5),
 
+            // FileUploadedWidget(
+            //   svgname: "assets/svg_images/upload_image_receipt.svg",
+            //   title: "Tap to Upload Image of Receipt ",
+            //   files: damagedFiles,
+            //   onFileUpload: (file) {
+            //     setState(() {
+            //       damagedFiles.add(file);
+            //     });
+            //   },
+            // ),
+
             FileUploadedWidget(
-              svgname: "assets/svg_images/upload_image_receipt.svg",
-              title: "Tap to Upload Image of Receipt ",
-              files: damagedFiles,
-              onFileUpload: (file) {
-                setState(() {
-                  damagedFiles.add(file);
-                });
-              },
-            ),
+                svgname: "assets/svg_images/upload_image_receipt.svg",
+                title: "Tap to Upload Image of Receipt",
+                files: servicingFiles,
+                onSubmitImages: (base64ImagesList) {
+                  setState(() {
+                    // base64DamageImage.clear();
+                    // base64DamageImage.addAll(base64ImagesList);
+                    servicingController.damagedPartImage.clear();
+                    servicingController.damagedPartImage
+                        .addAll(base64ImagesList);
+                  });
+                }),
 
             ///Replaced Part
             Row(
@@ -138,70 +170,76 @@ class _LogServicingFormState extends State<LogServicingForm> {
               svgname: "assets/svg_images/upload_image_receipt.svg",
               title: "Tap to Upload Image of Receipt ",
               files: replacedFiles,
-              onFileUpload: (file) {
+              onSubmitImages: (base64ImagesList) {
                 setState(() {
-                  replacedFiles.add(file);
+                  servicingController.replacedPartImage.clear();
+                  servicingController.replacedPartImage
+                      .addAll(base64ImagesList);
                 });
               },
             ),
-            SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                OutlinedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ServicingMain()));
-                  },
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.all(10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: SizedBox(
-                    // width: 150,
-                    width: getWidth(context) * 0.39,
-                    child: const Text(
-                      textAlign: TextAlign.center,
-                      'Cancel',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    _showSubmitDialog();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(10),
-                    backgroundColor: const Color(0xff60BF8F),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: SizedBox(
-                    // width: 150,
-                    width: getWidth(context) * 0.39,
-                    child: const Text(
-                      textAlign: TextAlign.center,
-                      'Submit',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     OutlinedButton(
+            //       onPressed: () {
+            //         Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //                 builder: (context) => const ServicingMain()));
+            //       },
+            //       style: OutlinedButton.styleFrom(
+            //         padding: const EdgeInsets.all(10),
+            //         shape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(12),
+            //         ),
+            //       ),
+            //       child: SizedBox(
+            //         // width: 150,
+            //         width: getWidth(context) * 0.39,
+            //         child: const Text(
+            //           textAlign: TextAlign.center,
+            //           'Cancel',
+            //           style: TextStyle(
+            //               color: Colors.black,
+            //               fontSize: 16,
+            //               fontWeight: FontWeight.w500),
+            //         ),
+            //       ),
+            //     ),
+            //     ElevatedButton(
+            //       onPressed: () {
+            //         // _showSubmitDialog();
+            //         servicingController.submitServicingData();
+            //       },
+            //       style: ElevatedButton.styleFrom(
+            //         padding: const EdgeInsets.all(10),
+            //         backgroundColor: const Color(0xff60BF8F),
+            //         shape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(12),
+            //         ),
+            //       ),
+            //       child: SizedBox(
+            //         // width: 150,
+            //         width: getWidth(context) * 0.39,
+            //         child: const Text(
+            //           textAlign: TextAlign.center,
+            //           'Submit',
+            //           style: TextStyle(
+            //               color: Colors.white,
+            //               fontSize: 16,
+            //               fontWeight: FontWeight.w500),
+            //         ),
+            //       ),
+            //     ),
+
+            //   ],
+            // ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 
   // Bill Date section
@@ -233,7 +271,8 @@ class _LogServicingFormState extends State<LogServicingForm> {
               suffixIcon: const Icon(Icons.calendar_month_outlined),
             ),
             child: Text(
-              _selectedDate,
+              // servicingController.servicingDate=_selectedDate,
+              servicingController.servicingDate.value,
               style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey,
@@ -309,6 +348,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
         ),
         const SizedBox(height: 5),
         TextField(
+          controller: servicingController.totalAmountController,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             hintText: 'Enter Total Amount',
@@ -363,6 +403,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
                 setState(() {
                   checkboxValues[index] = value!;
                 });
+                updatePartsUsed(); // Update controller's list
               },
             );
           },

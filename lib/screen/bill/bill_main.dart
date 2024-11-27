@@ -86,7 +86,7 @@ class _BillMainState extends State<BillMain> {
                 labelColor: const Color(0xff60BF8F),
                 unselectedLabelColor: Colors.grey,
               ),
-              const Expanded(
+              Expanded(
                 child: TabBarView(
                   children: [
                     BillMethod(),

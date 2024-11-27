@@ -54,16 +54,16 @@ class _ReportIssueState extends State<ReportIssue> {
             addPhotoTitle(context),
             SizedBox(height: getHeight(context) * 0.01),
             // imageUploadSection(context),
-            FileUploadedWidget(
-              svgname: "assets/svg_images/upload_icon.svg",
-              title: "Tap to Upload Image of Fuel Receipt",
-              files: imageReceipt,
-              onFileUpload: (file) {
-                setState(() {
-                  imageReceipt.add(file);
-                });
-              },
-            ),
+            // FileUploadedWidget(
+            //   svgname: "assets/svg_images/upload_icon.svg",
+            //   title: "Tap to Upload Image of Fuel Receipt",
+            //   files: imageReceipt,
+            //   onFileUpload: (file) {
+            //     setState(() {
+            //       imageReceipt.add(file);
+            //     });
+            //   },
+            // ),
             SizedBox(height: getHeight(context) * 0.04),
             submitButton(context),
             SizedBox(height: getHeight(context) * 0.03),
