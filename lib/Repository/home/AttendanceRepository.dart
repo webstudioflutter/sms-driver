@@ -2,8 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:driver_app/Model/AttendanceModel.dart';
-import 'package:driver_app/controller/Auth/Basecontroller.dart';
-
+import 'package:driver_app/Repository/auth/Basecontroller.dart';
 
 class AttendanceRepository {
   late final String _appUrl;
