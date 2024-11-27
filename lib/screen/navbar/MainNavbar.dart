@@ -1,7 +1,7 @@
 import 'package:driver_app/core/utils/asset_provider.dart';
 import 'package:driver_app/screen/dashboard/home_page.dart';
 import 'package:driver_app/screen/dashboard/profile/profile_page.dart';
-import 'package:driver_app/screen/location/map.dart';
+import 'package:driver_app/screen/map/maps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -18,7 +18,7 @@ class _MainNavbarState extends State<MainNavbar> {
   final List<Widget> _pages = [
     const HomePage(),
     const Center(child: Text("Search Page")),
-    const LiveTrackingMapPage(),
+    MapTrackingPage(),
     const Center(child: Text("Notification Page")),
     const ProfilePage(),
   ];
