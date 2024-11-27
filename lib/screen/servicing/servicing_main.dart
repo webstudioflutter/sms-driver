@@ -1,7 +1,9 @@
+import 'package:driver_app/controller/Home/ServicingHistoryController.dart';
 import 'package:driver_app/core/widgets/custom_app_bar.dart';
 import 'package:driver_app/screen/servicing/log_servicing_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class ServicingMain extends StatefulWidget {
   const ServicingMain({super.key});
@@ -11,6 +13,8 @@ class ServicingMain extends StatefulWidget {
 }
 
 class _ServicingMainState extends State<ServicingMain> {
+  final servicingHistroyController = Get.put(ServicingHistoryController());
+
   final List<Map<String, String>> servicehistory = [
     {
       'date': '07 August, 2024',
@@ -31,64 +35,81 @@ class _ServicingMainState extends State<ServicingMain> {
         context: context,
         title: 'Servicing',
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            _servicingDateContent(),
-            const SizedBox(height: 5),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Text(
-                    'Servicing History',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+      body: Obx(() {
+        if (servicingHistroyController.isLoading.value) {
+          // Show loading spinner when data is being fetched
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (servicingHistroyController.servicingHistoryModel.value?.result?.length == 0) {
+          // Show error or no data message if the model is null
+          return const Center(
+            child: Text(
+              'No attendance data available.',
+              style: TextStyle(color: Colors.red),
+            ),
+          );
+        }
+
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              _servicingDateContent(),
+              const SizedBox(height: 5),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    const Text(
+                      'Servicing History',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xff545454),
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    SvgPicture.asset(
+                      'assets/svg_images/history.svg',
+                      height: 25,
+                      width: 25,
                       color: Color(0xff545454),
                     ),
-                  ),
-                  const SizedBox(width: 15),
-                  SvgPicture.asset(
-                    'assets/svg_images/history.svg',
-                    height: 25,
-                    width: 25,
-                    color: Color(0xff545454),
-                  ),
-                ],
-              ),
-            ),
-            _servingHistoryContent(),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LogServicingForm()));
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(10),
-                  backgroundColor: Color(0xffff6448),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  ],
                 ),
-                child: const SizedBox(
-                  width: 350,
-                  child: Text(
-                    "LOG SERVICING",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
+              ),
+              _servingHistoryContent(),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LogServicingForm()));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(10),
+                    backgroundColor: Color(0xffff6448),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                )),
-            const SizedBox(height: 40)
-          ],
-        ),
-      ),
+                  child: const SizedBox(
+                    width: 350,
+                    child: Text(
+                      "LOG SERVICING",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  )),
+              const SizedBox(height: 40)
+            ],
+          ),
+        );
+      }),
     );
   }
 
@@ -148,9 +169,13 @@ class _ServicingMainState extends State<ServicingMain> {
   Widget _servingHistoryContent() {
     return Expanded(
       child: ListView.builder(
-        itemCount: servicehistory.length,
+        // itemCount: servicehistory.length,
+        itemCount: servicingHistroyController
+            .servicingHistoryModel.value?.result?.length,
         itemBuilder: (context, index) {
-          final item = servicehistory[index];
+          // final item = servicehistory[index];
+          final item = servicingHistroyController
+              .servicingHistoryModel.value?.result![index];
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
@@ -178,7 +203,8 @@ class _ServicingMainState extends State<ServicingMain> {
                             color: Colors.grey),
                         const SizedBox(width: 4),
                         Text(
-                          item['date'] ?? '',
+                          // item['date'] ?? '',
+                          item?.date ?? "",
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -189,7 +215,8 @@ class _ServicingMainState extends State<ServicingMain> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '${item['items']}',
+                      // '${item['items']}',
+                      "",
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -198,7 +225,8 @@ class _ServicingMainState extends State<ServicingMain> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      '${item['price']}',
+                      // '${item['price']}',
+                      "",
                       style: const TextStyle(
                         color: Color(0xff545454),
                         fontSize: 14,

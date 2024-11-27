@@ -70,21 +70,32 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.all(5.0),
                 child: Column(
                   children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MyAccount()));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 20.0),
+// <<<<<<< sahadev
+//                     Padding(
+//                       padding: const EdgeInsets.only(top: 10.0),
+//                       child: GestureDetector(
+//                         onTap: () {
+//                           Navigator.push(
+//                               context,
+//                               MaterialPageRoute(
+//                                   builder: (context) => const MyAccount()));
+//                         },
+// =======
+//                     InkWell(
+//                       onTap: () {
+//                         Navigator.push(
+//                             context,
+//                             MaterialPageRoute(
+//                                 builder: (context) => const MyAccount()));
+//                       },
+//                       child: Padding(
+//                         padding: const EdgeInsets.only(top: 20.0),
+// >>>>>>> main
                         child: Row(
                           children: [
                             SvgPicture.asset('assets/svg_images/profile.svg'),
                             const SizedBox(width: 10),
                             SizedBox(
-                              width: getWidth(context) * 0.6,
                               child: const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -123,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Divider(),
                     Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
+                      padding: const EdgeInsets.only(top: 10.0),
                       child: Row(
                         children: [
                           SvgPicture.asset('assets/svg_images/lock.svg'),

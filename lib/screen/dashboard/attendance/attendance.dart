@@ -1,108 +1,16 @@
-// lib/attendance.dart
-import 'package:driver_app/core/utils/util.dart';
-import 'package:driver_app/core/widgets/page_title_bar.dart';
+import 'package:driver_app/controller/Home/AttendanceController.dart';
 import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:driver_app/core/utils/util.dart';
+import 'package:driver_app/core/widgets/page_title_bar.dart';
 
-class Attendance extends StatefulWidget {
-  const Attendance({super.key});
+class Attendance extends StatelessWidget {
+  Attendance({super.key});
 
-  @override
-  _AttendanceState createState() => _AttendanceState();
-}
-
-class _AttendanceState extends State<Attendance> {
-  Map<String, List<Map<String, String>>> contacts = {
-    'A': [
-      {'name': 'Aakash Kunwar', 'class': '5A', 'location': 'Kathmandu'},
-      {'name': 'Aarohi', 'class': '4B', 'location': 'Lalitpur'},
-      {'name': 'Aashish Bhai', 'class': '6C', 'location': 'Bhaktapur'},
-      {'name': 'Amit Poudel', 'class': '3A', 'location': 'Pokhara'},
-      {'name': 'Arun Bhai', 'class': '5B', 'location': 'Biratnagar'},
-    ],
-    'B': [
-      {'name': 'Bage', 'class': '4A', 'location': 'Chitwan'},
-      {'name': 'Bed', 'class': '7A', 'location': 'Janakpur'},
-      {'name': 'Bharat Fupaju', 'class': '5C', 'location': 'Hetauda'},
-      {'name': 'Bharat Sathi', 'class': '6A', 'location': 'Dharan'},
-    ],
-    'C': [
-      {'name': 'Chandan', 'class': '6B', 'location': 'Mahendranagar'},
-      {'name': 'Chandravardana', 'class': '7B', 'location': 'Nagarjuna'},
-      {'name': 'Chandravani', 'class': '3B', 'location': 'Rameshwaram'},
-    ],
-    'D': [
-      {'name': 'Dilip', 'class': '2A', 'location': 'Butwal'},
-      {'name': 'Divya', 'class': '3C', 'location': 'Nepalgunj'},
-      {'name': 'Dinesh', 'class': '4C', 'location': 'Rajbirajanagar'},
-    ],
-  };
-
-  bool sortByName = false;
-  bool sortByLocation = false;
-
-  void sortContacts() {
-    contacts.forEach((letter, namesList) {
-      if (sortByName) {
-        namesList.sort((a, b) => a['name']!.compareTo(b['name']!));
-      } else if (sortByLocation) {
-        namesList.sort((a, b) => a['location']!.compareTo(b['location']!));
-      }
-    });
-  }
-
-  void showSortDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Align(
-            alignment: Alignment.center,
-            child: Text('Sort By'),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CheckboxListTile(
-                title: const Text('By Name'),
-                value: sortByName,
-                onChanged: (bool? value) {
-                  setState(() {
-                    sortByName = value ?? false;
-                    sortByLocation =
-                        false; // Uncheck location if name is selected
-                    sortContacts();
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-              CheckboxListTile(
-                title: const Text('By Location'),
-                value: sortByLocation,
-                onChanged: (bool? value) {
-                  setState(() {
-                    sortByLocation = value ?? false;
-                    sortByName = false; // Uncheck name if location is selected
-                    sortContacts();
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  final AttendanceController attendanceController =
+      Get.put(AttendanceController());
 
   @override
   Widget build(BuildContext context) {
@@ -161,15 +69,18 @@ class _AttendanceState extends State<Attendance> {
                             horizontal: getWidth(context) * 0.06,
                           ),
                           height: getHeight(context) * 0.09,
-                          child: const Column(
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                '25',
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff0b835c),
+                              Obx(
+                                () => Text(
+                                  // '25',
+                                  "${attendanceController.presentStudent}",
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff0b835c),
+                                  ),
                                 ),
                               ),
                               Text(
@@ -194,15 +105,18 @@ class _AttendanceState extends State<Attendance> {
                             horizontal: getWidth(context) * 0.06,
                           ),
                           height: getHeight(context) * 0.09,
-                          child: const Column(
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                '05',
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xffe01e31),
+                              Obx(
+                                () => Text(
+                                  // '05',
+                                  "${attendanceController.absentStudent}",
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xffe01e31),
+                                  ),
                                 ),
                               ),
                               Text(
@@ -225,64 +139,57 @@ class _AttendanceState extends State<Attendance> {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: Column(
-          children: [
-            SizedBox(height: getHeight(context) * 0.01),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Card(
-                  elevation: 1,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6.0),
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
-                    height: getHeight(context) * 0.06,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.edit_square, color: Color(0xff221f1f)),
-                        SizedBox(width: getWidth(context) * 0.01),
-                        const Text(
-                          'Edit',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xff363636),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(width: getWidth(context) * 0.02),
-                GestureDetector(
-                  onTap: () {
-                    showSortDialog(context);
-                  },
-                  child: Card(
+      body: Obx(() {
+        if (attendanceController.isLoading.value) {
+          // Show loading spinner when data is being fetched
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (attendanceController.attendanceModel.value == null) {
+          // Show error or no data message if the model is null
+          return const Center(
+            child: Text(
+              'No attendance data available.',
+              style: TextStyle(color: Colors.red),
+            ),
+          );
+        }
+
+        final attendanceModel = attendanceController.attendanceModel.value!;
+        if (attendanceModel.count == 0) {
+          return const Center(child: Text('No attendance data available.'));
+        }
+
+        // Render attendance list
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Column(
+            children: [
+              SizedBox(height: getHeight(context) * 0.01),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Card(
                     elevation: 1,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6.0),
                     ),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
                       height: getHeight(context) * 0.06,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.swap_vert,
-                              size: 30, color: Color(0xff221f1f)),
+                          const Icon(
+                            Icons.edit_square,
+                            color: Color(0xff221f1f),
+                          ),
                           SizedBox(width: getWidth(context) * 0.01),
                           const Text(
-                            'Sort',
+                            'Edit',
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
@@ -293,104 +200,209 @@ class _AttendanceState extends State<Attendance> {
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: getHeight(context) * 0.01),
-            Expanded(
-              child: ListView.builder(
-                itemCount: contacts.length,
-                itemBuilder: (context, index) {
-                  String letter = contacts.keys.elementAt(index);
-                  List<Map<String, String>> names = contacts[letter]!;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          letter,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  SizedBox(width: getWidth(context) * 0.02),
+                  GestureDetector(
+                    onTap: () {
+                      showSortDialog(context);
+                    },
+                    child: Card(
+                      elevation: 1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6.0),
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        height: getHeight(context) * 0.06,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.swap_vert,
+                                size: 30, color: Color(0xff221f1f)),
+                            SizedBox(width: getWidth(context) * 0.01),
+                            const Text(
+                              'Sort',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xff363636),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      ...names.map(
-                        (contact) => Card(
-                          child: Padding(
-                            // padding: const EdgeInsets.symmetric(
-                            //     horizontal: 5.0, vertical: 8),
-                            padding: const EdgeInsets.all(16),
-                            child: Row(
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: getHeight(context) * 0.01),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: attendanceModel.result?.length,
+                  itemBuilder: (context, index) {
+                    final contact = attendanceModel.result![index];
+                    final studentId = contact.sId!;
+
+                    // final status =
+                    //     attendanceController.attendanceStatus[studentId] ??
+                    false;
+                    return Card(
+                      child: Padding(
+                        // padding: const EdgeInsets.symmetric(
+                        //     horizontal: 5.0, vertical: 8),
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            ClipOval(
+                              child: Image.asset(
+                                'assets/images/fake_profile.jpg',
+                                width: 42,
+                                height: 42,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            SizedBox(width: getHeight(context) * 0.01),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ClipOval(
-                                  child: Image.asset(
-                                    'assets/images/fake_profile.jpg',
-                                    width: 42,
-                                    height: 42,
-                                    fit: BoxFit.cover,
+                                Text(
+                                  contact.user?.name ?? "",
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff2b2b2b),
                                   ),
                                 ),
-                                SizedBox(width: getHeight(context) * 0.01),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      contact['name']!,
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff2b2b2b),
-                                      ),
-                                    ),
-                                    Text(
-                                      'Class: ${contact['class']}',
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xff345326),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: getWidth(context) * 0.38,
-                                      child: Text(
-                                        'Location: ${contact['location']}',
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          color: Color(0xff345326),
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  "Class:${contact.className?.className ?? ""}",
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xff345326),
+                                  ),
                                 ),
-                                const Spacer(),
-                                SvgPicture.asset(
-                                  'assets/svg_images/present.svg',
-                                  height: 44,
-                                  width: 44,
-                                ),
-                                SizedBox(width: getHeight(context) * 0.01),
-                                SvgPicture.asset(
-                                  'assets/svg_images/absent.svg',
-                                  height: 44,
-                                  width: 44,
+                                Text(
+                                  "Location:${contact.user?.pickDropLocation}",
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xff345326),
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
                                 ),
                               ],
                             ),
-                          ),
+                            const Spacer(),
+
+                            // Present Button
+                            // Obx(() {
+                            //   final status = attendanceController
+                            //       .attendanceStatus[studentId];
+                            //   return InkWell(
+                            //     onTap: () =>
+                            //         attendanceController.markPresent(studentId),
+                            //     child: SvgPicture.asset(
+                            //       status == true
+                            //           ? 'assets/svg_images/check-mark.svg'
+                            //           : 'assets/svg_images/default-present.svg',
+                            //       height: 44,
+                            //       width: 44,
+                            //     ),
+                            //   );
+                            // }),
+                            Obx(() {
+                              // final id = attendanceController
+                              //     .attendanceModel.value?.result![index].sId;
+                              return InkWell(
+                                onTap: () => attendanceController
+                                    .updateStudentStatus(index, true),
+                                child: SvgPicture.asset(
+                                  'assets/svg_images/present.svg',
+                                  height: 44,
+                                  width: 44,
+                                  color: attendanceController.attendanceModel
+                                              .value?.result![index].status ==
+                                          true
+                                      ? Colors.green
+                                      : null,
+                                ),
+                              );
+                            }),
+
+                            SizedBox(width: getHeight(context) * 0.01),
+                            // Absent Button
+                            Obx(() {
+                              // final status = attendanceController
+                              //     .attendanceStatus[studentId];
+                              return InkWell(
+                                onTap: () => attendanceController
+                                    .updateStudentStatus(index, false),
+                                child: SvgPicture.asset(
+                                  attendanceController.attendanceModel.value
+                                              ?.result![index].status ==
+                                          false
+                                      ? 'assets/svg_images/default-absent.svg'
+                                      : 'assets/svg_images/absent.svg',
+                                  height: 44,
+                                  width: 44,
+                                ),
+                              );
+                            }),
+                          ],
                         ),
                       ),
-                      SizedBox(height: getHeight(context) * 0.02),
-                    ],
-                  );
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+
+    void showSortDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Align(
+            alignment: Alignment.center,
+            child: Text('Sort By'),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CheckboxListTile(
+                title: const Text('By Name'),
+                value: attendanceController.sortParameter.value == 'name',
+                onChanged: (bool? value) {
+                  attendanceController.sortParameter.value = 'name';
+                  attendanceController.sortAttendance();
+                  Navigator.of(context).pop();
                 },
               ),
+              CheckboxListTile(
+                title: const Text('By Location'),
+                value: attendanceController.sortParameter.value == 'location',
+                onChanged: (bool? value) {
+                  attendanceController.sortParameter.value = 'location';
+                  attendanceController.sortAttendance();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Close'),
             ),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:driver_app/screen/bill/bill_main.dart';
 import 'package:driver_app/screen/dashboard/attendance/attendance.dart';
 import 'package:driver_app/screen/dashboard/home_page.dart';
 import 'package:driver_app/screen/fuel/fuel_tracking.dart';
+import 'package:driver_app/screen/navbar/MainNavbar.dart';
 import 'package:driver_app/screen/servicing/servicing_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,12 +41,12 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
           children: [
             _headerPart(context),
             Expanded(child: _buildDrawerOptions(context)),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
-              child: Divider(color: Colors.white54),
-            ),
-            _logoutButton(context),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            // const Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 10.0),
+            //   child: Divider(color: Colors.white54),
+            // ),
+            // _logoutButton(context),
+            // SizedBox(height: MediaQuery.of(context).size.height * 0.05),
           ],
         ),
       ),
@@ -100,39 +101,41 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
     );
   }
 
-  Container _logoutButton(BuildContext context) {
-    return Container(
-      width: MediaQuery.sizeOf(context).width * 0.7,
-      height: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.white,
-      ),
-      child: Center(
-        child: GestureDetector(
-          onTap: () {},
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.logout_outlined,
-                color: Color(0xfff24b3f),
-              ),
-              SizedBox(width: 8),
-              Text(
-                'Logout',
-                style: TextStyle(
-                  color: Color(0xfff24b3f),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // Container _logoutButton(BuildContext context) {
+  //   return Container(
+  //     width: MediaQuery.sizeOf(context).width * 0.7,
+  //     height: 50,
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.circular(8),
+  //       color: Colors.white,
+  //     ),
+  //     child: Center(
+  //       child: GestureDetector(
+  //         onTap: () {
+  //           Get.offAll(DriverLoginScreen());
+  //         },
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             Icon(
+  //               Icons.logout_outlined,
+  //               color: Color(0xfff24b3f),
+  //             ),
+  //             SizedBox(width: 8),
+  //             Text(
+  //               'Logout',
+  //               style: TextStyle(
+  //                 color: Color(0xfff24b3f),
+  //                 fontSize: 16,
+  //                 fontWeight: FontWeight.w500,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildDrawerOptions(BuildContext context) {
     return ListView(
@@ -142,7 +145,7 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
           svgAsset: 'assets/svg_images/drawer/home.svg',
           imageColor: Colors.white,
           label: 'Home',
-          destination: HomePage(),
+          destination: MainNavbar(),
         ),
         DrawerCard(
           svgAsset: 'assets/svg_images/drawer/attendance.svg',
@@ -159,7 +162,7 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
           label: 'Maintenance',
           // destination: AssignmentScreen(),
         ),
-        const DrawerCard(
+         DrawerCard(
           svgAsset: 'assets/svg_images/drawer/fuel-tracking.svg',
           label: 'Fuel Tracking',
           destination: FuelTrackingMain(),
