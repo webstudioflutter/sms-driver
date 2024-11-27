@@ -1,12 +1,11 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:driver_app/controller/Auth/Basecontroller.dart';
+import 'package:driver_app/Repository/auth/Basecontroller.dart';
 
 class StudentAttendance {
   late final String _appUrl;
   late final Dio _dio;
-
 
   StudentAttendance() {
     _dio = baseController.dio;

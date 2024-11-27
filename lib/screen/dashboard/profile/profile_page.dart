@@ -81,16 +81,15 @@ class _ProfilePageState extends State<ProfilePage> {
 //                                   builder: (context) => const MyAccount()));
 //                         },
 // =======
-//                     InkWell(
-//                       onTap: () {
-//                         Navigator.push(
-//                             context,
-//                             MaterialPageRoute(
-//                                 builder: (context) => const MyAccount()));
-//                       },
-//                       child: Padding(
-//                         padding: const EdgeInsets.only(top: 20.0),
-// >>>>>>> main
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MyAccount()));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 20.0),
                         child: Row(
                           children: [
                             SvgPicture.asset('assets/svg_images/profile.svg'),
