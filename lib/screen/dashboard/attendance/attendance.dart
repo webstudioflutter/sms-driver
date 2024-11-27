@@ -241,6 +241,11 @@ class Attendance extends StatelessWidget {
                   itemCount: attendanceModel.result?.length,
                   itemBuilder: (context, index) {
                     final contact = attendanceModel.result![index];
+                    final studentId = contact.sId!;
+
+                    // final status =
+                    //     attendanceController.attendanceStatus[studentId] ??
+                    false;
                     return Card(
                       child: Padding(
                         // padding: const EdgeInsets.symmetric(
@@ -284,59 +289,64 @@ class Attendance extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 ),
-                                // SizedBox(
-                                //   width: getWidth(context) * 0.4,
-                                //   child:
-                                //   Text(
-                                //     "Location:${contact.user?.pickDropLocation}",
-                                //     style: const TextStyle(
-                                //       fontSize: 12,
-                                //       color: Color(0xff345326),
-                                //     ),
-                                //     overflow: TextOverflow.ellipsis,
-                                //     maxLines: 1,
-                                //   ),
-                                // ),
                               ],
                             ),
                             const Spacer(),
-                            ////Present
-                            InkWell(
-                              onTap: () {
-                                if (contact.status == true) {
-                                  attendanceController.markPresent();
-                                }
-                              },
-                              child: SvgPicture.asset(
-                                // 'assets/svg_images/present.svg',
-                                // contact.status == true
-                                //     ? 'assets/svg_images/present.svg'
-                                //     :
-                                'assets/svg_images/check-mark.svg',
-                                color: Color(0xffb7b7b7),
-                                height: 44,
-                                width: 44,
-                              ),
-                            ),
+
+                            // Present Button
+                            // Obx(() {
+                            //   final status = attendanceController
+                            //       .attendanceStatus[studentId];
+                            //   return InkWell(
+                            //     onTap: () =>
+                            //         attendanceController.markPresent(studentId),
+                            //     child: SvgPicture.asset(
+                            //       status == true
+                            //           ? 'assets/svg_images/check-mark.svg'
+                            //           : 'assets/svg_images/default-present.svg',
+                            //       height: 44,
+                            //       width: 44,
+                            //     ),
+                            //   );
+                            // }),
+                            Obx(() {
+                              // final id = attendanceController
+                              //     .attendanceModel.value?.result![index].sId;
+                              return InkWell(
+                                onTap: () => attendanceController
+                                    .updateStudentStatus(index, true),
+                                child: SvgPicture.asset(
+                                  'assets/svg_images/present.svg',
+                                  height: 44,
+                                  width: 44,
+                                  color: attendanceController.attendanceModel
+                                              .value?.result![index].status ==
+                                          true
+                                      ? Colors.green
+                                      : null,
+                                ),
+                              );
+                            }),
+
                             SizedBox(width: getHeight(context) * 0.01),
-
-                            ////Absent
-                            InkWell(
-                              onTap: () {
-                                if (contact.status == false) {
-                                  attendanceController.markAbsent();
-                                }
-                              },
-                              child: SvgPicture.asset(
-                                // 'assets/svg_images/absent.svg',
-                                // contact.status == false
-                                //     ? 'assets/svg_images/absent.svg'
-                                'assets/svg_images/default-absent.svg',
-
-                                height: 44,
-                                width: 44,
-                              ),
-                            ),
+                            // Absent Button
+                            Obx(() {
+                              // final status = attendanceController
+                              //     .attendanceStatus[studentId];
+                              return InkWell(
+                                onTap: () => attendanceController
+                                    .updateStudentStatus(index, false),
+                                child: SvgPicture.asset(
+                                  attendanceController.attendanceModel.value
+                                              ?.result![index].status ==
+                                          false
+                                      ? 'assets/svg_images/default-absent.svg'
+                                      : 'assets/svg_images/absent.svg',
+                                  height: 44,
+                                  width: 44,
+                                ),
+                              );
+                            }),
                           ],
                         ),
                       ),
@@ -348,29 +358,10 @@ class Attendance extends StatelessWidget {
           ),
         );
       }),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xff60bd8f),
-            shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(8.0), // Adjust the radius as needed
-            ),
-          ),
-          onPressed: () {},
-          child: Text(
-            'Confirm Attendance',
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
     );
   }
 
-  void showSortDialog(BuildContext context) {
+    void showSortDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

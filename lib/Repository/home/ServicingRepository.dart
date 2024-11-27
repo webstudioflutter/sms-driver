@@ -3,21 +3,21 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:driver_app/controller/Auth/Basecontroller.dart';
 
-class FuelTrackingRepository {
+class ServicingRepository {
   late final String _appUrl;
   late final Dio _dio;
 
-  FuelTrackingRepository() {
+  ServicingRepository() {
     _dio = baseController.dio;
     _appUrl = baseController.appUrl;
   }
 
-  Future<Map<String, dynamic>> postFuelTrackingInfo(
-      Map<String, dynamic> fuelTrackingData) async {
+  Future<Map<String, dynamic>> postServicingData(
+      {Map<String, dynamic>? servicingData}) async {
     try {
       final response = await _dio.post(
-        '$_appUrl/vehicle-fuel',
-        data: fuelTrackingData,
+        '$_appUrl/vehicle-expenses',
+        data: servicingData,
       );
 
       if (response.data['message'] == "Success") {
@@ -47,4 +47,4 @@ class FuelTrackingRepository {
   }
 }
 
-final fuelTrackingRepository = FuelTrackingRepository();
+final servicingRepository = ServicingRepository();

@@ -3,26 +3,28 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:driver_app/controller/Auth/Basecontroller.dart';
 
-class FuelTrackingRepository {
+class StudentAttendance {
   late final String _appUrl;
   late final Dio _dio;
 
-  FuelTrackingRepository() {
+
+  StudentAttendance() {
     _dio = baseController.dio;
     _appUrl = baseController.appUrl;
   }
 
-  Future<Map<String, dynamic>> postFuelTrackingInfo(
-      Map<String, dynamic> fuelTrackingData) async {
+  Future<Map<String, dynamic>> postStudentAttendance(
+      Map<String, dynamic> studentAttendanceData) async {
     try {
       final response = await _dio.post(
-        '$_appUrl/vehicle-fuel',
-        data: fuelTrackingData,
+        '$_appUrl/vehicle-attendance',
+        data: studentAttendanceData,
       );
 
       if (response.data['message'] == "Success") {
         // Extract the result from the response
         final result = response.data['result'] as Map<String, dynamic>;
+        log("Data successfully submitted: $result");
         return {
           'status': true,
           'message': "Data successfully submitted",
@@ -47,4 +49,4 @@ class FuelTrackingRepository {
   }
 }
 
-final fuelTrackingRepository = FuelTrackingRepository();
+final fuelTrackingRepository = StudentAttendance();

@@ -43,16 +43,16 @@ class _BillMethodState extends State<BillMethod> {
           const SizedBox(height: 10),
           _buildTotalAmountSection(),
           const SizedBox(height: 15),
-          FileUploadedWidget(
-            svgname: "assets/svg_images/upload_icon.svg",
-            title: "Tap to upload your bill",
-            files: uploadedFiles,
-            onFileUpload: (file) {
-              setState(() {
-                uploadedFiles.add(file);
-              });
-            },
-          ),
+          // FileUploadedWidget(
+          //   svgname: "assets/svg_images/upload_icon.svg",
+          //   title: "Tap to upload your bill",
+          //   files: uploadedFiles,
+          //   onFileUpload: (file) {
+          //     setState(() {
+          //       uploadedFiles.add(file);
+          //     });
+          //   },
+          // ),
           const SizedBox(height: 15),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

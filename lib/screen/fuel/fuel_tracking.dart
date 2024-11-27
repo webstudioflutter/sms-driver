@@ -5,8 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class FuelTrackingMain extends StatelessWidget {
+class FuelTrackingMain extends StatefulWidget {
+  @override
+  State<FuelTrackingMain> createState() => _FuelTrackingMainState();
+}
+
+class _FuelTrackingMainState extends State<FuelTrackingMain> {
   final FuelTrackingController _controller = Get.put(FuelTrackingController());
+
+  final List<Map<String, dynamic>> petrolPumpReadingFiles = [];
+  final List<String> base64petrolPumpImage = [];
 
   @override
   Widget build(BuildContext context) {
@@ -15,97 +23,118 @@ class FuelTrackingMain extends StatelessWidget {
         context: context,
         title: 'Fuel Tracking',
       ),
-      body: Obx(() => _controller.isLoading.value
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildQuantitySlider(),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    label: 'Odometer Reading',
-                    icon: Icons.speed,
-                    controller: _controller.odometerController,
-                    hint: 'Enter Reading on Odometer',
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    label: 'Fuel Rate',
-                    icon: Icons.attach_money,
-                    controller: _controller.fuelRateController,
-                    hint: 'Enter current fuel rate',
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      const Text(
-                        'Petrol Pump Reading',
-                        style: TextStyle(
-                          color: Color(0xff545454),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+      body: Obx(() => SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildQuantitySlider(),
+                const SizedBox(height: 16),
+                _buildTextField(
+                  label: 'Odometer Reading',
+                  icon: Icons.speed,
+                  controller: _controller.odometerController,
+                  hint: 'Enter Reading on Odometer',
+                ),
+                const SizedBox(height: 16),
+                _buildTextField(
+                  label: 'Fuel Rate',
+                  icon: Icons.attach_money,
+                  controller: _controller.fuelRateController,
+                  hint: 'Enter current fuel rate',
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Text(
+                      'Petrol Pump Reading',
+                      style: TextStyle(
+                        color: Color(0xff545454),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
                       ),
-                      const SizedBox(width: 8),
-                      Icon(Icons.local_gas_station,
-                          color: Color(0xff545454), size: 20),
-                    ],
-                  ),
-                  const SizedBox(height: 15),
-                  FileUploadedWidget(
-                    svgname: "assets/svg_images/upload_icon.svg",
-                    title: "Tap to Upload Image of Pump Reading",
-                    files: _controller.petrolPumpReadingReceipt,
-                    onFileUpload: (file) {
-                      _controller.addFile(file);
-                    },
-                  ),
-                  const SizedBox(height: 45),
-                  ElevatedButton(
-                    onPressed: _controller.isLoading.value
-                        ? null
-                        : () async {
-                            await _controller.submitFuelTrackingData();
-                          },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xffff6448),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      minimumSize: const Size(double.infinity, 48),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'ADD FUEL RECORD',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        SvgPicture.asset(
-                          'assets/svg_images/fuel_reading.svg',
-                          color: Colors.white,
-                        ),
-                      ],
+                    const SizedBox(width: 8),
+                    Icon(Icons.local_gas_station,
+                        color: Color(0xff545454), size: 20),
+                  ],
+                ),
+                const SizedBox(height: 15),
+                // FileUploadedWidget(
+                //   svgname: "assets/svg_images/upload_icon.svg",
+                //   title: "Tap to Upload Image of Pump Reading",
+                //   files: _controller.petrolPumpReadingReceipt,
+                //   onFileUpload: (file) {
+                //     _controller.addFile(file);
+                //   },
+                // ),
+
+                FileUploadedWidget(
+                  svgname: "assets/svg_images/upload_image_receipt.svg",
+                  title: "Tap to Upload Image of Receipt ",
+                  files: petrolPumpReadingFiles,
+                  // onFileUpload: (file) {
+                  //   setState(() {
+                  //     petrolPumpReadingFiles.add(file);
+                  //   });
+                  // },
+                  onSubmitImages: (base64ImagesList) {
+                    setState(() {
+                      _controller.petrolPumpReadingImage.clear();
+                      // base64petrolPumpImage.clear();
+                      // base64petrolPumpImage.addAll(base64ImagesList);
+                      // _controller.petrolPumpReadingImage.clear();
+                      _controller.petrolPumpReadingImage
+                          .addAll(base64ImagesList);
+                    });
+                  },
+                ),
+                const SizedBox(height: 45),
+                ElevatedButton(
+                  onPressed: _controller.isLoading.value
+                      ? null
+                      : () {
+                          _controller.submitFuelTrackingData();
+                        },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xffff6448),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    // const Text(
-                    //   'ADD FUEL RECORD',
-                    //   style: TextStyle(
-                    //     color: Colors.white,
-                    //     fontSize: 16,
-                    //     fontWeight: FontWeight.w500,
-                    //   ),
-                    // ),
+                    minimumSize: const Size(double.infinity, 48),
                   ),
-                ],
-              ),
-            )),
+                  child: _controller.isLoading.value
+                      ? CircularProgressIndicator(color: Colors.white)
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'ADD FUEL RECORD',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            SvgPicture.asset(
+                              'assets/svg_images/fuel_reading.svg',
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                  // const Text(
+                  //   'ADD FUEL RECORD',
+                  //   style: TextStyle(
+                  //     color: Colors.white,
+                  //     fontSize: 16,
+                  //     fontWeight: FontWeight.w500,
+                  //   ),
+                  // ),
+                ),
+              ],
+            ),
+          )),
     );
   }
 
@@ -180,7 +209,7 @@ class FuelTrackingMain extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Icon(icon,color: iconColor),
+            Icon(icon, color: iconColor),
           ],
         ),
         const SizedBox(height: 5),

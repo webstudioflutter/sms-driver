@@ -12,14 +12,15 @@ class FuelTrackingController extends GetxController {
   final TextEditingController fuelRateController = TextEditingController();
 
   var fuelQuantity = 1.0.obs;
-  var petrolPumpReadingReceipt = <Map<String, dynamic>>[].obs;
+  // var petrolPumpReadingReceipt = <Map<String, dynamic>>[].obs;
+  var petrolPumpReadingImage = <String>[].obs;
 
   var isLoading = false.obs;
 
   Future<void> submitFuelTrackingData() async {
     if (odometerController.text.isEmpty ||
         fuelRateController.text.isEmpty ||
-        petrolPumpReadingReceipt.isEmpty) {
+        petrolPumpReadingImage.isEmpty) {
       Get.snackbar('Validation Error', 'Please fill all required fields.',
           backgroundColor: Colors.red.shade400, colorText: Colors.white);
       return;
@@ -35,14 +36,17 @@ class FuelTrackingController extends GetxController {
         "readingOnOdometer": int.tryParse(odometerController.text) ?? 0,
         "addedFuel": fuelQuantity.value.toInt(),
         "fuelRate": int.tryParse(fuelRateController.text) ?? 0,
-        "pumpReadingImage": petrolPumpReadingReceipt.first['fileName'],
+        // "pumpReadingImage": petrolPumpReadingReceipt.first['fileName'],
+        "pumpReadingImage": petrolPumpReadingImage[0],
         "driverInfo": {"_id": "driverId"}, // Replace with actual driver ID
         "vehicleInfo": {"_id": "vehicleId"}, // Replace with actual vehicle ID
+        "status": true
       };
-
+      log("Fuel Tracking Data:${data}");
       final response = await _repository.postFuelTrackingInfo(data);
 
       if (response['status']) {
+        log(response['message'].toString());
         Get.snackbar('Success', 'Fuel record added successfully!',
             backgroundColor: Colors.green.shade400, colorText: Colors.white);
         resetFields();
@@ -58,14 +62,14 @@ class FuelTrackingController extends GetxController {
     }
   }
 
-  void addFile(Map<String, dynamic> fileData) {
-    petrolPumpReadingReceipt.add(fileData);
-  }
+  // void addFile(Map<String, dynamic> fileData) {
+  //   petrolPumpReadingReceipt.add(fileData);
+  // }
 
   void resetFields() {
     odometerController.clear();
     fuelRateController.clear();
     fuelQuantity.value = 1.0;
-    petrolPumpReadingReceipt.clear();
+    petrolPumpReadingImage.clear();
   }
 }

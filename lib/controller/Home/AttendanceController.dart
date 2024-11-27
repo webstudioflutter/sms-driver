@@ -7,21 +7,15 @@ import 'package:get/get.dart';
 
 class AttendanceController extends GetxController {
   final AttendanceRepository _repository = AttendanceRepository();
+
   var presentStudent = 0.obs;
   var absentStudent = 0.obs;
-  var attendanceStatus = Map<String, dynamic>().obs;
 
-  void markPresent() {
-    presentStudent.value++;
-  }
-
-  void markAbsent() {
-    absentStudent.value++;
-  }
+  // var attendanceStatus = Map<String, bool>().obs; // Map to track student status by ID
 
   var isLoading = false.obs;
   var attendanceModel = Rx<AttendanceModel?>(null);
-  var sortParameter = ''.obs; // Sorting parameter
+  var sortParameter = ''.obs;
 
   Future<void> fetchStudentList() async {
     try {
@@ -31,21 +25,18 @@ class AttendanceController extends GetxController {
 
       if (response.count != null && response.count != 0) {
         attendanceModel.value = response; // Assign the response to the model
+        // Initialize attendance status map
+        // for (var student in response.result!) {
+        //   attendanceStatus[student.sId ?? ""] = false; // Default to absent
+        // }
         sortAttendance(); // Sort data after fetching
-
-        // Get.snackbar(
-        //   'Success',
-        //   'List fetched successfully!',
-        //   backgroundColor: Colors.green.shade400,
-        //   colorText: Colors.white,
-        // );
       } else {
         attendanceModel.value = null;
         throw Exception('No data found');
       }
     } catch (e) {
       log('Error: $e');
-      attendanceModel.value = null; // Reset model on error
+      attendanceModel.value = null;
       Get.snackbar(
         'Error',
         'An error occurred. Please try again.',
@@ -54,6 +45,27 @@ class AttendanceController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  // Updates the counts of present and absent students
+  void updateCounts() {
+    int present = 0;
+    int absent = 0;
+
+    for (var entry in attendanceModel.value?.result ?? []) {
+      for (var contact in entry) {
+        if (contact['status'] == true) present++;
+        if (contact['status'] == false) absent++;
+      }
+    }
+    presentStudent.value = present;
+    absentStudent.value = absent;
+  }
+
+  // Updates the status of a specific student and adjusts the counts
+  void updateStudentStatus(int index, bool isPresent) {
+    attendanceModel.value?.result![index].status = isPresent;
+    updateCounts();
   }
 
   void sortAttendance() {
