@@ -1,12 +1,16 @@
 import 'dart:io';
 
 import 'package:driver_app/Repository/auth/AuthenticationRepository.dart';
+import 'package:driver_app/controller/Profilecontroller.dart';
+import 'package:driver_app/core/color_constant.dart';
 import 'package:driver_app/core/utils/util.dart';
-import 'package:driver_app/core/widgets/page_title_bar.dart';
+import 'package:driver_app/screen/dashboard/home_drawer.dart';
 import 'package:driver_app/screen/dashboard/profile/my_account.dart';
+import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:driver_app/screen/login_and_logout/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -36,119 +40,22 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  final ProfileController controller = Get.put(ProfileController());
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.getProfile(); // Fetch the profile data when the page loads
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.sizeOf(context).height * 0.25),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Container(
-              height: MediaQuery.sizeOf(context).height * 0.27,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xff6bccc1), Color(0xff6fcf99)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(40),
-                      bottomRight: Radius.circular(40))),
-            ),
-            Positioned(
-              top: MediaQuery.sizeOf(context).height * 0.07,
-              right: 10,
-              left: 10,
-              child: PageTitleBar(
-                title: 'Profile',
-                firstIcon: Icons.arrow_back,
-                lastWidget: SvgPicture.asset(
-                    'assets/svg_images/notification.svg',
-                    height: 20),
-              ),
-            ),
-            Positioned(
-              bottom: -95,
-              right: 10,
-              left: 10,
-              child: SizedBox(
-                // height: MediaQuery.sizeOf(context).height * 0.21,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: const Color(0xff60bf8f),
-                                width: 2,
-                              ),
-                            ),
-                            child: ClipOval(
-                              child: Image.asset(
-                                'assets/images/fake_profile.jpg',
-                                height: getHeight(context) * 0.14,
-                                width: getHeight(context) * 0.14,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            right: -15,
-                            bottom: 25,
-                            child: GestureDetector(
-                              onTap: () {
-                                _openModalBottomSheetForProfileEdit(context);
-                              },
-                              child: Container(
-                                height: getHeight(context) * 0.05,
-                                width: getHeight(context) * 0.05,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.green,
-                                ),
-                                child: const Icon(
-                                  Icons.edit_square,
-                                  size: 25,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Text(
-                        'Lal Bahadur Ojha',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff545454),
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      const Text(
-                        'License No: 4048683576',
-                        style: TextStyle(
-                          color: Color(0xff676767),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      resizeToAvoidBottomInset: true,
+      key: _scaffoldKey,
+      drawer: const HomePageDrawer(),
+      appBar: _appBarContent(context),
       body: Padding(
         padding: EdgeInsets.only(
           top: getHeight(context) * 0.13,
@@ -163,15 +70,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.all(5.0),
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const MyAccount()));
-                        },
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MyAccount()));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 20.0),
                         child: Row(
                           children: [
                             SvgPicture.asset('assets/svg_images/profile.svg'),
@@ -250,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Divider(),
-                    GestureDetector(
+                    InkWell(
                       onTap: () {
                         showLogoutConfirmation(context);
                       },
@@ -352,6 +259,172 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  PreferredSize _appBarContent(BuildContext context) {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(MediaQuery.sizeOf(context).height * 0.25),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            height: MediaQuery.sizeOf(context).height * 0.25,
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xff6bccc1), Color(0xff6fcf99)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(40),
+                    bottomRight: Radius.circular(40))),
+          ),
+          Positioned(
+            top: MediaQuery.sizeOf(context).height * 0.048,
+            right: 18,
+            left: 18,
+            child: Container(
+              height: 50,
+              decoration: const BoxDecoration(
+                  color: Color(0xffcdeede),
+                  borderRadius: BorderRadius.all(Radius.circular(25))),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        _scaffoldKey.currentState?.openDrawer();
+                      },
+                      child: SvgPicture.asset(
+                        'assets/svg_images/menu.svg',
+                        height: 30,
+                      ),
+                    ),
+                    Text(
+                      "Profile",
+                      style: const TextStyle(
+                        color: pageTitleColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EmergencyMain(),
+                            ));
+                      },
+                      child: SvgPicture.asset(
+                        'assets/svg_images/notification.svg',
+                        height: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: -95,
+            right: 10,
+            left: 10,
+            child: SizedBox(
+              // height: MediaQuery.sizeOf(context).height * 0.21,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+                child: Obx(() {
+                  if (controller.isLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (controller.profile.value == null) {
+                    return const Center(child: Text("Data not found"));
+                  } else {
+                    final profile = controller.profile.value!.result!;
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                _openModalBottomSheetForProfileEdit(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: const Color(0xff60bf8f),
+                                    width: 2,
+                                  ),
+                                ),
+                                child: ClipOval(
+                                  child: _image == null
+                                      ? Image.asset(
+                                          'assets/images/fake_profile.jpg',
+                                          height: getHeight(context) * 0.14,
+                                          width: getHeight(context) * 0.14,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.file(
+                                          File(_image!.path),
+                                          height: getHeight(context) * 0.14,
+                                          width: getHeight(context) * 0.14,
+                                          fit: BoxFit.cover,
+                                        ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              right: -15,
+                              bottom: 25,
+                              child: Container(
+                                height: getHeight(context) * 0.05,
+                                width: getHeight(context) * 0.05,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.green,
+                                ),
+                                child: const Icon(
+                                  Icons.edit_square,
+                                  size: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          "${profile.fullName}",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xff545454),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          "License No :${profile.lisenceNo}" ?? 'N/A',
+                          style: TextStyle(
+                            color: Color(0xff676767),
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                }),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -21,9 +21,7 @@ class AuthenticationModel {
     this.message,
     this.token,
   });
-
   AuthenticationModel.withError(String errorValue) : error = errorValue;
-
   factory AuthenticationModel.fromJson(Map<String, dynamic> json) =>
       AuthenticationModel(
         result: json["result"] == null ? null : Result.fromJson(json["result"]),
@@ -73,6 +71,11 @@ class Result {
   String? createdBy;
   DateTime? createdAt;
   int? v;
+  DateTime? modifiedAt;
+  String? modifiedBy;
+  String? citizenshipNo;
+  int? experiencedYear;
+  String? lisenceNo;
 
   Result({
     this.address,
@@ -109,6 +112,11 @@ class Result {
     this.createdBy,
     this.createdAt,
     this.v,
+    this.modifiedAt,
+    this.modifiedBy,
+    this.citizenshipNo,
+    this.experiencedYear,
+    this.lisenceNo,
   });
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
@@ -173,6 +181,13 @@ class Result {
             ? null
             : DateTime.parse(json["createdAt"]),
         v: json["__v"],
+        modifiedAt: json["modifiedAt"] == null
+            ? null
+            : DateTime.parse(json["modifiedAt"]),
+        modifiedBy: json["modifiedBy"],
+        citizenshipNo: json["citizenshipNo"],
+        experiencedYear: json["experiencedYear"],
+        lisenceNo: json["lisenceNo"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -228,6 +243,11 @@ class Result {
         "createdBy": createdBy,
         "createdAt": createdAt?.toIso8601String(),
         "__v": v,
+        "modifiedAt": modifiedAt?.toIso8601String(),
+        "modifiedBy": modifiedBy,
+        "citizenshipNo": citizenshipNo,
+        "experiencedYear": experiencedYear,
+        "lisenceNo": lisenceNo,
       };
 }
 
