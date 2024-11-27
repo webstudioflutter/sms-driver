@@ -1,5 +1,8 @@
+import 'package:driver_app/controller/BillController.dart';
 import 'package:driver_app/core/utils/util.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class HistoryMethod extends StatefulWidget {
   const HistoryMethod({super.key});
@@ -9,30 +12,17 @@ class HistoryMethod extends StatefulWidget {
 }
 
 class _HistoryMethodState extends State<HistoryMethod> {
-  final List<Map<String, String>> bills = [
-    {'date': '07 August, 2024', 'bill_type': 'Fuel', 'price': 'Rs.12000'},
-    {
-      'date': '07 August, 2024',
-      'bill_type': 'Maintenance Fee',
-      'price': 'Rs.12000'
-    },
-    {'date': '22 October, 2024', 'bill_type': 'Fuel', 'price': 'Rs.15000'},
-  ];
+  final BillController billController = Get.put(BillController());
 
   String? selectedBillType = 'Bill Type';
   DateTime? selectedDate;
 
   List<String> billTypes = ['Bill Type', 'Fuel', 'Maintenance Fee'];
 
-  List<Map<String, String>> get filteredBills {
-    return bills.where((bill) {
-      final matchesBillType = selectedBillType == null ||
-          selectedBillType == 'Bill Type' ||
-          bill['bill_type'] == selectedBillType;
-      final matchesDate =
-          selectedDate == null || bill['date'] == formatDate(selectedDate!);
-      return matchesBillType && matchesDate;
-    }).toList();
+  @override
+  void initState() {
+    super.initState();
+    billController.getBills();
   }
 
   String formatDate(DateTime date) {
@@ -59,191 +49,203 @@ class _HistoryMethodState extends State<HistoryMethod> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: getHeight(context) * 0.08,
-                  child: DropdownButtonFormField<String>(
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xff545454),
-                      fontWeight: FontWeight.w900,
-                    ),
-                    value: selectedBillType,
-                    hint: const Text(
-                      'Bill Type',
-                      style: TextStyle(
-                        fontSize: 19,
-                        color: Color(0xff545454),
-                      ),
-                    ),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffe0e0e0)),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffe0e0e0)),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    items: billTypes.map((type) {
-                      return DropdownMenuItem(
-                        value: type,
-                        child: Text(
-                          type,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedBillType = value;
-                      });
-                    },
-                    isExpanded: true,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: InkWell(
-                  onTap: () async {
-                    final pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2023),
-                      lastDate: DateTime(2025),
-                    );
-                    if (pickedDate != null) {
-                      setState(() {
-                        selectedDate = pickedDate;
-                      });
-                    }
-                  },
+    return Obx(() {
+      if (billController.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      // Using billController.bills to get the list of bills
+      var billsdata = billController.bills;
+
+      // Apply any filtering logic here if needed
+      // var filteredBills = bills.where((bill) {
+      //   final matchesBillType = selectedBillType == null || selectedBillType == 'Bill Type' || bill.billType == selectedBillType;
+      //   final matchesDate = selectedDate == null || bill.date == formatDate(selectedDate!);
+      //   return matchesBillType && matchesDate;
+      // }).toList();
+
+      return Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
                   child: Container(
                     height: getHeight(context) * 0.08,
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Color(0xffe0e0e0))),
-                        border: OutlineInputBorder(),
+                    child: DropdownButtonFormField<String>(
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Color(0xff545454),
+                        fontWeight: FontWeight.w900,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            selectedDate == null
-                                ? 'Choose Date'
-                                : formatDate(selectedDate!),
+                      value: selectedBillType,
+                      hint: const Text(
+                        'Bill Type',
+                        style: TextStyle(
+                          fontSize: 19,
+                          color: Color(0xff545454),
+                        ),
+                      ),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xffe0e0e0)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xffe0e0e0)),
+                        ),
+                      ),
+                      items: billTypes.map((type) {
+                        return DropdownMenuItem(
+                          value: type,
+                          child: Text(
+                            type,
                             style: const TextStyle(
-                                color: Color(0xff545454), fontSize: 16),
-                          ),
-                          Visibility(
-                            visible: selectedDate == null,
-                            child: Icon(
-                              Icons.calendar_month_outlined,
-                              color: Colors.grey,
-                              size: 24.0,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
                             ),
                           ),
-                          if (selectedDate != null)
-                            IconButton(
-                              icon: const Icon(
-                                Icons.clear,
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedBillType = value;
+                        });
+                      },
+                      isExpanded: true,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: InkWell(
+                    onTap: () async {
+                      final pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2023),
+                        lastDate: DateTime(2025),
+                      );
+                      if (pickedDate != null) {
+                        setState(() {
+                          selectedDate = pickedDate;
+                        });
+                      }
+                    },
+                    child: Container(
+                      height: getHeight(context) * 0.08,
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xffe0e0e0))),
+                          border: OutlineInputBorder(),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              selectedDate == null
+                                  ? 'Choose Date'
+                                  : formatDate(selectedDate!),
+                              style: const TextStyle(
+                                  color: Color(0xff545454), fontSize: 16),
+                            ),
+                            Visibility(
+                              visible: selectedDate == null,
+                              child: const Icon(
+                                Icons.calendar_month_outlined,
                                 color: Colors.grey,
                                 size: 24.0,
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  selectedDate = null;
-                                });
-                              },
                             ),
-                        ],
+                            if (selectedDate != null)
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.clear,
+                                  color: Colors.grey,
+                                  size: 24.0,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    selectedDate = null;
+                                  });
+                                },
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: filteredBills.length,
-            itemBuilder: (context, index) {
-              final item = filteredBills[index];
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        spreadRadius: 1,
-                        blurRadius: 4,
-                        offset: const Offset(0, 4),
+          Expanded(
+            child: ListView.builder(
+              itemCount: billsdata.length,
+              itemBuilder: (context, index) {
+                final item = billsdata[index];
+
+                return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 4,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                    ],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 16, right: 16, top: 8, bottom: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Icon(Icons.calendar_month_outlined,
-                                color: Colors.grey),
-                            const SizedBox(width: 4),
+                            Row(
+                              children: [
+                                const Icon(Icons.calendar_month_outlined,
+                                    color: Colors.grey),
+                                const SizedBox(width: 4),
+                                Text(
+                                  "${DateFormat('yyyy-MM-dd').parse(item.date!)}",
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xffadadad)),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 5),
                             Text(
-                              item['date'] ?? '',
+                              "Bill Type : ${item.billType}",
                               style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xff545454),
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              'Rs ${item.billAmount}',
+                              style: const TextStyle(
+                                  color: Color(0xff545454),
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xffadadad)),
+                                  fontWeight: FontWeight.w500),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'Bill Type : ${item['bill_type'] ?? ''}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xff545454),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '${item['price']}',
-                          style: const TextStyle(
-                              color: Color(0xff545454),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
+                      ),
+                    ));
+              },
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 }

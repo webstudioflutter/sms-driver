@@ -4,7 +4,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:driver_app/Model/Authenticationmodel.dart';
-import 'package:driver_app/controller/Auth/Basecontroller.dart';
+import 'package:driver_app/Repository/auth/Basecontroller.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,12 +31,13 @@ class AuthenticationRepository {
       final authResponse = AuthenticationModel.fromJson(response.data);
 
       // Validate response for DRIVER group and token
-      if (authResponse.result?.group == "DRIVER" &&
-          authResponse.token != null) {
+      if (authResponse.token != null) {
         await _saveAuthToken(authResponse.token!);
         await _saveDriverId(authResponse.result!.id);
+        await _saveDrivename(authResponse.result!.fullName);
         await _saveSchoolId(authResponse.result!.username);
         await _saveTransportationId(authResponse.result!.transporation?.id);
+        await _saveTransportationName(authResponse.result!.transporation!.name);
       } else {
         throw Exception("Authentication failed");
       }
@@ -71,6 +72,12 @@ class AuthenticationRepository {
     }
   }
 
+  Future<void> _saveDrivename(String? name) async {
+    if (name != null) {
+      await _secureStorage.write(key: 'drivername', value: name);
+    }
+  }
+
   /// Saves school ID to secure storage.
   Future<void> _saveSchoolId(String? id) async {
     if (id != null) {
@@ -82,6 +89,12 @@ class AuthenticationRepository {
   Future<void> _saveTransportationId(String? id) async {
     if (id != null) {
       await _secureStorage.write(key: 'transportationId', value: id);
+    }
+  }
+
+  Future<void> _saveTransportationName(String? name) async {
+    if (name != null) {
+      await _secureStorage.write(key: 'transporationName', value: name);
     }
   }
 
@@ -101,11 +114,7 @@ class AuthenticationRepository {
   /// Logs the user out by clearing all stored data.
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
-
-    // Remove token from shared preferences
     await prefs.remove('token');
-
-    // Clear secure storage data
     await _secureStorage.delete(key: 'driverId');
     await _secureStorage.delete(key: 'schoolId');
     await _secureStorage.delete(key: 'transportationId');
