@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:driver_app/Repository/auth/AuthenticationRepository.dart';
@@ -9,8 +10,10 @@ import 'package:driver_app/screen/dashboard/profile/my_account.dart';
 import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:driver_app/screen/login_and_logout/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -23,6 +26,10 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
+  List<Map<String, dynamic>> uploadedFiles = [];
+
+  File? _profileImage;
+  String? _profileBase64;
 
   // Function to pick image from camera or gallery
   Future<void> _pickImage(ImageSource source) async {
@@ -40,13 +47,79 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  takePhoto() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      try {
+        File imageFile = File(image.path);
+
+        // Read image bytes and decode
+        final bytes = await imageFile.readAsBytes();
+        final img.Image? originalImage = img.decodeImage(bytes);
+
+        if (originalImage != null) {
+          // Fix orientation and encode to JPEG
+          img.Image fixedImage = img.bakeOrientation(originalImage);
+          final fixedImageBytes = img.encodeJpg(fixedImage);
+          final fixedImageFile = File(imageFile.path)
+            ..writeAsBytesSync(fixedImageBytes);
+
+          // Convert to Base64 string
+          final base64Image = base64Encode(fixedImageBytes);
+
+          // Update state
+          setState(() {
+            _profileBase64 = base64Image;
+            _profileImage = fixedImageFile;
+          });
+
+          print("Profile Image File: $_profileImage");
+          print("Base64 Image: $_profileBase64");
+        } else {
+          print("Failed to decode the image.");
+        }
+      } catch (e) {
+        print("Error while processing image: $e");
+      }
+    } else {
+      print("No image selected.");
+    }
+  }
+
+  selectFromGallery() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      File imageFile = File(image.path);
+
+      var result = await FlutterImageCompress.compressWithFile(
+        imageFile.absolute.path,
+        minWidth: 500,
+        minHeight: 500,
+        quality: 88,
+        rotate: 0,
+      );
+
+      if (result != null) {
+        File compressedImage = await File(imageFile.path).writeAsBytes(result);
+
+        setState(() {
+          _profileImage = compressedImage;
+          _profileBase64 = base64Encode(result);
+        });
+
+        print("Encoded and compressed image as Base64: $_profileBase64");
+      }
+    }
+  }
+
   final ProfileController controller = Get.put(ProfileController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    controller.getProfile(); // Fetch the profile data when the page loads
+    controller.getProfile();
   }
 
   @override
@@ -70,17 +143,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.all(5.0),
                 child: Column(
                   children: [
-// <<<<<<< sahadev
-//                     Padding(
-//                       padding: const EdgeInsets.only(top: 10.0),
-//                       child: GestureDetector(
-//                         onTap: () {
-//                           Navigator.push(
-//                               context,
-//                               MaterialPageRoute(
-//                                   builder: (context) => const MyAccount()));
-//                         },
-// =======
                     InkWell(
                       onTap: () {
                         Navigator.push(
@@ -236,9 +298,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Card(
               child: Padding(
                 padding: EdgeInsets.only(
-                  // top: 20.0,
                   top: getHeight(context) * 0.01,
-                  // bottom: 20,
                   bottom: getHeight(context) * 0.01,
                   left: 5,
                 ),
@@ -368,57 +428,23 @@ class _ProfilePageState extends State<ProfilePage> {
                               onTap: () {
                                 _openModalBottomSheetForProfileEdit(context);
                               },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: const Color(0xff60bf8f),
-                                    width: 2,
-                                  ),
-                                ),
-                                child: ClipOval(
-                                  child: profile.profileImage == null ||
-                                          profile.profileImage!.isEmpty
-                                      ? Image.asset(
-                                          'assets/images/fake_profile.jpg',
-                                          height: getHeight(context) * 0.14,
-                                          width: getHeight(context) * 0.14,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Image.network(
-                                          profile.profileImage!,
-                                          height: getHeight(context) * 0.14,
-                                          width: getHeight(context) * 0.14,
-                                          fit: BoxFit.cover,
-                                          loadingBuilder: (context, child,
-                                              loadingProgress) {
-                                            if (loadingProgress == null)
-                                              return child;
-                                            return Center(
-                                              child: CircularProgressIndicator(
-                                                value: loadingProgress
-                                                            .expectedTotalBytes !=
-                                                        null
-                                                    ? loadingProgress
-                                                            .cumulativeBytesLoaded /
-                                                        (loadingProgress
-                                                                .expectedTotalBytes ??
-                                                            1)
-                                                    : null,
-                                              ),
-                                            );
-                                          },
-                                          errorBuilder:
-                                              (context, error, stackTrace) {
-                                            return Image.asset(
-                                              'assets/images/fake_profile.jpg',
-                                              height: getHeight(context) * 0.14,
-                                              width: getHeight(context) * 0.14,
-                                              fit: BoxFit.cover,
-                                            );
-                                          },
-                                        ),
-                                ),
+                              child: CircleAvatar(
+                                maxRadius: 40,
+                                minRadius: 30,
+                                backgroundImage: _profileImage != null
+                                    ? FileImage(_profileImage!)
+                                    : (profile.profileImage == null ||
+                                            profile.profileImage!.isEmpty
+                                        ? const AssetImage(
+                                            'assets/images/fakeprofile.png')
+                                        : MemoryImage(
+                                            base64Decode(
+                                              profile.profileImage!
+                                                  .replaceFirst(
+                                                      'data:image/jpeg;base64,',
+                                                      ''),
+                                            ),
+                                          )),
                               ),
                             ),
                             Positioned(
@@ -467,103 +493,169 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void _openModalBottomSheetForProfileEdit(BuildContext context) {
-    showModalBottomSheet(
+  Future<dynamic> _openModalBottomSheetForProfileEdit(BuildContext context) {
+    return showDialog(
       context: context,
-      isScrollControlled: true,
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 25.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Container(
-                  height: 75,
-                  width: 75,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle, // Makes the border circular
-                    border: Border.all(
-                      color: const Color(0xff60bf8f),
-                      width: 2,
-                    ),
-                  ),
-                  child: ClipOval(
-                    child: _image == null
-                        ? Image.asset(
-                            'assets/images/fake_profile.jpg',
-                            height: 120,
-                            width: 120,
-                            fit: BoxFit.cover,
-                          )
-                        : Image.file(
-                            File(_image!.path),
-                            fit: BoxFit.cover,
-                            width: 120,
-                            height: 120,
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          backgroundColor: Colors.white,
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Obx(() {
+                // Loading state or profile not found handling
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (controller.profile.value == null) {
+                  return const Center(child: Text("Data not found"));
+                } else {
+                  final profile = controller.profile.value!.result!;
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 25.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Display profile image in CircleAvatar
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: CircleAvatar(
+                            maxRadius: 40,
+                            minRadius: 30,
+                            backgroundImage: _profileImage != null
+                                ? FileImage(
+                                    _profileImage!) // Show selected image
+                                : (profile.profileImage == null ||
+                                        profile.profileImage!.isEmpty)
+                                    ? const AssetImage(
+                                            'assets/images/fakeprofile.png')
+                                        as ImageProvider // Default image if null
+                                    : MemoryImage(
+                                        base64Decode(
+                                          profile.profileImage!.replaceFirst(
+                                              'data:image/jpeg;base64,', ''),
+                                        ),
+                                      ),
                           ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
-                child: GestureDetector(
-                  onTap: () {
-                    _pickImage(ImageSource.camera); // Select from camera
-                    Navigator.pop(context);
-                  },
-                  child: Row(
-                    children: [
-                      const Icon(Icons.camera_alt_outlined),
-                      SizedBox(width: MediaQuery.sizeOf(context).width * 0.02),
-                      const Text(
-                        'Take Photograph',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
-                child: GestureDetector(
-                  onTap: () {
-                    _pickImage(ImageSource.gallery); // Select from gallery
-                    Navigator.pop(context);
-                  },
-                  child: Row(
-                    children: [
-                      const Icon(Icons.image),
-                      SizedBox(width: MediaQuery.sizeOf(context).width * 0.02),
-                      const Text(
-                        'Select from album',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Row(
-                    children: [
-                      const Icon(Icons.delete, color: Colors.red),
-                      SizedBox(width: MediaQuery.sizeOf(context).width * 0.02),
-                      const Text(
-                        'Remove Profile Picture',
-                        style: TextStyle(fontSize: 16, color: Colors.red),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+                        ),
+                        // Take Photo Option
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 10),
+                          child: GestureDetector(
+                            onTap: () async {
+                              var image = await takePhoto();
+                              if (image != null) {
+                                setState(() {
+                                  _profileImage = image;
+                                  _profileBase64 =
+                                      base64Encode(image.readAsBytesSync());
+                                });
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                const Icon(Icons.camera_alt_outlined),
+                                SizedBox(
+                                    width: MediaQuery.sizeOf(context).width *
+                                        0.02),
+                                const Text('Take Photograph',
+                                    style: TextStyle(fontSize: 16)),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // Select Photo from Gallery Option
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 10),
+                          child: GestureDetector(
+                            onTap: () async {
+                              final image = await selectFromGallery();
+                              if (image != null) {
+                                setState(() {
+                                  _profileImage = image;
+                                  _profileBase64 =
+                                      base64Encode(image.readAsBytesSync());
+                                });
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                const Icon(Icons.image),
+                                SizedBox(
+                                    width: MediaQuery.sizeOf(context).width *
+                                        0.02),
+                                const Text('Select from album',
+                                    style: TextStyle(fontSize: 16)),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // Remove Profile Image Option
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 10),
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _profileImage = null;
+                              });
+                              Navigator.of(context)
+                                  .pop(true); // Close dialog after removal
+                            },
+                            child: Row(
+                              children: [
+                                const Icon(Icons.delete, color: Colors.red),
+                                SizedBox(
+                                    width: MediaQuery.sizeOf(context).width *
+                                        0.02),
+                                const Text('Remove Profile Picture',
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.red)),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // Update Profile Button
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_profileBase64 != null &&
+                                _profileBase64!.isNotEmpty) {
+                              var data = {
+                                "profileImage":
+                                    "data:image/jpeg;base64,$_profileBase64",
+                              };
+                              controller.updateProfile(data);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.all(10),
+                            backgroundColor: Colors.blue,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: SizedBox(
+                            width: MediaQuery.sizeOf(context).width * 0.39,
+                            child: const Text(
+                              textAlign: TextAlign.center,
+                              'Update Profile',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              });
+            },
           ),
         );
       },
@@ -615,47 +707,3 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-
-// void showLogoutConfirmation(BuildContext context) {
-//     showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return AlertDialog(
-//           title: const Icon(Icons.logout, color: Colors.green),
-//           content: const Text('Are you sure you want to log out?'),
-//           actions: <Widget>[
-//             ElevatedButton(
-//               style: ElevatedButton.styleFrom(
-//                 padding: const EdgeInsets.all(10),
-//                 backgroundColor: const Color(0xffdddddd),
-//                 shape: RoundedRectangleBorder(
-//                   borderRadius: BorderRadius.circular(12),
-//                 ),
-//               ),
-//               child:
-//                   const Text('Cancel', style: TextStyle(color: Colors.black)),
-//               onPressed: () {
-//                 Navigator.of(context).pop();
-//               },
-//             ),
-//             ElevatedButton(
-//               style: ElevatedButton.styleFrom(
-//                 padding: const EdgeInsets.all(10),
-//                 backgroundColor: Colors.green,
-//                 shape: RoundedRectangleBorder(
-//                   borderRadius: BorderRadius.circular(12),
-//                 ),
-//               ),
-//               child: const Text('Yes', style: TextStyle(color: Colors.white)),
-//               onPressed: () {
-//                 Navigator.push(
-//                     context,
-//                     MaterialPageRoute(
-//                         builder: (context) => const TeacherLoginScreen()));
-//               },
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }

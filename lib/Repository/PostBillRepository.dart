@@ -32,17 +32,17 @@ class PostBillRepository {
         body: json.encode(data),
       );
 
-      // Check if the status code is successful (200)
+     
       if (response.statusCode == 200) {
         log("Success: ${response.body}");
         return PostBillModel.fromJson(
-            json.decode(response.body)); // Decode the response to JSON
+            json.decode(response.body)); 
       } else {
         log("Error response: ${response.statusCode} - ${response.body}");
         return PostBillModel.withError("Error: ${response.statusCode}");
       }
     } on DioError catch (dioError) {
-      // Enhanced error handling for Dio exceptions
+    
       log('DioError: ${dioError.message}\nStacktrace: ${dioError.stackTrace}',
           name: 'PostBillRepository');
       return PostBillModel.withError(baseController.handleError(dioError));
@@ -58,7 +58,7 @@ final postBillRepository = PostBillRepository();
 
 
 
-// import 'dart:developer';
+
 
 // import 'package:dio/dio.dart';
 // import 'package:driver_app/Repository/auth/Basecontroller.dart';

@@ -32,4 +32,27 @@ class ProfileController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  Future<void> updateProfile(Map<String, dynamic> data) async {
+    isLoading.value = true;
+    final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+    String? profileId = await _secureStorage.read(key: 'driverId');
+    try {
+      final Response =
+          await profileRepository.updateProfileField("${profileId}", data);
+      if (Response.result != null) {
+        profile.value = Response; // Assign the fetched profile
+        log("thissss${Response.result}");
+      } else {
+        profile.value = AuthenticationModel.withError(
+            baseController.handleError(Response.error));
+      }
+    } catch (e) {
+      log("Error: $e");
+      profile.value =
+          AuthenticationModel.withError(baseController.handleError(e));
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }
