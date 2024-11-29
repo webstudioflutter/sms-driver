@@ -16,19 +16,24 @@ class ServicingHistoryRepository {
   Future<ServicingHistoryModel> fetchServicingHistory() async {
     try {
       final response = await _dio.get('$_appUrl/vehicle-expenses');
-      log(response.data.toString());
 
       final servicingHistory = ServicingHistoryModel.fromJson(response.data);
 
       // Correct conditional check
-      if (servicingHistory.count != 0 && servicingHistory.result?.length == 0) {
+      if (servicingHistory.count != 0 && servicingHistory.result?.length != 0) {
         return servicingHistory;
       } else {
         throw Exception("No data found");
       }
     } on DioException catch (error) {
-      log('DioException: ${error.message}');
-      return ServicingHistoryModel.withError(baseController.handleError(error));
+      if (error.response != null && error.response?.statusCode == 400) {
+        // Handle specific 400 status code
+        final message = error.response?.data['message'] ?? "Bad Request";
+        log("Log data (400): $message");
+
+        return ServicingHistoryModel.withError(message);
+      }
+      return ServicingHistoryModel.withError(error.response?.data['message']);
     } catch (e) {
       log('Error: $e');
       return ServicingHistoryModel.withError(
