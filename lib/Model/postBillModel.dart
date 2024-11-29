@@ -18,6 +18,7 @@ class PostBillModel {
     this.message,
     this.result,
   });
+
   PostBillModel.withError(String errorValue) : error = errorValue;
 
   factory PostBillModel.fromJson(Map<String, dynamic> json) => PostBillModel(
@@ -32,9 +33,9 @@ class PostBillModel {
 }
 
 class Result {
-  List<String>? partsUsed;
-  List<String>? oldPartsImages;
-  List<String>? newPartsImages;
+  List<dynamic>? partsUsed;
+  List<dynamic>? oldPartsImages;
+  List<dynamic>? newPartsImages;
   bool? status;
   DateTime? createdAt;
   bool? isArchived;
@@ -45,8 +46,8 @@ class Result {
   String? billType;
   String? billTitle;
   int? billAmount;
-  DateTime? nextServiceDate;
-  String? billImage;
+  String? nextServiceDate;
+  dynamic billImage;
   Info? driverInfo;
   Info? vehicleInfo;
   String? createdBy;
@@ -77,13 +78,13 @@ class Result {
   factory Result.fromJson(Map<String, dynamic> json) => Result(
         partsUsed: json["partsUsed"] == null
             ? []
-            : List<String>.from(json["partsUsed"]!.map((x) => x)),
+            : List<dynamic>.from(json["partsUsed"]!.map((x) => x)),
         oldPartsImages: json["oldPartsImages"] == null
             ? []
-            : List<String>.from(json["oldPartsImages"]!.map((x) => x)),
+            : List<dynamic>.from(json["oldPartsImages"]!.map((x) => x)),
         newPartsImages: json["newPartsImages"] == null
             ? []
-            : List<String>.from(json["newPartsImages"]!.map((x) => x)),
+            : List<dynamic>.from(json["newPartsImages"]!.map((x) => x)),
         status: json["status"],
         createdAt: json["createdAt"] == null
             ? null
@@ -96,9 +97,7 @@ class Result {
         billType: json["billType"],
         billTitle: json["billTitle"],
         billAmount: json["billAmount"],
-        nextServiceDate: json["nextServiceDate"] == null
-            ? null
-            : DateTime.parse(json["nextServiceDate"]),
+        nextServiceDate: json["nextServiceDate"],
         billImage: json["billImage"],
         driverInfo: json["driverInfo"] == null
             ? null
@@ -125,12 +124,13 @@ class Result {
         "isArchived": isArchived,
         "_id": id,
         "schoolId": schoolId,
-        "date": date?.toIso8601String(),
+        "date":
+            "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
         "expenseType": expenseType,
         "billType": billType,
         "billTitle": billTitle,
         "billAmount": billAmount,
-        "nextServiceDate": nextServiceDate?.toIso8601String(),
+        "nextServiceDate": nextServiceDate,
         "billImage": billImage,
         "driverInfo": driverInfo?.toJson(),
         "vehicleInfo": vehicleInfo?.toJson(),
@@ -158,4 +158,3 @@ class Info {
         "name": name,
       };
 }
-

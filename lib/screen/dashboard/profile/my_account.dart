@@ -91,17 +91,31 @@ class _MyAccountState extends State<MyAccount> {
                                   ? "${profile.contactNumber}"
                                   : 'N/A',
                               suffixIcon: Icons.edit_square,
-                              onPressdSuffixIcon: () {},
+                              onTap: () async {
+                                final newContact = await numberController(
+                                  context,
+                                  title: "Edit Contact Information",
+                                  initialValue: "${profile.contactNumber}",
+                                );
+                              },
                             ),
                             SizedBox(height: getHeight(context) * 0.025),
                             UserInfoRow(
                               leadingIcon: 'assets/svg_images/home_profile.svg',
                               title: 'Home Address',
                               subtitle: profile.address!.city != null
-                                  ? "${profile.address!.street} ${profile.address!.city} "
+                                  ? "${profile.address!.street}${profile.address!.city}"
                                   : 'N/A',
                               suffixIcon: Icons.edit_square,
-                              onPressdSuffixIcon: () {},
+                              onTap: () async {
+                                final newAddress = await showAddressEditDialog(
+                                  context,
+                                  title: "Edit Home Address",
+                                  initialValue: profile.address != null
+                                      ? "${profile.address!.street}, ${profile.address!.city}"
+                                      : '',
+                                );
+                              },
                             ),
                             SizedBox(height: getHeight(context) * 0.025),
                             const Text(
@@ -115,7 +129,7 @@ class _MyAccountState extends State<MyAccount> {
                             UserInfoRow(
                               leadingIcon: 'assets/svg_images/bus.svg',
                               title: 'Assigned Vehicle',
-                              subtitle: profile.transporation!.name ?? 'N/A',
+                              subtitle: profile.transporation?.name ?? 'N/A',
                             ),
                             SizedBox(height: getHeight(context) * 0.025),
                             UserInfoRow(
@@ -133,6 +147,92 @@ class _MyAccountState extends State<MyAccount> {
             },
           ),
         ),
+      ),
+    );
+  }
+
+  Future<String?> numberController(
+    BuildContext context, {
+    required String title,
+    required String initialValue,
+  }) {
+    final TextEditingController textController =
+        TextEditingController(text: initialValue);
+
+    return showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: TextField(
+          controller: textController,
+          decoration: InputDecoration(hintText: "Enter new value"),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              var data = {"contactNumber": textController.text};
+              controller.updateProfile(data);
+            },
+            child: const Text("Save"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<String?> showAddressEditDialog(
+    BuildContext context, {
+    required String title,
+    required String initialValue,
+  }) {
+    final TextEditingController textController =
+        TextEditingController(text: initialValue);
+    final TextEditingController streetController =
+        TextEditingController(text: initialValue);
+
+    return showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Column(
+          children: [
+            TextField(
+              controller: textController,
+              decoration: InputDecoration(labelText: "Enter new city"),
+            ),
+            TextField(
+              controller: streetController,
+              decoration: InputDecoration(
+                labelText: "Enter new street",
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              var data = {
+                "address": {
+                  "city": textController.text,
+                  "district": "",
+                  "muncipality": "",
+                  "street": streetController.text,
+                  "location": ""
+                }
+              };
+              controller.updateProfile(data);
+            },
+            child: const Text("Save"),
+          ),
+        ],
       ),
     );
   }

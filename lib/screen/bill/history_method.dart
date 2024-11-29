@@ -17,7 +17,7 @@ class _HistoryMethodState extends State<HistoryMethod> {
   String? selectedBillType = 'Bill Type';
   DateTime? selectedDate;
 
-  List<String> billTypes = ['Bill Type', 'Fuel', 'Maintenance Fee'];
+  List<String> billTypes = ['Bill Type', 'Fuel', 'Maintenance'];
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class _HistoryMethodState extends State<HistoryMethod> {
   }
 
   String formatDate(DateTime date) {
-    return '${date.day.toString().padLeft(1, '0')} ${getMonthName(date.month)}, ${date.year}';
+    return '${date.day.toString().padLeft(2, '0')} ${getMonthName(date.month)}, ${date.year}';
   }
 
   String getMonthName(int month) {
@@ -54,15 +54,16 @@ class _HistoryMethodState extends State<HistoryMethod> {
         return const Center(child: CircularProgressIndicator());
       }
 
-      // Using billController.bills to get the list of bills
       var billsdata = billController.bills;
 
-      // Apply any filtering logic here if needed
-      // var filteredBills = bills.where((bill) {
-      //   final matchesBillType = selectedBillType == null || selectedBillType == 'Bill Type' || bill.billType == selectedBillType;
-      //   final matchesDate = selectedDate == null || bill.date == formatDate(selectedDate!);
-      //   return matchesBillType && matchesDate;
-      // }).toList();
+      var filteredBills = billsdata.where((bill) {
+        final matchesBillType = selectedBillType == null ||
+            selectedBillType == 'Bill Type' ||
+            bill.billType == selectedBillType;
+        final matchesDate = selectedDate == null ||
+            bill.date == DateFormat('yyyy-MM-dd').format(selectedDate!);
+        return matchesBillType && matchesDate;
+      }).toList();
 
       return Column(
         children: [
@@ -182,65 +183,66 @@ class _HistoryMethodState extends State<HistoryMethod> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: billsdata.length,
+              itemCount: filteredBills.length,
               itemBuilder: (context, index) {
-                final item = billsdata[index];
+                final item = filteredBills[index];
 
                 return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 4,
-                            offset: const Offset(0, 4),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 4,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.calendar_month_outlined,
+                                  color: Colors.grey),
+                              const SizedBox(width: 4),
+                              Text(
+                                item.date!,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xffadadad)),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            "Bill Type : ${item.billType}",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xff545454),
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            'Rs ${item.billAmount}',
+                            style: const TextStyle(
+                                color: Color(0xff545454),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500),
                           ),
                         ],
-                        borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(Icons.calendar_month_outlined,
-                                    color: Colors.grey),
-                                const SizedBox(width: 4),
-                                Text(
-                                  "${DateFormat('yyyy-MM-dd').parse(item.date!)}",
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xffadadad)),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              "Bill Type : ${item.billType}",
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xff545454),
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              'Rs ${item.billAmount}',
-                              style: const TextStyle(
-                                  color: Color(0xff545454),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ));
+                    ),
+                  ),
+                );
               },
             ),
           ),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:driver_app/controller/Profilecontroller.dart';
 import 'package:driver_app/core/constants/string_constants.dart';
 import 'package:driver_app/core/utils/asset_provider.dart';
@@ -159,12 +161,17 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               ClipOval(
-                                child: Image.asset(
-                                  'assets/images/fake_profile.jpg',
-                                  height: 100,
-                                  width: 100,
-                                  fit: BoxFit.cover,
-                                ),
+                                child: profile.profileImage == null
+                                    ? Icon(Icons.image)
+                                    : Image.memory(
+                                        base64Decode(
+                                          profile.profileImage!.replaceFirst(
+                                              'data:image/jpeg;base64,', ''),
+                                        ),
+                                        height: getHeight(context) * 0.14,
+                                        width: getHeight(context) * 0.14,
+                                        fit: BoxFit.cover,
+                                      ),
                               ),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -264,7 +271,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>  FuelTrackingMain(),
+                  builder: (context) => FuelTrackingMain(),
                 ),
               );
             },

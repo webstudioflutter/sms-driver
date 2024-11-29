@@ -249,6 +249,10 @@ class Result {
         "experiencedYear": experiencedYear,
         "lisenceNo": lisenceNo,
       };
+
+  void updateProfileField(String field, String value) {}
+
+  void updateField(String field, String value) {}
 }
 
 class Address {

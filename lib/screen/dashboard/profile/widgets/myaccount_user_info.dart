@@ -7,15 +7,15 @@ class UserInfoRow extends StatelessWidget {
   final String title;
   final String subtitle;
   final IconData? suffixIcon;
-  final VoidCallback? onPressdSuffixIcon;
+  void Function()? onTap;
 
-  const UserInfoRow({
+  UserInfoRow({
     super.key,
     required this.leadingIcon,
     required this.title,
     required this.subtitle,
     this.suffixIcon,
-    this.onPressdSuffixIcon,
+    this.onTap,
   });
 
   @override
@@ -41,7 +41,7 @@ class UserInfoRow extends StatelessWidget {
         ),
         const Spacer(),
         GestureDetector(
-          onTap: () => onPressdSuffixIcon,
+          onTap: onTap,
           child: Icon(suffixIcon, color: const Color(0xff9c9c9c)),
         ),
       ],
