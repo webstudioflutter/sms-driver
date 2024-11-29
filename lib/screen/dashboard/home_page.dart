@@ -162,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               ClipOval(
-                                child: profile.profileImage == null
+                                child: profile!.profileImage == null
                                     ? Icon(Icons.image)
                                     : Image.memory(
                                         base64Decode(
@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   Text(
                                     // "${profile?.fullName}" ?? 'N/A',
-                                    "${profile?.fullName ?? 'N/A'}",
+                                    "${profile.fullName ?? 'N/A'}",
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
@@ -194,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                                     child: Text(
                                       // "License No: ${profile?.lisenceNo}" ??
                                       //     'N/A',
-                                      "License No: ${profile?.lisenceNo ?? 'N/A'}",
+                                      "License No: ${profile.lisenceNo ?? 'N/A'}",
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
