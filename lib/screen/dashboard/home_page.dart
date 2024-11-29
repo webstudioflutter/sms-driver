@@ -156,7 +156,8 @@ class _HomePageState extends State<HomePage> {
                         } else if (controller.profile.value == null) {
                           return const Center(child: Text("Data not found"));
                         } else {
-                          final profile = controller.profile.value!.result!;
+                          // final profile = controller.profile.value!.result!;
+                          final profile = controller.profile.value?.result;
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -178,7 +179,8 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "${profile.fullName}" ?? 'N/A',
+                                    // "${profile?.fullName}" ?? 'N/A',
+                                    "${profile?.fullName ?? 'N/A'}",
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
@@ -190,8 +192,9 @@ class _HomePageState extends State<HomePage> {
                                   Padding(
                                     padding: EdgeInsets.only(left: 5.0),
                                     child: Text(
-                                      "License No: ${profile.lisenceNo}" ??
-                                          'N/A',
+                                      // "License No: ${profile?.lisenceNo}" ??
+                                      //     'N/A',
+                                      "License No: ${profile?.lisenceNo ?? 'N/A'}",
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,

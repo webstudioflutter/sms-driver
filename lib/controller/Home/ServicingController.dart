@@ -18,15 +18,14 @@ class ServicingController extends GetxController {
   var isLoading = false.obs;
 
   Future<void> submitServicingData() async {
-    if (totalAmountController.text.isEmpty ||
-            servicingDate.isEmpty ||
-            partsUsed.isEmpty ||
+    if (servicingDate.isEmpty ||
+            totalAmountController.text.isEmpty ||
             billImage.isEmpty
-        //||
+        //partsUsed.isEmpty ||
         // damagedPartImage.isEmpty ||
         // replacedPartImage.isEmpty
         ) {
-      Get.snackbar('Validation Error', 'Please fill all required fields.',
+      Get.snackbar('Validation Error', 'Please fill required fields.',
           backgroundColor: Colors.red.shade400, colorText: Colors.white);
       return;
     }
@@ -37,17 +36,23 @@ class ServicingController extends GetxController {
       isLoading.value = true;
 
       final data = {
+        ///---------------Mandatory Properties---------------///
+        "schoolId": "@nidisecondaryschool",
         "date": servicingDate.value,
-        "partsUsed": partsUsed.toList(),
         "billAmount": int.tryParse(totalAmountController.text) ?? 0,
-        "billType": "Servicing",
+        "expenseType": "Maintainance",
+        "driverInfo": {"_id": "driverId"},
+        "vehicleInfo": {"_id": "vehicleId"},
+
+        ///---------------Optional Properties---------------///
+        "partsUsed": partsUsed.toList(),
+        // "billType": "Servicing",
         "billImage": billImage[0],
         "oldPartsImages": damagedPartImage.toList(),
         "newPartsImages": replacedPartImage.toList(),
-        "driverInfo": {"_id": "driverId"},
-        "vehicleInfo": {"_id": "vehicleId"},
         "status": true
       };
+      log("Log servicing data:$data");
       final response = await _repository.postServicingData(servicingData: data);
 
       if (response['status']) {
@@ -59,7 +64,12 @@ class ServicingController extends GetxController {
 
         resetFields();
       } else {
-        Get.snackbar('Error', response['message']);
+        Get.snackbar(
+          'Error',
+          response['message'],
+          colorText: Colors.white,
+          backgroundColor: Colors.red,
+        );
       }
     } catch (e) {
       log('Error submitting fuel data: $e');

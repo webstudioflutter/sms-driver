@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ServicingHistoryController extends GetxController {
-  final ServicingHistoryRepository _repository = ServicingHistoryRepository();
 
   var isLoading = false.obs;
   var servicingHistoryModel = Rx<ServicingHistoryModel?>(null);
@@ -20,13 +19,15 @@ class ServicingHistoryController extends GetxController {
     try {
       isLoading.value = true;
 
-      final response = await _repository.fetchServicingHistory();
+      final response = await servicingHistoryRepo.fetchServicingHistory();
 
-      if (response.count != null && response.result != null) {
+      // Check if the response has valid data, and assign it to the model.
+      if (response.result != null && response.result!.isNotEmpty) {
         servicingHistoryModel.value = response;
       } else {
+        // Avoid throwing an error, just handle the empty case gracefully.
         servicingHistoryModel.value = null;
-        throw Exception('No data found');
+        log('No data found');
       }
     } catch (e) {
       log('Error: $e');
@@ -40,4 +41,5 @@ class ServicingHistoryController extends GetxController {
       isLoading.value = false;
     }
   }
+
 }

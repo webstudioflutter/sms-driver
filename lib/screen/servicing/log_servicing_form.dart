@@ -39,15 +39,20 @@ class _LogServicingFormState extends State<LogServicingForm> {
     "Air Filter",
     "Others",
   ];
-  List<bool> checkboxValues = List.filled(8, false);
-// Update the controller's partsUsed list
-  void updatePartsUsed() {
-    servicingController.partsUsed.clear();
-    servicingController.partsUsed.value = [
-      for (int i = 0; i < checkboxLabels.length; i++)
-        if (checkboxValues[i]) checkboxLabels[i],
-    ];
-  }
+  /////-----------Chips for parts replaced----//////
+  // List to store selected items
+  final List<String> selectedItems = [];
+  /////-----------Chips for parts replaced----//////
+
+//   List<bool> checkboxValues = List.filled(8, false);
+// // Update the controller's partsUsed list
+//   void updatePartsUsed() {
+//     servicingController.partsUsed.clear();
+//     servicingController.partsUsed.value = [
+//       for (int i = 0; i < checkboxLabels.length; i++)
+//         if (checkboxValues[i]) checkboxLabels[i],
+//     ];
+//   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -72,172 +77,182 @@ class _LogServicingFormState extends State<LogServicingForm> {
         context: context,
         title: 'Servicing',
       ),
-      body: Obx(
-        () => ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            _buildServiceDateSection(),
-            const SizedBox(height: 15),
-            _buildCheckboxSection(),
-            const SizedBox(height: 25),
-            _buildTotalAmountSection(),
-            const SizedBox(height: 15),
 
-            //Servicing File
-            Row(
-              children: [
-                const Text(
-                  'Servicing Bill',
-                  style: TextStyle(
-                      color: Color(0xff676767),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
+      ///For submit button
+      bottomNavigationBar: Obx(
+        () {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: servicingController.isLoading.value
+                  ? null // Disable the button while loading
+                  : () {
+                      servicingController.submitServicingData();
+                    },
+              style: ElevatedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                backgroundColor: const Color(0xff60BF8F),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                const SizedBox(width: 8),
-                SvgPicture.asset('assets/svg_images/bill_receipt.svg'),
-              ],
+              ),
+              child: servicingController.isLoading.value
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : const Text(
+                      'Submit',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
             ),
-            SizedBox(height: 5),
+          );
+        },
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _buildServiceDateSection(),
+          const SizedBox(height: 15),
+          _buildCheckboxSection(),
+          const SizedBox(height: 25),
+          _buildTotalAmountSection(),
+          const SizedBox(height: 15),
 
-            FileUploadedWidget(
-                svgname: "assets/svg_images/upload_image_receipt.svg",
-                title: "Tap to Upload Image of Receipt",
-                files: servicingFiles,
-                onSubmitImages: (base64ImagesList) {
-                  setState(() {
-                    servicingController.billImage.clear();
-                    servicingController.billImage.addAll(base64ImagesList);
-                  });
-                }),
+          //Servicing File
+          Row(
+            children: [
+              const Text(
+                'Servicing Bill',
+                style: TextStyle(
+                    color: Color(0xff676767),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(width: 8),
+              SvgPicture.asset('assets/svg_images/bill_receipt.svg'),
+            ],
+          ),
+          SizedBox(height: 5),
 
-            Row(
-              children: [
-                const Text(
-                  'Damaged Part',
-                  style: TextStyle(
-                      color: Color(0xff676767),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(width: 8),
-                SvgPicture.asset('assets/svg_images/bill_receipt.svg'),
-              ],
-            ),
-            SizedBox(height: 5),
-
-            // FileUploadedWidget(
-            //   svgname: "assets/svg_images/upload_image_receipt.svg",
-            //   title: "Tap to Upload Image of Receipt ",
-            //   files: damagedFiles,
-            //   onFileUpload: (file) {
-            //     setState(() {
-            //       damagedFiles.add(file);
-            //     });
-            //   },
-            // ),
-
-            FileUploadedWidget(
-                svgname: "assets/svg_images/upload_image_receipt.svg",
-                title: "Tap to Upload Image of Receipt",
-                files: servicingFiles,
-                onSubmitImages: (base64ImagesList) {
-                  setState(() {
-                    // base64DamageImage.clear();
-                    // base64DamageImage.addAll(base64ImagesList);
-                    servicingController.damagedPartImage.clear();
-                    servicingController.damagedPartImage
-                        .addAll(base64ImagesList);
-                  });
-                }),
-
-            ///Replaced Part
-            Row(
-              children: [
-                const Text(
-                  'Replaced Part',
-                  style: TextStyle(
-                      color: Color(0xff676767),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(width: 8),
-                SvgPicture.asset('assets/svg_images/bill_receipt.svg'),
-              ],
-            ),
-            SizedBox(height: 5),
-
-            FileUploadedWidget(
+          FileUploadedWidget(
               svgname: "assets/svg_images/upload_image_receipt.svg",
-              title: "Tap to Upload Image of Receipt ",
-              files: replacedFiles,
+              title: "Tap to Upload Image of Receipt",
+              files: servicingFiles,
               onSubmitImages: (base64ImagesList) {
                 setState(() {
-                  servicingController.replacedPartImage.clear();
-                  servicingController.replacedPartImage
-                      .addAll(base64ImagesList);
+                  servicingController.billImage.clear();
+                  servicingController.billImage.addAll(base64ImagesList);
                 });
-              },
-            ),
+              }),
 
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     OutlinedButton(
-            //       onPressed: () {
-            //         Navigator.push(
-            //             context,
-            //             MaterialPageRoute(
-            //                 builder: (context) => const ServicingMain()));
-            //       },
-            //       style: OutlinedButton.styleFrom(
-            //         padding: const EdgeInsets.all(10),
-            //         shape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(12),
-            //         ),
-            //       ),
-            //       child: SizedBox(
-            //         // width: 150,
-            //         width: getWidth(context) * 0.39,
-            //         child: const Text(
-            //           textAlign: TextAlign.center,
-            //           'Cancel',
-            //           style: TextStyle(
-            //               color: Colors.black,
-            //               fontSize: 16,
-            //               fontWeight: FontWeight.w500),
-            //         ),
-            //       ),
-            //     ),
-            //     ElevatedButton(
-            //       onPressed: () {
-            //         // _showSubmitDialog();
-            //         servicingController.submitServicingData();
-            //       },
-            //       style: ElevatedButton.styleFrom(
-            //         padding: const EdgeInsets.all(10),
-            //         backgroundColor: const Color(0xff60BF8F),
-            //         shape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(12),
-            //         ),
-            //       ),
-            //       child: SizedBox(
-            //         // width: 150,
-            //         width: getWidth(context) * 0.39,
-            //         child: const Text(
-            //           textAlign: TextAlign.center,
-            //           'Submit',
-            //           style: TextStyle(
-            //               color: Colors.white,
-            //               fontSize: 16,
-            //               fontWeight: FontWeight.w500),
-            //         ),
-            //       ),
-            //     ),
+          Row(
+            children: [
+              const Text(
+                'Damaged Part',
+                style: TextStyle(
+                    color: Color(0xff676767),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(width: 8),
+              SvgPicture.asset('assets/svg_images/bill_receipt.svg'),
+            ],
+          ),
+          SizedBox(height: 5),
 
-            //   ],
-            // ),
-          ],
-        ),
+          // FileUploadedWidget(
+          //   svgname: "assets/svg_images/upload_image_receipt.svg",
+          //   title: "Tap to Upload Image of Receipt ",
+          //   files: damagedFiles,
+          //   onFileUpload: (file) {
+          //     setState(() {
+          //       damagedFiles.add(file);
+          //     });
+          //   },
+          // ),
+
+          FileUploadedWidget(
+              svgname: "assets/svg_images/upload_image_receipt.svg",
+              title: "Tap to Upload Image of Receipt",
+              files: servicingFiles,
+              onSubmitImages: (base64ImagesList) {
+                setState(() {
+                  // base64DamageImage.clear();
+                  // base64DamageImage.addAll(base64ImagesList);
+                  servicingController.damagedPartImage.clear();
+                  servicingController.damagedPartImage.addAll(base64ImagesList);
+                });
+              }),
+
+          ///Replaced Part
+          Row(
+            children: [
+              const Text(
+                'Replaced Part',
+                style: TextStyle(
+                    color: Color(0xff676767),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(width: 8),
+              SvgPicture.asset('assets/svg_images/bill_receipt.svg'),
+            ],
+          ),
+          SizedBox(height: 5),
+
+          FileUploadedWidget(
+            svgname: "assets/svg_images/upload_image_receipt.svg",
+            title: "Tap to Upload Image of Receipt ",
+            files: replacedFiles,
+            onSubmitImages: (base64ImagesList) {
+              setState(() {
+                servicingController.replacedPartImage.clear();
+                servicingController.replacedPartImage.addAll(base64ImagesList);
+              });
+            },
+          ),
+
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     OutlinedButton(
+          //       onPressed: () {
+          //         Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //                 builder: (context) => const ServicingMain()));
+          //       },
+          //       style: OutlinedButton.styleFrom(
+          //         padding: const EdgeInsets.all(10),
+          //         shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(12),
+          //         ),
+          //       ),
+          //       child: SizedBox(
+          //         // width: 150,
+          //         width: getWidth(context) * 0.39,
+          //         child: const Text(
+          //           textAlign: TextAlign.center,
+          //           'Cancel',
+          //           style: TextStyle(
+          //               color: Colors.black,
+          //               fontSize: 16,
+          //               fontWeight: FontWeight.w500),
+          //         ),
+          //       ),
+          //     ),
+
+          //   ],
+          // ),
+        ],
       ),
     );
   }
@@ -383,31 +398,60 @@ class _LogServicingFormState extends State<LogServicingForm> {
             SvgPicture.asset('assets/svg_images/part_replacement.svg'),
           ],
         ),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 6,
-          ),
-          itemCount: checkboxLabels.length,
-          itemBuilder: (context, index) {
-            return CheckboxListTile(
-              controlAffinity: ListTileControlAffinity.leading,
-              contentPadding: EdgeInsets.zero,
-              title: Text(checkboxLabels[index]),
-              value: checkboxValues[index],
-              onChanged: (value) {
+        ///-----------Chips for parts replaced----//////
+        Wrap(
+          spacing: 3.0, // Horizontal space between chips
+          //runSpacing: 5.0, // Vertical space between rows
+          children: checkboxLabels.map((label) {
+            final bool isSelected = selectedItems.contains(label);
+
+            return ChoiceChip(
+              label: Text(label),
+              selected: isSelected,
+              selectedColor: const Color.fromARGB(
+                  255, 134, 216, 144), // Color for selected chips
+              onSelected: (bool selected) {
                 setState(() {
-                  checkboxValues[index] = value!;
+                  if (selected) {
+                    selectedItems.add(label);
+                  } else {
+                    selectedItems.remove(label);
+                  }
+                  servicingController.partsUsed.value = selectedItems;
                 });
-                updatePartsUsed(); // Update controller's list
               },
             );
-          },
+          }).toList(),
         ),
+
+        /////-----------Chips for parts replaced----//////
+
+        // GridView.builder(
+        //   shrinkWrap: true,
+        //   physics: const NeverScrollableScrollPhysics(),
+        //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        //     crossAxisCount: 2,
+        //     mainAxisSpacing: 10,
+        //     crossAxisSpacing: 10,
+        //     childAspectRatio: 6,
+        //   ),
+        //   itemCount: checkboxLabels.length,
+        //   itemBuilder: (context, index) {
+        //     return CheckboxListTile(
+        //       controlAffinity: ListTileControlAffinity.leading,
+        //       contentPadding: EdgeInsets.zero,
+        //       title: Text(checkboxLabels[index]),
+        //       value: checkboxValues[index],
+        //       onChanged: (value) {
+        //         setState(() {
+        //           checkboxValues[index] = value!;
+        //         });
+        //         updatePartsUsed(); // Update controller's list
+        //       },
+        //     );
+        //   },
+        // ),
+      
       ],
     );
   }
