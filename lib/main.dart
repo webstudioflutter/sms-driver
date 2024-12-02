@@ -1,16 +1,27 @@
+import 'dart:async';
+
+import 'package:driver_app/controller/NotificationController.dart';
 import 'package:driver_app/core/color_constant.dart';
 import 'package:driver_app/screen/SplashScreen/SplashScreen.dart';
+import 'package:driver_app/services/NotificationService.dart';
+import 'package:driver_app/services/socket_io_client.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void main() => runApp(
-      // DevicePreview(
-      //   enabled: !kReleaseMode,
-      //   builder: (context) => const MyApp(), // Wrap your app
-      // ),
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await NotificationService.instance.initialize();
+  runApp(
+    // DevicePreview(
+    //   enabled: !kReleaseMode,
+    //   builder: (context) => const MyApp(), // Wrap your app
+    // ),
 
-      const MyApp(), // Wrap your app
-    );
+    const MyApp(), // Wrap your app
+  );
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -22,21 +33,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
+    socketSetup.initSocket();
+    notificationbloc.notificationdata();
+    Timer.periodic(Duration(seconds: 30), (timer) {
+      notificationbloc.notificationdata();
+    });
     super.initState();
   }
-
-  // void checkLoginStatus() async {
-  //   bool isLoggedIn = await authenticationRepository.isAuthenticated();
-  //   if (isLoggedIn) {
-  //     Get.to(() => const MainNavbar());
-  //   } else {
-  //     Get.to(() => DriverLoginScreen());
-  //   }
-  // }
-
-  // Future<String?> getAuthToken() async {
-  //   return null;
-  // }
 
   @override
   Widget build(BuildContext context) {

@@ -1,32 +1,58 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:driver_app/Model/TransportModel.dart';
 import 'package:driver_app/Repository/auth/Basecontroller.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TransportRepository {
-  late final String appUrl;
-  late final Dio _dio;
-
-  TransportRepository() {
-    _dio = baseController.dio;
-    appUrl = baseController.appUrl;
-  }
-
   Future<Transportation> transportdata(
       String? Id, Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
     try {
-      Response response = await _dio.patch(
-        'http://62.72.42.129:8090/api/transportation-route/$Id',
-        data: data,
+      // Perform the PATCH request to update the profile field
+      final response = await http.patch(
+        Uri.parse(
+          'http://62.72.42.129:8090/api/transportation-route/67470057251a8b0de86178be',
+        ),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: json.encode(data),
       );
-      log("mahesh ${response.data!}");
 
-      return Transportation.fromJson(response.data);
+      if (response.statusCode == 200) {
+        log("Success: ${response.body}");
+        return Transportation.fromJson(json.decode(response.body));
+      } else {
+        log("Error response: ${response.statusCode} - ${response.body}");
+        return Transportation.withError("Error: ${response.statusCode}");
+      }
+    } on DioError catch (dioError) {
+      log('DioError: ${dioError.message}\nStacktrace: ${dioError.stackTrace}',
+          name: 'ProfileRepository');
+      return Transportation.withError(baseController.handleError(dioError));
     } catch (error, stacktrace) {
-      log('Exception occurred: $error stackTrace: $stacktrace');
+      log('Error: $error\nStacktrace: $stacktrace', name: 'ProfileRepository');
       return Transportation.withError(baseController.handleError(error));
     }
+
+    // try {
+    //   Response response = await _dio.patch(
+    //     'ws://62.72.42.129:8090/api/transportation-route/$Id',
+    //     data: data,
+    //   );
+    //   log("mahesh ${response.data!}");
+
+    //   return Transportation.fromJson(response.data);
+    // } catch (error, stacktrace) {
+    //   log('Exception occurred: $error stackTrace: $stacktrace');
+    //   return Transportation.withError(baseController.handleError(error));
+    // }
   }
 }
 

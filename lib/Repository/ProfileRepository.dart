@@ -15,7 +15,7 @@ class ProfileRepository {
     appUrl = baseController.appUrl;
   }
 
-  Future<AuthenticationModel> ProfileData(String Id) async {
+  //get data of profile
     try {
       Response response = await _dio.get(
         '$appUrl/user/$Id',
@@ -28,13 +28,14 @@ class ProfileRepository {
     }
   }
 
+//update data of profile
   Future<AuthenticationModel> updateProfileField(
       String Id, Map<String, dynamic> value) async {
     final prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
     try {
       // Perform the PATCH request to update the profile field
-      final response = await http.post(
+      final response = await http.patch(
         Uri.parse(
           '$appUrl/user/$Id',
         ),

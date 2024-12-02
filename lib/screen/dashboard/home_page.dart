@@ -37,6 +37,8 @@ class _HomePageState extends State<HomePage> {
     controller.getProfile();
   }
 
+  final TextEditingController _routeController = TextEditingController();
+  final controller = Get.put(ProfileController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(

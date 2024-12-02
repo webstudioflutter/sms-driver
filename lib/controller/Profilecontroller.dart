@@ -10,6 +10,11 @@ class ProfileController extends GetxController {
   var isLoading = false.obs;
   var profile =
       Rxn<AuthenticationModel>(); // Rxn is used for nullable observable values
+  @override
+  void onInit() {
+    getProfile();
+    super.onInit();
+  }
 
   Future<void> getProfile() async {
     isLoading.value = true;
@@ -19,7 +24,12 @@ class ProfileController extends GetxController {
       final Response =
           await profileRepository.ProfileData(profileId.toString());
       if (Response.result != null) {
-        profile.value = Response; // Assign the fetched profile
+        profile.value = Response;
+        String? fcmtokens = await _secureStorage.read(key: 'notificationtoken');
+        var data = {
+          "fcmToken": "${fcmtokens}",
+        };
+        await updateProfile(data); // Assign the fetched profile
       } else {
         profile.value = AuthenticationModel.withError(
             baseController.handleError(Response.error));
@@ -56,3 +66,5 @@ class ProfileController extends GetxController {
     }
   }
 }
+
+var profileController = ProfileController();

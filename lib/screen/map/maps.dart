@@ -7,8 +7,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:web_socket_channel/status.dart' as status;
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 class MapTrackingPage extends StatefulWidget {
   @override
@@ -28,7 +26,6 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
 
   // User's current location
   LatLng? userLocation;
-  late WebSocketChannel channel;
   String receivedData = '';
   // Track zoom and center
   LatLng currentCenter = LatLng(27.7172, 85.3240);
@@ -39,58 +36,26 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
     super.initState();
     _getCurrentLocation();
     Timer.periodic(
-      const Duration(seconds: 2), // Hits the API every 2 seconds
+      const Duration(seconds: 1), // Hits the API every 2 seconds
       (Timer timer) async {
-        final FlutterSecureStorage _secureStorage =
-            const FlutterSecureStorage();
-        String? driverId = await _secureStorage.read(key: 'driverId');
+        final _secureStorage = const FlutterSecureStorage();
+        String? transportId =
+            await _secureStorage.read(key: 'transportationId');
 
-        if (driverId != null) {
+        if (transportId != null) {
           var data = {
             "currentLocation": {
               "latitude": userLocation!.latitude.toStringAsFixed(4),
               "longitude": userLocation!.longitude.toStringAsFixed(4)
             }
           };
-          log("mahesh ${data}");
-          transportBloc.postlocation("6745b249a5ec2c2dd8a90544", data);
+          transportBloc.postlocation(transportId, data);
         } else {
           // Stop the timer if `driverId` is not found.
           timer.cancel();
         }
       },
     );
-
-    channel = WebSocketChannel.connect(
-      Uri.parse('http://62.72.42.129:8090'),
-    );
-
-    // Listen to the stream for incoming data
-    channel.stream.listen(
-      (data) {
-        setState(() {
-          receivedData = data; // Update UI with the received data
-        });
-        log('WebSocket Error: ${receivedData}');
-      },
-      onError: (error) {
-        log('WebSocket Error: $error');
-      },
-      onDone: () {
-        log('WebSocket closed');
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    // Close the WebSocket connection when the widget is disposed
-    channel.sink.close(status.goingAway);
-    super.dispose();
-  }
-
-  void sendMessage() {
-    channel.sink.add('{"message": "Hello WebSocket"}');
   }
 
   Future<void> _getCurrentLocation() async {
@@ -157,111 +122,93 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
         title: const Text('Real-Time Location Tracking'),
         backgroundColor: Colors.blueAccent,
       ),
-      body: StreamBuilder(
-          stream: transportBloc.transportInfoInfo,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text("data");
-            }
-            if (snapshot.hasError) {
-              return Text("data");
-            }
-            var datas = snapshot.data!.data;
-            return Stack(
-              children: [
-                // FlutterMap Widget
-                FlutterMap(
-                  mapController: mapController,
-                  options: MapOptions(
-                    initialCenter: currentCenter,
-                    initialZoom: currentZoom,
-                    interactionOptions: InteractionOptions(
-                      flags: ~InteractiveFlag
-                          .doubleTapZoom, // Disable double-tap zoom
-                    ),
+      body: Stack(
+        children: [
+          // FlutterMap Widget
+          FlutterMap(
+            mapController: mapController,
+            options: MapOptions(
+              initialCenter: currentCenter,
+              initialZoom: currentZoom,
+              interactionOptions: InteractionOptions(
+                flags:
+                    ~InteractiveFlag.doubleTapZoom, // Disable double-tap zoom
+              ),
+            ),
+            children: [
+              // Map tiles
+              TileLayer(
+                urlTemplate:
+                    'https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png',
+                subdomains: ['a', 'b', 'c'],
+              ),
+              // Route polyline
+              PolylineLayer(
+                polylines: [
+                  Polyline(
+                    points: points,
+                    strokeWidth: 5.0,
+                    color: const Color(0xff0f53ff),
                   ),
-                  children: [
-                    // Map tiles
-                    TileLayer(
-                      urlTemplate:
-                          'https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png',
-                      subdomains: ['a', 'b', 'c'],
-                    ),
-                    // Route polyline
-                    PolylineLayer(
-                      polylines: [
-                        Polyline(
-                          points: points,
-                          strokeWidth: 5.0,
-                          color: const Color(0xff0f53ff),
-                        ),
-                      ],
-                    ),
-                    // Markers
-                    MarkerLayer(
-                      markers: [
-                        Marker(
-                          point: points.first, // Starting point
-                          child: const Icon(Icons.home,
-                              color: Colors.green, size: 40),
-                        ),
-                        if (userLocation != null)
-                          Marker(
-                            point: userLocation!, // User's location
-                            child: const Icon(Icons.person_pin_circle,
-                                color: Colors.blue, size: 40),
-                          ),
-                        Marker(
-                          point: points.last, // End point
-                          child: const Icon(Icons.location_on,
-                              color: Colors.red, size: 40),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-
-                // Status Bar
-                Positioned(
-                  bottom: 20,
-                  left: 20,
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 10,
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.person_pin_circle, color: Colors.blue),
-                        const SizedBox(width: 10),
-                        Text(
-                          userLocation != null
-                              ? 'Your Location: (${userLocation!.latitude.toStringAsFixed(4)}, '
-                                  '${userLocation!.longitude.toStringAsFixed(4)})'
-                              : 'Fetching location...',
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ),
+                ],
+              ),
+              // Markers
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    point: points.first, // Starting point
+                    child:
+                        const Icon(Icons.home, color: Colors.green, size: 40),
                   ),
-                ),
+                  if (userLocation != null)
+                    Marker(
+                      point: userLocation!, // User's location
+                      child: const Icon(Icons.person_pin_circle,
+                          color: Colors.blue, size: 40),
+                    ),
+                  Marker(
+                    point: points.last, // End point
+                    child: const Icon(Icons.location_on,
+                        color: Colors.red, size: 40),
+                  ),
+                ],
+              ),
+            ],
+          ),
 
-                Positioned(
-                  top: 100,
-                  right: 60,
-                  child: Text(
-                      " my location ${datas!.currentLocation!.latitude}  ${datas.currentLocation!.longitude}"),
-                )
-              ],
-            );
-          }),
+          // Status Bar
+          Positioned(
+            bottom: 20,
+            left: 20,
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.person_pin_circle, color: Colors.blue),
+                  const SizedBox(width: 10),
+                  Text(
+                    userLocation != null
+                        ? 'Your Location: (${userLocation!.latitude.toStringAsFixed(4)}, '
+                            '${userLocation!.longitude.toStringAsFixed(4)})'
+                        : 'Fetching location...',
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

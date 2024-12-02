@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -31,52 +30,29 @@ class _ProfilePageState extends State<ProfilePage> {
   File? _profileImage;
   String? _profileBase64;
 
-  // Function to pick image from camera or gallery
-  Future<void> _pickImage(ImageSource source) async {
-    try {
-      final XFile? image = await _picker.pickImage(source: source);
-      setState(() {
-        _image = image;
-      });
-      if (image != null) {
-        // You can use the image file here, e.g., display it or upload it
-        print('Picked image path: ${image.path}');
-      }
-    } catch (e) {
-      print('Error picking image: $e');
-    }
-  }
-
   takePhoto() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     if (image != null) {
       try {
         File imageFile = File(image.path);
-
+        var result = await FlutterImageCompress.compressWithFile(
+          imageFile.absolute.path,
+          minWidth: 500,
+          minHeight: 500,
+          quality: 60,
+          rotate: 0,
+        );
         // Read image bytes and decode
-        final bytes = await imageFile.readAsBytes();
-        final img.Image? originalImage = img.decodeImage(bytes);
+        if (result != null) {
+          File compressedImage =
+              await File(imageFile.path).writeAsBytes(result);
 
-        if (originalImage != null) {
-          // Fix orientation and encode to JPEG
-          img.Image fixedImage = img.bakeOrientation(originalImage);
-          final fixedImageBytes = img.encodeJpg(fixedImage);
-          final fixedImageFile = File(imageFile.path)
-            ..writeAsBytesSync(fixedImageBytes);
-
-          // Convert to Base64 string
-          final base64Image = base64Encode(fixedImageBytes);
-
-          // Update state
           setState(() {
-            _profileBase64 = base64Image;
-            _profileImage = fixedImageFile;
+            _profileImage = compressedImage;
+            _profileBase64 = base64Encode(result);
           });
 
-          print("Profile Image File: $_profileImage");
-          print("Base64 Image: $_profileBase64");
-        } else {
-          print("Failed to decode the image.");
+          print("Encoded and compressed image as Base64: $_profileBase64");
         }
       } catch (e) {
         print("Error while processing image: $e");
@@ -96,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
         imageFile.absolute.path,
         minWidth: 500,
         minHeight: 500,
-        quality: 88,
+        quality: 60,
         rotate: 0,
       );
 
@@ -115,12 +91,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   final ProfileController controller = Get.put(ProfileController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    super.initState();
-    controller.getProfile();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -421,16 +391,15 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                _openModalBottomSheetForProfileEdit(context);
-                              },
-                              child: CircleAvatar(
-                                maxRadius: 40,
-                                minRadius: 30,
+                        GestureDetector(
+                          onTap: () {
+                            openModalBottomSheetForProfileEdit(context);
+                          },
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              CircleAvatar(
+                                maxRadius: 60,
                                 backgroundImage: _profileImage != null
                                     ? FileImage(_profileImage!)
                                     : (profile.profileImage == null ||
@@ -439,32 +408,28 @@ class _ProfilePageState extends State<ProfilePage> {
                                             'assets/images/fakeprofile.png')
                                         : MemoryImage(
                                             base64Decode(
-                                              profile.profileImage!
-                                                  .replaceFirst(
-                                                      'data:image/jpeg;base64,',
-                                                      ''),
-                                            ),
-                                          )),
+                                                ("${profile.profileImage!.replaceFirst('data:image/jpeg;base64,', '')}")),
+                                          )) as ImageProvider,
                               ),
-                            ),
-                            Positioned(
-                              right: -15,
-                              bottom: 25,
-                              child: Container(
-                                height: getHeight(context) * 0.05,
-                                width: getHeight(context) * 0.05,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.green,
-                                ),
-                                child: const Icon(
-                                  Icons.edit_square,
-                                  size: 25,
-                                  color: Colors.white,
+                              Positioned(
+                                right: -15,
+                                bottom: 10,
+                                child: Container(
+                                  height: getHeight(context) * 0.05,
+                                  width: getHeight(context) * 0.05,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.green,
+                                  ),
+                                  child: const Icon(
+                                    Icons.edit_square,
+                                    size: 25,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         Text(
                           "${profile.fullName}",
@@ -493,7 +458,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Future<dynamic> _openModalBottomSheetForProfileEdit(BuildContext context) {
+  Future<dynamic> openModalBottomSheetForProfileEdit(BuildContext context) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -522,22 +487,17 @@ class _ProfilePageState extends State<ProfilePage> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
                           child: CircleAvatar(
-                            maxRadius: 40,
-                            minRadius: 30,
+                            maxRadius: 60,
                             backgroundImage: _profileImage != null
-                                ? FileImage(
-                                    _profileImage!) // Show selected image
+                                ? FileImage(_profileImage!)
                                 : (profile.profileImage == null ||
-                                        profile.profileImage!.isEmpty)
+                                        profile.profileImage!.isEmpty
                                     ? const AssetImage(
-                                            'assets/images/fakeprofile.png')
-                                        as ImageProvider // Default image if null
+                                        'assets/images/fakeprofile.png')
                                     : MemoryImage(
                                         base64Decode(
-                                          profile.profileImage!.replaceFirst(
-                                              'data:image/jpeg;base64,', ''),
-                                        ),
-                                      ),
+                                            ("${profile.profileImage!.replaceFirst('data:image/jpeg;base64,', '')}")),
+                                      )) as ImageProvider,
                           ),
                         ),
                         // Take Photo Option
@@ -602,9 +562,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             onTap: () {
                               setState(() {
                                 _profileImage = null;
+                                // Clear the selected profile image
                               });
-                              Navigator.of(context)
-                                  .pop(true); // Close dialog after removal
+                              Navigator.of(context).pop();
+                              // Close dialog after removing// Close dialog after removal
                             },
                             child: Row(
                               children: [
@@ -629,6 +590,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     "data:image/jpeg;base64,$_profileBase64",
                               };
                               controller.updateProfile(data);
+                              Navigator.of(context).pop();
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -666,42 +628,62 @@ class _ProfilePageState extends State<ProfilePage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Icon(Icons.logout, color: Colors.red),
-          content: const Text('Are you sure you want to log out?'),
-          actions: <Widget>[
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(10),
-                backgroundColor: const Color(0xffdddddd),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child:
-                  const Text('Cancel', style: TextStyle(color: Colors.black)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(10),
-                backgroundColor: Colors.red,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text('Yes', style: TextStyle(color: Colors.white)),
-              onPressed: () async {
-                await authenticationRepository.logout();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DriverLoginScreen()));
-              },
-            ),
-          ],
+        bool isLoading = false;
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Icon(Icons.logout, color: Colors.red),
+              content: const Text('Are you sure you want to log out?'),
+              actions: isLoading
+                  ? <Widget>[const Center(child: CircularProgressIndicator())]
+                  : <Widget>[
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(10),
+                          backgroundColor: const Color(0xffdddddd),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text('Cancel',
+                            style: TextStyle(color: Colors.black)),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(10),
+                          backgroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text('Yes',
+                            style: TextStyle(color: Colors.white)),
+                        onPressed: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+
+                          // Simulate a 1-second delay
+                          await Future.delayed(const Duration(seconds: 1));
+
+                          // Perform logout
+                          await authenticationRepository.logout();
+
+                          // Navigate to the login screen
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DriverLoginScreen()),
+                          );
+                        },
+                      ),
+                    ],
+            );
+          },
         );
       },
     );
