@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:driver_app/controller/Home/RouteController.dart';
 import 'package:driver_app/controller/Profilecontroller.dart';
 import 'package:driver_app/core/constants/string_constants.dart';
 import 'package:driver_app/core/utils/asset_provider.dart';
@@ -25,8 +26,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final TextEditingController _routeController = TextEditingController();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // final TextEditingController _routeController = TextEditingController();
   final ProfileController controller = Get.put(ProfileController());
+  final routeController = Get.put(Routecontroller());
 
   @override
   void initState() {
@@ -162,12 +165,14 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               ClipOval(
-                                child: profile!.profileImage == null
+                                child: profile?.profileImage == null
                                     ? Icon(Icons.image)
                                     : Image.memory(
                                         base64Decode(
-                                          profile.profileImage!.replaceFirst(
-                                              'data:image/jpeg;base64,', ''),
+                                          profile?.profileImage?.replaceFirst(
+                                                  'data:image/jpeg;base64,',
+                                                  '') ??
+                                              "",
                                         ),
                                         height: getHeight(context) * 0.14,
                                         width: getHeight(context) * 0.14,
@@ -179,8 +184,7 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    // "${profile?.fullName}" ?? 'N/A',
-                                    "${profile.fullName ?? 'N/A'}",
+                                    "${profile?.fullName ?? 'N/A'}",
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
@@ -192,9 +196,7 @@ class _HomePageState extends State<HomePage> {
                                   Padding(
                                     padding: EdgeInsets.only(left: 5.0),
                                     child: Text(
-                                      // "License No: ${profile?.lisenceNo}" ??
-                                      //     'N/A',
-                                      "License No: ${profile.lisenceNo ?? 'N/A'}",
+                                      "License No: ${profile?.lisenceNo ?? 'N/A'}",
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
@@ -471,71 +473,162 @@ class _HomePageState extends State<HomePage> {
                         topLeft: Radius.circular(25),
                         topRight: Radius.circular(25),
                       )),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Enter Today's Starting KM",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Color(0xff60bf8f),
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      SizedBox(
-                          height: MediaQuery.sizeOf(context).height * 0.03),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(15)),
-                            border: Border.all(color: Colors.green)),
-                        child: TextFormField(
-                          controller: _routeController,
-                          textAlign: TextAlign.center,
-                          cursorColor: const Color(0xffcdeede),
-                          cursorHeight: 16,
-                          decoration: InputDecoration(
-                            hintText: 'XXX-XXX-XX',
-                            hintStyle: TextStyle(color: Colors.grey.shade200),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 9),
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Enter Today's Starting KM",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Color(0xff60bf8f),
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
-                      ),
-                      SizedBox(
-                          height: MediaQuery.sizeOf(context).height * 0.03),
-                      GestureDetector(
-                        onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => const BusRouteMain()),
-                          // );
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 20),
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(18),
-                            color: const Color(0xff60bf8f),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'Start Route',
-                              style: TextStyle(
-                                color: Colors.white,
+                        SizedBox(
+                            height: MediaQuery.sizeOf(context).height * 0.03),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            cursorColor: const Color(0xffcdeede),
+                            keyboardType: TextInputType.phone,
+                            controller:
+                                routeController.readingOnStartController,
+                            textAlign: TextAlign.center,
+                            cursorHeight: 20,
+                            style: TextStyle(fontSize: 20),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Please enter starting KM';
+                              }
+                              // Check if the value is a valid number
+                              final number = double.tryParse(value);
+                              if (number == null) {
+                                return 'Please enter a valid number';
+                              }
+                              // Check for negative values
+                              if (number < 0) {
+                                return 'Negative values are not allowed';
+                              }
+                              // Optional: Check if the length is too long
+                              if (value.length > 10) {
+                                return 'Please enter a valid value';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              hintText: 'XXX-XXX-XX',
+                              hintStyle: TextStyle(color: Colors.grey.shade200),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 15),
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: BorderSide
+                                    .none, // No border for the default state
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide:
+                                    BorderSide(color: Colors.green, width: 1),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide:
+                                    BorderSide(color: Colors.green, width: 2),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide:
+                                    BorderSide(color: Colors.red, width: 2),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide:
+                                    BorderSide(color: Colors.red, width: 2),
+                              ),
+                              errorStyle: TextStyle(
+                                color: Colors.red,
+                                fontSize: 14,
                               ),
                             ),
                           ),
                         ),
-                      )
-                    ],
+
+                        // Container(
+                        //   margin: const EdgeInsets.symmetric(horizontal: 20),
+                        //   height: 50,
+                        //   decoration: BoxDecoration(
+                        //       color: Colors.white,
+                        //       borderRadius:
+                        //           const BorderRadius.all(Radius.circular(15)),
+                        //       border: Border.all(color: Colors.green)),
+                        //   child: TextFormField(
+                        //     autovalidateMode:
+                        //         AutovalidateMode.onUserInteraction,
+                        //     cursorErrorColor: Colors.red,
+                        //     keyboardType: TextInputType.phone,
+                        //     controller:
+                        //         routeController.readingOnStartController,
+                        //     textAlign: TextAlign.center,
+                        //     cursorColor: const Color(0xffcdeede),
+                        //     cursorHeight: 20,
+                        //     style: TextStyle(fontSize: 17),
+                        //     validator: (value) {
+                        //       if (value == null || value.trim().isEmpty) {
+                        //         return 'Please enter starting KM';
+                        //       }
+                        //       return null;
+                        //     },
+                        //     decoration: InputDecoration(
+                        //       hintText: 'XXX-XXX-XX',
+                        //       hintStyle: TextStyle(color: Colors.grey.shade200),
+                        //       contentPadding: const EdgeInsets.symmetric(
+                        //           horizontal: 10.0, vertical: 9),
+                        //       border: InputBorder.none,
+                        //       focusedBorder: InputBorder.none,
+                        //       enabledBorder: InputBorder.none,
+                        //       errorBorder: OutlineInputBorder(
+                        //         borderSide: BorderSide(
+                        //             color: Colors.red,
+                        //             width: 2), // Red error border
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+
+                        SizedBox(
+                            height: MediaQuery.sizeOf(context).height * 0.03),
+                        GestureDetector(
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              Navigator.pop(context);
+                              _openModalBottomSheetForPickDrop(context);
+                            }
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18),
+                              color: const Color(0xff60bf8f),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'Start Route',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 Positioned(
@@ -570,37 +663,53 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 195, 235, 227),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    height: 90,
-                    width: 139,
-                    child: const Center(
-                      child: Text(
-                        'PICK UP',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xff186444),
+                  GestureDetector(
+                    onTap: () {
+                      routeController.submitRouteType("PICKED");
+                      routeController.submitRouteData();
+                      Navigator.pop(context);
+                      routeController.readingOnStartController.clear();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 195, 235, 227),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      height: 90,
+                      width: 139,
+                      child: const Center(
+                        child: Text(
+                          'PICK UP',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xff186444),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      // color: Color(0xff8df3e1),
-                      color: const Color.fromARGB(255, 195, 235, 227),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    height: 90,
-                    width: 139,
-                    child: const Center(
-                      child: Text(
-                        'DROP OFF',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xff186444),
+                  GestureDetector(
+                    onTap: () {
+                      routeController.submitRouteType("DROPPED");
+                      routeController.submitRouteData();
+                      Navigator.pop(context);
+                      routeController.readingOnStartController.clear();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        // color: Color(0xff8df3e1),
+                        color: const Color.fromARGB(255, 195, 235, 227),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      height: 90,
+                      width: 139,
+                      child: const Center(
+                        child: Text(
+                          'DROP OFF',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xff186444),
+                          ),
                         ),
                       ),
                     ),

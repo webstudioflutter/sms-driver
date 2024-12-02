@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  final emailController = TextEditingController(text:"driver2@gmail.com");
-  final passwordController = TextEditingController(text:"12345678");
+  final emailController = TextEditingController(text: "driver2@gmail.com");
+  final passwordController = TextEditingController(text: "12345678");
 
   var isPasswordVisible = false.obs;
   var isLoading = false.obs;
@@ -43,7 +43,7 @@ class LoginController extends GetxController {
       final authResponse =
           await authenticationRepository.sendAuthInfo(authData);
       if (authResponse.error == null) {
-        log("${authResponse.result}");
+        // log("${authResponse.result}");
 
         Get.offAll(() => const MainNavbar()); // Navigate to the main navbar
       } else {

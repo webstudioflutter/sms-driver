@@ -14,6 +14,7 @@ class ProfileRepository {
     _dio = baseController.dio;
     appUrl = baseController.appUrl;
   }
+
   Future<AuthenticationModel> ProfileData(String Id) async {
     try {
       Response response = await _dio.get(
