@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "352232158982",
+    "project_id": "notification-f5de6",
+    "storage_bucket": "notification-f5de6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:352232158982:android:05c3e974d50f49f35a1087",
+        "android_client_info": {
+          "package_name": "com.example.driver_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEcFrxsY7_QA723ZdsmQ4y1yeP7D4IadU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:352232158982:android:eae6bf81b83a9dd25a1087",
+        "android_client_info": {
+          "package_name": "com.example.schoolapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEcFrxsY7_QA723ZdsmQ4y1yeP7D4IadU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:352232158982:android:062f0772ef1e18585a1087",
+        "android_client_info": {
+          "package_name": "com.example.teachermgmtsystem"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEcFrxsY7_QA723ZdsmQ4y1yeP7D4IadU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

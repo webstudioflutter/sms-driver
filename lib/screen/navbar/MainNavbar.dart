@@ -1,9 +1,13 @@
+import 'package:driver_app/controller/NotificationController.dart';
+import 'package:driver_app/controller/Profilecontroller.dart';
 import 'package:driver_app/core/utils/asset_provider.dart';
 import 'package:driver_app/screen/dashboard/home_page.dart';
 import 'package:driver_app/screen/dashboard/profile/profile_page.dart';
 import 'package:driver_app/screen/map/maps.dart';
+import 'package:driver_app/screen/notification/notificationScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class MainNavbar extends StatefulWidget {
   const MainNavbar({super.key});
@@ -19,7 +23,7 @@ class _MainNavbarState extends State<MainNavbar> {
     const HomePage(),
     const Center(child: Text("Search Page")),
     MapTrackingPage(),
-    const Center(child: Text("Notification Page")),
+    NotificationScreen(),
     const ProfilePage(),
   ];
 
@@ -28,6 +32,8 @@ class _MainNavbarState extends State<MainNavbar> {
       _selectedIndex = index;
     });
   }
+
+  final controller = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +115,7 @@ class _MainNavbarState extends State<MainNavbar> {
   Widget _buildNavItem(
       String svgAsset, String label, int index, String svgAsset2) {
     bool isSelected = index == _selectedIndex;
+
     return GestureDetector(
       onTap: () => _onItemTapped(index),
       child: Padding(
@@ -116,10 +123,48 @@ class _MainNavbarState extends State<MainNavbar> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(
-              isSelected ? svgAsset2 : svgAsset,
-              height: 22,
-              color: isSelected ? Colors.green : const Color(0xff516B5E),
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                SvgPicture.asset(
+                  isSelected ? svgAsset2 : svgAsset,
+                  height: 22,
+                  color: isSelected ? Colors.green : const Color(0xff516B5E),
+                ),
+                if (index == 3) // Badge for Notification tab
+                  StreamBuilder<int>(
+                    stream: notificationbloc
+                        .unreadCount, // Replace with your actual stream
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && snapshot.data! > 0) {
+                        return Positioned(
+                          right: -6,
+                          top: -6,
+                          child: Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 16,
+                              minHeight: 16,
+                            ),
+                            child: Text(
+                              '${snapshot.data}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
+                      }
+                      return const SizedBox();
+                    },
+                  ),
+              ],
             ),
             Text(
               label,

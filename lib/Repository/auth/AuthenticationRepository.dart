@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:driver_app/Model/Authenticationmodel.dart';
 import 'package:driver_app/Repository/auth/Basecontroller.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -85,6 +86,14 @@ class AuthenticationRepository {
     }
   }
 
+  Future<void> fcmtoken(String? token) async {
+    if (token != null) {
+      await _secureStorage.write(key: 'notificationtoken', value: token);
+      String? fcmtokens = await _secureStorage.read(key: 'notificationtoken');
+      // studentCardBloc.stdcardId(classId);
+    }
+  }
+
   /// Saves transportation ID to secure storage.
   Future<void> _saveTransportationId(String? id) async {
     if (id != null) {
@@ -111,10 +120,21 @@ class AuthenticationRepository {
     return prefs.getString('token');
   }
 
+  Future<void> deleteCurrentToken() async {
+    try {
+      await FirebaseMessaging.instance.deleteToken();
+      log("Token update empty");
+    } catch (e) {
+      print("Error deleting token: $e");
+    }
+  }
+
   /// Logs the user out by clearing all stored data.
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
+    deleteCurrentToken();
+    await _secureStorage.delete(key: 'notificationtoken');
     await _secureStorage.delete(key: 'driverId');
     await _secureStorage.delete(key: 'schoolId');
     await _secureStorage.delete(key: 'transportationId');

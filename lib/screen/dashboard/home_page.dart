@@ -26,14 +26,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _routeController = TextEditingController();
-  final ProfileController controller = Get.put(ProfileController());
-
-  @override
-  void initState() {
-    super.initState();
-    controller.getProfile();
-  }
-
+  final controller = Get.put(ProfileController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -2,22 +2,16 @@ import 'dart:developer';
 
 import 'package:driver_app/Repository/auth/AuthenticationRepository.dart';
 import 'package:driver_app/screen/navbar/MainNavbar.dart';
+import 'package:driver_app/services/NotificationService.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  final emailController = TextEditingController(text:"driver2@gmail.com");
-  final passwordController = TextEditingController(text:"12345678");
+  final emailController = TextEditingController(text: "driver2@gmail.com");
+  final passwordController = TextEditingController(text: "12345678");
 
   var isPasswordVisible = false.obs;
   var isLoading = false.obs;
-
-  // @override
-  // void onClose() {
-  //   emailController.dispose();
-  //   passwordController.dispose();
-  //   super.onClose();
-  // }
 
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
@@ -42,13 +36,15 @@ class LoginController extends GetxController {
 
       final authResponse =
           await authenticationRepository.sendAuthInfo(authData);
-      if (authResponse.error == null) {
+
+      if (authResponse.result != null) {
+        await NotificationService.instance.initialize();
+
         log("${authResponse.result}");
 
         Get.offAll(() => const MainNavbar()); // Navigate to the main navbar
       } else {
         log("Login Failed");
-
         Get.snackbar(
           "Login Failed",
           authResponse.error!,
@@ -61,6 +57,8 @@ class LoginController extends GetxController {
         "Error",
         "An unexpected error occurred",
         snackPosition: SnackPosition.BOTTOM,
+        colorText: Colors.red,
+        backgroundColor: Colors.red,
       );
     } finally {
       isLoading.value = false;
