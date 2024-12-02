@@ -30,15 +30,12 @@ class _HomePageState extends State<HomePage> {
   // final TextEditingController _routeController = TextEditingController();
   final ProfileController controller = Get.put(ProfileController());
   final routeController = Get.put(Routecontroller());
-
   @override
   void initState() {
     super.initState();
     controller.getProfile();
   }
 
-  final TextEditingController _routeController = TextEditingController();
-  final controller = Get.put(ProfileController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(

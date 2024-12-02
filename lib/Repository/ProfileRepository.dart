@@ -16,6 +16,7 @@ class ProfileRepository {
   }
 
   //get data of profile
+  Future<AuthenticationModel> ProfileData(String Id) async {
     try {
       Response response = await _dio.get(
         '$appUrl/user/$Id',
