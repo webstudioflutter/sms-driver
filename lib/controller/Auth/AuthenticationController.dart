@@ -36,6 +36,8 @@ class LoginController extends GetxController {
 
       final authResponse =
           await authenticationRepository.sendAuthInfo(authData);
+//       if (authResponse.error == null) {
+        // log("${authResponse.result}");
 
       if (authResponse.result != null) {
         await NotificationService.instance.initialize();

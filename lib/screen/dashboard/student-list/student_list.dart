@@ -1,8 +1,13 @@
+import 'dart:convert';
+
+import 'package:driver_app/controller/Home/StudentListController.dart';
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/core/widgets/page_title_bar.dart';
 import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StudentList extends StatefulWidget {
   const StudentList({super.key});
@@ -12,20 +17,25 @@ class StudentList extends StatefulWidget {
 }
 
 class _StudentListState extends State<StudentList> {
+  final controller = Get.put(StudentListController());
   String? classSelectedValue;
   String? locationSelectedValue;
-  List<String> classDropdownItems = [
-    'Class 1',
-    'Class 2',
-    'Class 3',
-    'Class 4'
-  ];
   List<String> locationDropdownItems = [
     'Baneshowar',
     'Ratnapark',
     'Kalopul',
     'Setopul'
   ];
+  List<String> classDropdownItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    controller.getStudentList();
+    controller.getClassList();
+    // studentListRepository.fetchStudentDummyList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,15 +90,17 @@ class _StudentListState extends State<StudentList> {
                         horizontal: getWidth(context) * 0.06,
                       ),
                       height: getHeight(context) * 0.1,
-                      child: const Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            '25',
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff0b835c),
+                          Obx(
+                            () => Text(
+                              "${controller.mapStudentListData['count'] ?? "0"}",
+                              style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xff0b835c),
+                              ),
                             ),
                           ),
                           Text(
@@ -109,165 +121,273 @@ class _StudentListState extends State<StudentList> {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(height: getHeight(context) * 0.01),
+      body: Obx(() {
+        if (controller.isLoadingStudentList.value ||
+            controller.isLoadingClassList.value) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-          ///Edit and Sort
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Card(
-                    elevation: 1,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0),
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      height: getHeight(context) * 0.06,
-                      child: DropdownButton<String>(
-                        value: classSelectedValue,
-                        hint: const Text(
-                          'Class',
-                          style: TextStyle(
-                            color: Color(0xff221f1f),
-                          ),
-                        ),
-                        iconEnabledColor: Color(0xff221f1f),
-                        items: classDropdownItems.map((String item) {
-                          return DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(item),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            classSelectedValue = newValue;
-                          });
-                        },
+        // Generate sorted dropdown items dynamically
+        List<String> classDropdownItems = controller
+            .classListModel.value!.result!
+            .map((element) => "Class ${element.className}${element.section}")
+            .toList()
+          ..sort((a, b) => a.compareTo(b));
+        return Column(
+          children: [
+            SizedBox(height: getHeight(context) * 0.01),
+
+            ///Edit and Sort
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Card(
+                      elevation: 1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6.0),
                       ),
-                    ),
-                  ),
-                  SizedBox(width: getWidth(context) * 0.02),
-                  Card(
-                    elevation: 1,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0),
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      height: getHeight(context) * 0.06,
-                      child: DropdownButton<String>(
-                        value: locationSelectedValue,
-                        hint: const Text(
-                          'Location',
-                          style: TextStyle(
-                            color: Color(0xff221f1f),
-                          ),
-                        ),
-                        iconEnabledColor: Color(0xff221f1f),
-                        items: locationDropdownItems.map((String item) {
-                          return DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(item),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            locationSelectedValue = newValue;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: getHeight(context) * 0.02),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView.separated(
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 7.0, vertical: 16),
-                      child: Row(
-                        children: [
-                          ClipOval(
-                            child: Image.asset(
-                              'assets/images/fake_profile.jpg',
-                              width: getHeight(context) * 0.07,
-                              height: getHeight(context) * 0.07,
-                              fit: BoxFit.cover,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        height: getHeight(context) * 0.06,
+                        child: DropdownButton<String>(
+                          value: classSelectedValue,
+                          hint: const Text(
+                            'Class',
+                            style: TextStyle(
+                              color: Color(0xff221f1f),
                             ),
                           ),
-                          SizedBox(width: getHeight(context) * 0.01),
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Hari Bahadur',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff221f1f),
-                                ),
-                              ),
-                              SizedBox(height: 2),
-                              Row(
-                                children: [
-                                  Text(
-                                    'Class: 5A ',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Color(0xff676767),
-                                    ),
-                                  ),
-                                  Text(
-                                    ' Location: Kathmandu',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Color(0xff676767),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 2),
-                              Text(
-                                'Gender: Male',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xff676767),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.arrow_forward_sharp)),
-                        ],
+                          iconEnabledColor: Color(0xff221f1f),
+                          items: classDropdownItems.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              classSelectedValue = newValue;
+                            });
+                          },
+                        ),
                       ),
                     ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return SizedBox(height: getHeight(context) * 0.015);
-                },
+                    SizedBox(width: getWidth(context) * 0.02),
+                    Card(
+                      elevation: 1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6.0),
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        height: getHeight(context) * 0.06,
+                        child: DropdownButton<String>(
+                          value: locationSelectedValue,
+                          hint: const Text(
+                            'Location',
+                            style: TextStyle(
+                              color: Color(0xff221f1f),
+                            ),
+                          ),
+                          iconEnabledColor: Color(0xff221f1f),
+                          items: locationDropdownItems.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              locationSelectedValue = newValue;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: getHeight(context) * 0.02),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.separated(
+                  // itemCount: (controller.mapStudentListData['result'] != null &&
+                  //         controller.mapStudentListData['result'] is List)
+                  //     ? (controller.mapStudentListData['result'] as List).length
+                  //     : 0,
+                  itemCount: (controller.mapStudentListData['result'] is List)
+                      ? (controller.mapStudentListData['result'] as List).length
+                      : 0,
+
+                  // itemCount: int.tryParse(
+                  //         "${controller.mapStudentListData['count']}") ??
+                  //     0,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 7.0, vertical: 16),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              maxRadius: 30,
+                              minRadius: 30,
+                              backgroundImage: controller
+                                              .mapStudentListData['result']
+                                          [index]['profileImage'] !=
+                                      null
+                                  ? MemoryImage(
+                                      base64Decode(
+                                        controller.mapStudentListData['result']
+                                                [index]['profileImage']
+                                            .replaceFirst(
+                                                'data:image/jpeg;base64,', ''),
+                                      ),
+                                    )
+                                  : null,
+                              child: controller.mapStudentListData['result']
+                                          [index]['profileImage'] ==
+                                      null
+                                  ? Icon(
+                                      Icons.person,
+                                      size: 40,
+                                    )
+                                  : null,
+                            ),
+
+                            // ClipOval(
+                            //   child: Image.asset(
+                            //     'assets/images/fake_profile.jpg',
+                            //     width: getHeight(context) * 0.07,
+                            //     height: getHeight(context) * 0.07,
+                            //     fit: BoxFit.cover,
+                            //   ),
+                            // ),
+                            SizedBox(width: getHeight(context) * 0.01),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${controller.mapStudentListData['result'][index]['fullName'] ?? "N/A"}",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff221f1f),
+                                  ),
+                                ),
+                                SizedBox(height: 2),
+                                // Text(
+                                //   "Class:${controller.mapStudentListData['result'][index]['className']['class']} ${controller.mapStudentListData['result'][index]['className']['section'] ?? "N/A"}",
+                                //   style: TextStyle(
+                                //     fontSize: 12,
+                                //     color: Color(0xff676767),
+                                //   ),
+                                // ),
+                                Text(
+                                  "Class: ${controller.mapStudentListData['result'][index]['className']?['class'] ?? "N/A"} "
+                                  "${controller.mapStudentListData['result'][index]['className']?['section'] ?? "N/A"}",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xff676767),
+                                  ),
+                                ),
+
+                                // Text(
+                                //   "Location:${controller.mapStudentListData['result'][index]['pickDropLocation']['busRoute'] ?? "N/A"}",
+                                //   style: TextStyle(
+                                //     fontSize: 12,
+                                //     color: Color(0xff676767),
+                                //   ),
+                                // ),
+                                Text(
+                                  "Location: ${controller.mapStudentListData['result'][index]['pickDropLocation']?['busRoute'] ?? "N/A"}",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xff676767),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            IconButton(
+                              onPressed: () async {
+                                var phoneNumber =
+                                    await "tel:${controller.mapStudentListData['result'][index]['contactNumber']}";
+                                final Uri callUri = Uri.parse(phoneNumber);
+
+                                if (await canLaunchUrl(callUri)) {
+                                  await launchUrl(callUri);
+                                } else {
+                                  Get.showSnackbar(
+                                    GetSnackBar(
+                                      message: 'Cannot call phone',
+                                      duration: Duration(seconds: 1),
+                                      snackPosition: SnackPosition.BOTTOM,
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              },
+                              icon: const Icon(Icons.call),
+                            ),
+                            // IconButton(
+                            //   onPressed: () async {
+                            //     final contactNumber =
+                            //         controller.mapStudentListData['result']
+                            //             [index]['contactNumber'];
+
+                            //     if (contactNumber != null &&
+                            //         contactNumber.isNotEmpty) {
+                            //       final phoneNumber = "tel:$contactNumber";
+                            //       final Uri callUri = Uri.parse(phoneNumber);
+
+                            //       if (await canLaunchUrl(callUri)) {
+                            //         await launchUrl(callUri);
+                            //       } else {
+                            //         Get.showSnackbar(
+                            //           GetSnackBar(
+                            //             message: 'Cannot call phone',
+                            //             duration: Duration(seconds: 1),
+                            //             snackPosition: SnackPosition.BOTTOM,
+                            //             backgroundColor: Colors.red,
+                            //           ),
+                            //         );
+                            //       }
+                            //     } else {
+                            //       Get.showSnackbar(
+                            //         GetSnackBar(
+                            //           message:
+                            //               'Contact number is not available',
+                            //           duration: Duration(seconds: 1),
+                            //           snackPosition: SnackPosition.BOTTOM,
+                            //           backgroundColor: Colors.orange,
+                            //         ),
+                            //       );
+                            //     }
+                            //   },
+                            //   icon: const Icon(Icons.call),
+                            // ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox(height: getHeight(context) * 0.015);
+                  },
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
     );
   }
 }
