@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:driver_app/controller/Home/StudentListController.dart';
+import 'package:driver_app/controller/Home/classListController.dart';
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/core/widgets/page_title_bar.dart';
 import 'package:driver_app/screen/emergency/emergency_main.dart';
@@ -18,22 +19,27 @@ class StudentList extends StatefulWidget {
 
 class _StudentListState extends State<StudentList> {
   final controller = Get.put(StudentListController());
+  final classcontroller = Get.put(classListController());
+
   String? classSelectedValue;
   String? locationSelectedValue;
-  List<String> locationDropdownItems = [
-    'Baneshowar',
-    'Ratnapark',
-    'Kalopul',
-    'Setopul'
-  ];
+  List<String> locationDropdownItems = [];
   List<String> classDropdownItems = [];
 
   @override
   void initState() {
     super.initState();
     controller.getStudentList();
-    controller.getClassList();
-    // studentListRepository.fetchStudentDummyList();
+    classcontroller.getClassList();
+    Future.delayed(Duration(seconds: 1), () {
+      setState(() {
+        locationDropdownItems = controller.list
+            .where((data) => data.pickDropLocation?.busRoute != null)
+            .map((data) => data.pickDropLocation!.busRoute!)
+            .toSet()
+            .toList();
+      });
+    });
   }
 
   @override
@@ -80,10 +86,20 @@ class _StudentListState extends State<StudentList> {
                         'assets/svg_images/notification.svg',
                         height: 20),
                   ),
-                  Card(
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          blurRadius: 2,
+                          spreadRadius: 1,
+                          offset: const Offset(1, 1),
+                        ),
+                      ],
                     ),
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -95,7 +111,7 @@ class _StudentListState extends State<StudentList> {
                         children: [
                           Obx(
                             () => Text(
-                              "${controller.mapStudentListData['count'] ?? "0"}",
+                              "${controller.list.length}",
                               style: TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
@@ -128,26 +144,33 @@ class _StudentListState extends State<StudentList> {
         }
 
         // Generate sorted dropdown items dynamically
-        List<String> classDropdownItems = controller
+        List<String> classDropdownItems = classcontroller
             .classListModel.value!.result!
-            .map((element) => "Class ${element.className}${element.section}")
-            .toList()
-          ..sort((a, b) => a.compareTo(b));
+            .map((element) => "Class ${element.className}")
+            .toList();
         return Column(
           children: [
             SizedBox(height: getHeight(context) * 0.01),
-
-            ///Edit and Sort
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Card(
-                      elevation: 1,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6.0),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            blurRadius: 1,
+                            spreadRadius: 0.5,
+                            offset: const Offset(0.5, 0.5),
+                          ),
+                        ],
                       ),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -177,10 +200,20 @@ class _StudentListState extends State<StudentList> {
                       ),
                     ),
                     SizedBox(width: getWidth(context) * 0.02),
-                    Card(
-                      elevation: 1,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6.0),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            blurRadius: 1,
+                            spreadRadius: 0.5,
+                            offset: const Offset(0.5, 0.5),
+                          ),
+                        ],
                       ),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -213,24 +246,53 @@ class _StudentListState extends State<StudentList> {
                 ),
               ],
             ),
-            SizedBox(height: getHeight(context) * 0.02),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ListView.separated(
-                  // itemCount: (controller.mapStudentListData['result'] != null &&
-                  //         controller.mapStudentListData['result'] is List)
-                  //     ? (controller.mapStudentListData['result'] as List).length
-                  //     : 0,
-                  itemCount: (controller.mapStudentListData['result'] is List)
-                      ? (controller.mapStudentListData['result'] as List).length
-                      : 0,
+                child: ListView.builder(
+                  itemCount: controller.list
+                      .where((data) {
+                        bool matchesClass = classSelectedValue == null ||
+                            "Class ${data.className!.classNameClass}" ==
+                                classSelectedValue;
+                        bool matchesLocation = locationSelectedValue == null ||
+                            data.pickDropLocation?.busRoute ==
+                                locationSelectedValue;
 
-                  // itemCount: int.tryParse(
-                  //         "${controller.mapStudentListData['count']}") ??
-                  //     0,
+                        return matchesClass || matchesLocation;
+                      })
+                      .toList()
+                      .length,
                   itemBuilder: (context, index) {
-                    return Card(
+                    var filteredList = controller.list.where((data) {
+                      bool matchesClass = classSelectedValue == null ||
+                          "Class ${data.className!.classNameClass}" ==
+                              classSelectedValue;
+                      bool matchesLocation = locationSelectedValue == null ||
+                          data.pickDropLocation?.busRoute ==
+                              locationSelectedValue;
+
+                      return matchesClass || matchesLocation;
+                    }).toList();
+
+                    var data = filteredList[index];
+
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 6),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            blurRadius: 1,
+                            spreadRadius: 0.5,
+                            offset: const Offset(0.5, 0.5),
+                          ),
+                        ],
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 7.0, vertical: 16),
@@ -239,43 +301,24 @@ class _StudentListState extends State<StudentList> {
                             CircleAvatar(
                               maxRadius: 30,
                               minRadius: 30,
-                              backgroundImage: controller
-                                              .mapStudentListData['result']
-                                          [index]['profileImage'] !=
-                                      null
-                                  ? MemoryImage(
+                              backgroundImage: data.profileImage == null ||
+                                      data.profileImage == "fasle" ||
+                                      data.profileImage == ""
+                                  ? const AssetImage(
+                                      'assets/images/fakeprofile.jpg')
+                                  : MemoryImage(
                                       base64Decode(
-                                        controller.mapStudentListData['result']
-                                                [index]['profileImage']
-                                            .replaceFirst(
-                                                'data:image/jpeg;base64,', ''),
+                                        data.profileImage!.replaceFirst(
+                                            'data:image/jpeg;base64,', ''),
                                       ),
-                                    )
-                                  : null,
-                              child: controller.mapStudentListData['result']
-                                          [index]['profileImage'] ==
-                                      null
-                                  ? Icon(
-                                      Icons.person,
-                                      size: 40,
-                                    )
-                                  : null,
+                                    ),
                             ),
-
-                            // ClipOval(
-                            //   child: Image.asset(
-                            //     'assets/images/fake_profile.jpg',
-                            //     width: getHeight(context) * 0.07,
-                            //     height: getHeight(context) * 0.07,
-                            //     fit: BoxFit.cover,
-                            //   ),
-                            // ),
                             SizedBox(width: getHeight(context) * 0.01),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "${controller.mapStudentListData['result'][index]['fullName'] ?? "N/A"}",
+                                  "${data.fullName}",
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -283,31 +326,28 @@ class _StudentListState extends State<StudentList> {
                                   ),
                                 ),
                                 SizedBox(height: 2),
-                                // Text(
-                                //   "Class:${controller.mapStudentListData['result'][index]['className']['class']} ${controller.mapStudentListData['result'][index]['className']['section'] ?? "N/A"}",
-                                //   style: TextStyle(
-                                //     fontSize: 12,
-                                //     color: Color(0xff676767),
-                                //   ),
-                                // ),
                                 Text(
-                                  "Class: ${controller.mapStudentListData['result'][index]['className']?['class'] ?? "N/A"} "
-                                  "${controller.mapStudentListData['result'][index]['className']?['section'] ?? "N/A"}",
+                                  data.className != null
+                                      ? "Class : ${data.className!.classNameClass}"
+                                      : "",
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Color(0xff676767),
                                   ),
                                 ),
-
-                                // Text(
-                                //   "Location:${controller.mapStudentListData['result'][index]['pickDropLocation']['busRoute'] ?? "N/A"}",
-                                //   style: TextStyle(
-                                //     fontSize: 12,
-                                //     color: Color(0xff676767),
-                                //   ),
-                                // ),
                                 Text(
-                                  "Location: ${controller.mapStudentListData['result'][index]['pickDropLocation']?['busRoute'] ?? "N/A"}",
+                                  data.pickDropLocation != null
+                                      ? "${data.pickDropLocation!.busRoute}"
+                                      : "",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xff676767),
+                                  ),
+                                ),
+                                Text(
+                                  data.contactNumber != null
+                                      ? "${data.contactNumber}"
+                                      : "",
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Color(0xff676767),
@@ -319,7 +359,7 @@ class _StudentListState extends State<StudentList> {
                             IconButton(
                               onPressed: () async {
                                 var phoneNumber =
-                                    await "tel:${controller.mapStudentListData['result'][index]['contactNumber']}";
+                                    await "tel:${data.contactNumber}";
                                 final Uri callUri = Uri.parse(phoneNumber);
 
                                 if (await canLaunchUrl(callUri)) {
@@ -337,50 +377,10 @@ class _StudentListState extends State<StudentList> {
                               },
                               icon: const Icon(Icons.call),
                             ),
-                            // IconButton(
-                            //   onPressed: () async {
-                            //     final contactNumber =
-                            //         controller.mapStudentListData['result']
-                            //             [index]['contactNumber'];
-
-                            //     if (contactNumber != null &&
-                            //         contactNumber.isNotEmpty) {
-                            //       final phoneNumber = "tel:$contactNumber";
-                            //       final Uri callUri = Uri.parse(phoneNumber);
-
-                            //       if (await canLaunchUrl(callUri)) {
-                            //         await launchUrl(callUri);
-                            //       } else {
-                            //         Get.showSnackbar(
-                            //           GetSnackBar(
-                            //             message: 'Cannot call phone',
-                            //             duration: Duration(seconds: 1),
-                            //             snackPosition: SnackPosition.BOTTOM,
-                            //             backgroundColor: Colors.red,
-                            //           ),
-                            //         );
-                            //       }
-                            //     } else {
-                            //       Get.showSnackbar(
-                            //         GetSnackBar(
-                            //           message:
-                            //               'Contact number is not available',
-                            //           duration: Duration(seconds: 1),
-                            //           snackPosition: SnackPosition.BOTTOM,
-                            //           backgroundColor: Colors.orange,
-                            //         ),
-                            //       );
-                            //     }
-                            //   },
-                            //   icon: const Icon(Icons.call),
-                            // ),
                           ],
                         ),
                       ),
                     );
-                  },
-                  separatorBuilder: (context, index) {
-                    return SizedBox(height: getHeight(context) * 0.015);
                   },
                 ),
               ),

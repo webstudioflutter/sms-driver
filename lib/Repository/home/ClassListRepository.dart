@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:driver_app/Model/ClassListModel.dart';
 import 'package:driver_app/Repository/auth/Basecontroller.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ClassListRepository {
   late final String _appUrl;
@@ -10,11 +11,14 @@ class ClassListRepository {
     _dio = baseController.dio;
     _appUrl = baseController.appUrl;
   }
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   Future<ClassListModel> fetchClassList() async {
+    var schoolname = await _secureStorage.read(key: 'schoolId');
+
     try {
       final response = await _dio.get(
-        '$_appUrl/classess/school/testflutter',
+        '$_appUrl/classess/school/@nidisecondaryschool',
       );
 
       final classListResponse = ClassListModel.fromJson(response.data);

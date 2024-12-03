@@ -24,7 +24,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final ImagePicker _picker = ImagePicker();
-  XFile? _image;
   List<Map<String, dynamic>> uploadedFiles = [];
 
   File? _profileImage;
@@ -152,7 +151,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ],
                               ),
                             ),
-                            const Icon(Icons.warning, color: Colors.red),
                             const Spacer(),
                             const Icon(
                               Icons.chevron_right,
@@ -312,14 +310,16 @@ class _ProfilePageState extends State<ProfilePage> {
           Container(
             height: MediaQuery.sizeOf(context).height * 0.25,
             decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xff6bccc1), Color(0xff6fcf99)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(40),
-                    bottomRight: Radius.circular(40))),
+              gradient: LinearGradient(
+                colors: [Color(0xff6bccc1), Color(0xff6fcf99)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(40),
+                bottomRight: Radius.circular(40),
+              ),
+            ),
           ),
           Positioned(
             top: MediaQuery.sizeOf(context).height * 0.048,
@@ -405,7 +405,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     : (profile.profileImage == null ||
                                             profile.profileImage!.isEmpty
                                         ? const AssetImage(
-                                            'assets/images/fakeprofile.png')
+                                            'assets/images/fakeprofile.jpg')
                                         : MemoryImage(
                                             base64Decode(
                                                 ("${profile.profileImage!.replaceFirst('data:image/jpeg;base64,', '')}")),
@@ -493,7 +493,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 : (profile.profileImage == null ||
                                         profile.profileImage!.isEmpty
                                     ? const AssetImage(
-                                        'assets/images/fakeprofile.png')
+                                        'assets/images/fakeprofile.jpg')
                                     : MemoryImage(
                                         base64Decode(
                                             ("${profile.profileImage!.replaceFirst('data:image/jpeg;base64,', '')}")),

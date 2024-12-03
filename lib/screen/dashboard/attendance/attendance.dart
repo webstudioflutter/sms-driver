@@ -1,16 +1,39 @@
 import 'package:driver_app/controller/Home/AttendanceController.dart';
+import 'package:driver_app/controller/Home/StudentListController.dart';
+import 'package:driver_app/core/utils/util.dart';
+import 'package:driver_app/core/widgets/page_title_bar.dart';
 import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:driver_app/core/utils/util.dart';
-import 'package:driver_app/core/widgets/page_title_bar.dart';
 
-class Attendance extends StatelessWidget {
+class Attendance extends StatefulWidget {
   Attendance({super.key});
 
+  @override
+  State<Attendance> createState() => _AttendanceState();
+}
+
+class _AttendanceState extends State<Attendance> {
   final AttendanceController attendanceController =
       Get.put(AttendanceController());
+
+  final controller = Get.put(StudentListController());
+
+  @override
+  void initState() {
+    super.initState();
+    controller.getStudentList();
+    Future.delayed(Duration(seconds: 1), () {
+      // setState(() {
+      //   locationDropdownItems = controller.list
+      //       .where((data) => data.pickDropLocation?.busRoute != null)
+      //       .map((data) => data.pickDropLocation!.busRoute!)
+      //       .toSet()
+      //       .toList();
+      // });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,10 +82,21 @@ class Attendance extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0),
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              blurRadius: 1,
+                              spreadRadius: 0.5,
+                              offset: const Offset(0.5, 0.5),
+                            ),
+                          ],
                         ),
                         child: Container(
                           padding: EdgeInsets.symmetric(
@@ -95,10 +129,21 @@ class Attendance extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0),
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              blurRadius: 1,
+                              spreadRadius: 0.5,
+                              offset: const Offset(0.5, 0.5),
+                            ),
+                          ],
                         ),
                         child: Container(
                           padding: EdgeInsets.symmetric(
@@ -140,26 +185,10 @@ class Attendance extends StatelessWidget {
         ),
       ),
       body: Obx(() {
-        if (attendanceController.isLoading.value) {
+        if (controller.isLoadingClassList.value) {
           // Show loading spinner when data is being fetched
           return const Center(child: CircularProgressIndicator());
         }
-
-        if (attendanceController.attendanceModel.value == null) {
-          // Show error or no data message if the model is null
-          return const Center(
-            child: Text(
-              'No attendance data available.',
-              style: TextStyle(color: Colors.red),
-            ),
-          );
-        }
-
-        final attendanceModel = attendanceController.attendanceModel.value!;
-        if (attendanceModel.count == 0) {
-          return const Center(child: Text('No attendance data available.'));
-        }
-
         // Render attendance list
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -169,10 +198,21 @@ class Attendance extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Card(
-                    elevation: 1,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0),
+                  Container(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          blurRadius: 1,
+                          spreadRadius: 0.5,
+                          offset: const Offset(0.5, 0.5),
+                        ),
+                      ],
                     ),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -205,10 +245,21 @@ class Attendance extends StatelessWidget {
                     onTap: () {
                       showSortDialog(context);
                     },
-                    child: Card(
-                      elevation: 1,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6.0),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 6),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            blurRadius: 1,
+                            spreadRadius: 0.5,
+                            offset: const Offset(0.5, 0.5),
+                          ),
+                        ],
                       ),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -238,15 +289,27 @@ class Attendance extends StatelessWidget {
               SizedBox(height: getHeight(context) * 0.01),
               Expanded(
                 child: ListView.builder(
-                  itemCount: attendanceModel.result?.length,
+                  itemCount: controller.list.length,
                   itemBuilder: (context, index) {
-                    final contact = attendanceModel.result![index];
-                    final studentId = contact.sId!;
+                    final data = controller.list[index];
 
-                    // final status =
-                    //     attendanceController.attendanceStatus[studentId] ??
                     false;
-                    return Card(
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 6),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            blurRadius: 1,
+                            spreadRadius: 0.5,
+                            offset: const Offset(0.5, 0.5),
+                          ),
+                        ],
+                      ),
                       child: Padding(
                         // padding: const EdgeInsets.symmetric(
                         //     horizontal: 5.0, vertical: 8),
@@ -255,7 +318,7 @@ class Attendance extends StatelessWidget {
                           children: [
                             ClipOval(
                               child: Image.asset(
-                                'assets/images/fake_profile.jpg',
+                                'assets/images/fakeprofile.jpg',
                                 width: 42,
                                 height: 42,
                                 fit: BoxFit.cover,
@@ -266,7 +329,7 @@ class Attendance extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  contact.user?.name ?? "",
+                                  data.fullName ?? "",
                                   style: const TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -274,14 +337,14 @@ class Attendance extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  "Class:${contact.className?.className ?? ""}",
+                                  "Class:${data.contactNumber ?? ""}",
                                   style: const TextStyle(
                                     fontSize: 12,
                                     color: Color(0xff345326),
                                   ),
                                 ),
                                 Text(
-                                  "Location:${contact.user?.pickDropLocation}",
+                                  "Location:${data.pickDropLocation!.busRoute}",
                                   style: const TextStyle(
                                     fontSize: 12,
                                     color: Color(0xff345326),
@@ -361,7 +424,7 @@ class Attendance extends StatelessWidget {
     );
   }
 
-    void showSortDialog(BuildContext context) {
+  void showSortDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

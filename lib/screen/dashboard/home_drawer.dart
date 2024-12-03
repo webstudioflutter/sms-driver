@@ -1,9 +1,7 @@
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/screen/bill/bill_main.dart';
 import 'package:driver_app/screen/dashboard/attendance/attendance.dart';
-import 'package:driver_app/screen/dashboard/home_page.dart';
 import 'package:driver_app/screen/fuel/fuel_tracking.dart';
-import 'package:driver_app/screen/navbar/MainNavbar.dart';
 import 'package:driver_app/screen/servicing/servicing_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -141,12 +139,6 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
     return ListView(
       padding: const EdgeInsets.only(left: 8.0),
       children: [
-        const DrawerCard(
-          svgAsset: 'assets/svg_images/drawer/home.svg',
-          imageColor: Colors.white,
-          label: 'Home',
-          destination: MainNavbar(),
-        ),
         DrawerCard(
           svgAsset: 'assets/svg_images/drawer/attendance.svg',
           label: 'Attendance',
@@ -162,7 +154,7 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
           label: 'Maintenance',
           // destination: AssignmentScreen(),
         ),
-         DrawerCard(
+        DrawerCard(
           svgAsset: 'assets/svg_images/drawer/fuel-tracking.svg',
           label: 'Fuel Tracking',
           destination: FuelTrackingMain(),

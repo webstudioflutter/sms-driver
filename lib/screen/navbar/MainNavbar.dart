@@ -5,6 +5,7 @@ import 'package:driver_app/screen/dashboard/home_page.dart';
 import 'package:driver_app/screen/dashboard/profile/profile_page.dart';
 import 'package:driver_app/screen/map/maps.dart';
 import 'package:driver_app/screen/notification/notificationScreen.dart';
+import 'package:driver_app/screen/search/SearchScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,7 @@ class _MainNavbarState extends State<MainNavbar> {
 
   final List<Widget> _pages = [
     const HomePage(),
-    const Center(child: Text("Search Page")),
+    SearchScreen(),
     MapTrackingPage(),
     NotificationScreen(),
     const ProfilePage(),
@@ -116,7 +117,7 @@ class _MainNavbarState extends State<MainNavbar> {
       String svgAsset, String label, int index, String svgAsset2) {
     bool isSelected = index == _selectedIndex;
 
-    return GestureDetector(
+    return InkWell(
       onTap: () => _onItemTapped(index),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5.0),

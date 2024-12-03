@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:driver_app/controller/NotificationController.dart';
-import 'package:driver_app/core/utils/asset_provider.dart';
 import 'package:driver_app/core/widgets/responsive_text.dart';
 import 'package:driver_app/screen/dashboard/attendance/attendance.dart';
 import 'package:driver_app/screen/dashboard/home_drawer.dart';
+import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:driver_app/screen/error/notfoundpage.dart';
 import 'package:driver_app/screen/error/servererror.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +78,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         backgroundColor: Colors.white,
         drawer: const HomePageDrawer(),
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Color(0xff4cb495),
           iconTheme: IconThemeData(color: Colors.white),
           elevation: 2,
           title: Center(
@@ -91,14 +91,19 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
           actions: [
             GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EmergencyMain(),
+                    ));
+              },
               child: SvgPicture.asset(
-                Assets.svgImages.searchnormal,
-                color: Colors.white,
+                'assets/svg_images/notification.svg',
+                height: 20,
               ),
             ),
-            const SizedBox(
-              width: 20,
-            ),
+            SizedBox(width: 20)
           ],
         ),
         body: RefreshIndicator(
@@ -154,7 +159,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         await notificationbloc.updatenotificationdata("${id}");
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5),
+        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
         padding: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           color: status == "READ" ? Colors.white : Colors.grey[300],
@@ -163,7 +168,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             BoxShadow(
               blurRadius: 1,
               offset: const Offset(0.5, 0.5),
-              spreadRadius: 1,
+              spreadRadius: 0.5,
               color: Colors.grey.withOpacity(0.5),
             ),
           ],

@@ -84,6 +84,7 @@ flutter:
     - assets/svg_images/
     - assets/svg_images/drawer/
     - assets/Animation.json
+    - assets/images/fakeprofile.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
