@@ -304,8 +304,7 @@ class _StudentListState extends State<StudentList> {
                               backgroundImage: data.profileImage == null ||
                                       data.profileImage == "fasle" ||
                                       data.profileImage == ""
-                                  ? const AssetImage(
-                                      'assets/images/fakeprofile.jpg')
+                                  ? const AssetImage('assets/images/user.png')
                                   : MemoryImage(
                                       base64Decode(
                                         data.profileImage!.replaceFirst(

@@ -405,7 +405,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     : (profile.profileImage == null ||
                                             profile.profileImage!.isEmpty
                                         ? const AssetImage(
-                                            'assets/images/fakeprofile.jpg')
+                                            'assets/images/user.png')
                                         : MemoryImage(
                                             base64Decode(
                                                 ("${profile.profileImage!.replaceFirst('data:image/jpeg;base64,', '')}")),
@@ -492,8 +492,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ? FileImage(_profileImage!)
                                 : (profile.profileImage == null ||
                                         profile.profileImage!.isEmpty
-                                    ? const AssetImage(
-                                        'assets/images/fakeprofile.jpg')
+                                    ? const AssetImage('assets/images/user.png')
                                     : MemoryImage(
                                         base64Decode(
                                             ("${profile.profileImage!.replaceFirst('data:image/jpeg;base64,', '')}")),
@@ -667,13 +666,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             isLoading = true;
                           });
 
-                          // Simulate a 1-second delay
-                          await Future.delayed(const Duration(seconds: 1));
-
-                          // Perform logout
                           await authenticationRepository.logout();
-
-                          // Navigate to the login screen
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

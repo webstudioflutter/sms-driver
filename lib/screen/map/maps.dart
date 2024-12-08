@@ -2,9 +2,13 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:driver_app/controller/transportcontroller.dart';
+import 'package:driver_app/core/utils/util.dart';
+import 'package:driver_app/screen/dashboard/home_drawer.dart';
+import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -22,6 +26,7 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
     LatLng(27.7182, 85.3250),
     LatLng(27.7192, 85.3260),
     LatLng(27.7202, 85.3270),
+    LatLng(27.7202, 85.3290),
   ];
 
   // User's current location
@@ -115,13 +120,13 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
     });
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Real-Time Location Tracking'),
-        backgroundColor: Colors.blueAccent,
-      ),
+      key: _scaffoldKey,
+      drawer: const HomePageDrawer(),
       body: Stack(
         children: [
           // FlutterMap Widget
@@ -178,8 +183,8 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
 
           // Status Bar
           Positioned(
-            bottom: 20,
-            left: 20,
+            bottom: 80,
+            left: 0,
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -207,8 +212,173 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
               ),
             ),
           ),
+          Positioned(
+            top: 30,
+            left: 10,
+            right: 10,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 50,
+                    width: width,
+                    decoration: const BoxDecoration(
+                      color: Color(0xff9BDCB9),
+                      borderRadius: BorderRadius.all(Radius.circular(25)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              _scaffoldKey.currentState?.openDrawer();
+                            },
+                            child: SvgPicture.asset(
+                              'assets/svg_images/menu.svg',
+                              height: 30,
+                            ),
+                          ),
+                        ),
+                        const Text(
+                          "Route Map",
+                          style: TextStyle(
+                            color: Color(0xff12422e),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const EmergencyMain(),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(right: 12.0, bottom: 4),
+                            child: SvgPicture.asset(
+                              'assets/svg_images/notification.svg',
+                              height: 20,
+                              width: 20,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Buttons at the top
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 20,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    _showConfirmationDialog();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(16),
+                    backgroundColor: const Color(0xffFF6448),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: SizedBox(
+                    width: 120,
+                    child: const Text(
+                      textAlign: TextAlign.center,
+                      'Mark Stop Point',
+                      style: TextStyle(
+                          color: Color(0xfffefefe),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(16),
+                    backgroundColor: const Color(0xffededed),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: SizedBox(
+                    width: 120,
+                    child: const Text(
+                      textAlign: TextAlign.center,
+                      'End Route',
+                      style: TextStyle(
+                          color: Color(0xff7b7b7b),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
+    );
+  }
+
+  void _showConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Are you sure?',
+            textAlign: TextAlign.center,
+          ),
+          content: const Text(
+            'Are you sure you want to set this location as a pick-up point?',
+            textAlign: TextAlign.center,
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                backgroundColor: const Color(0xffdddddd),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child:
+                  const Text('Cancel', style: TextStyle(color: Colors.black)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                backgroundColor: const Color(0xff60bf8f),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child:
+                  const Text('Confirm', style: TextStyle(color: Colors.white)),
+              onPressed: () {},
+            ),
+          ],
+        );
+      },
     );
   }
 }

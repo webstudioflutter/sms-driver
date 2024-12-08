@@ -13,12 +13,6 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
   final controller = Get.put(LoginController());
 
   @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -41,14 +35,14 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            const Text(
-              'School Bus Driver Login',
-              style: TextStyle(
-                fontSize: 28,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            // const Text(
+            //   'School Bus Driver Login',
+            //   style: TextStyle(
+            //     fontSize: 28,
+            //     color: Colors.white,
+            //     fontWeight: FontWeight.bold,
+            //   ),
+            // ),
             const SizedBox(height: 10),
             // const Text(
             //   'Already registered? Log in here',

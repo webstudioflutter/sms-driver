@@ -2,13 +2,13 @@ import 'dart:convert'; // For JSON encoding/decoding
 import 'dart:developer';
 
 import 'package:driver_app/Repository/vechileAttendanceRepository.dart';
-import 'package:driver_app/controller/Home/AttendanceController.dart';
+import 'package:driver_app/controller/Home/DroppedAttendanceController.dart';
 import 'package:driver_app/controller/Home/StudentListController.dart';
 import 'package:driver_app/controller/UpdateAttandanceController.dart';
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/core/widgets/page_title_bar.dart';
 import 'package:driver_app/core/widgets/responsive_text.dart';
-import 'package:driver_app/screen/dashboard/attendance/pickedattendance/updateAttendance.dart';
+import 'package:driver_app/screen/dashboard/attendance/pickedattendance/updatedroppedattendance.dart';
 import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:driver_app/screen/navbar/MainNavbar.dart';
 import 'package:flutter/material.dart';
@@ -18,18 +18,18 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Attendance extends StatefulWidget {
-  Attendance({super.key});
+class DroppedAttendance extends StatefulWidget {
+  DroppedAttendance({super.key});
 
   @override
-  State<Attendance> createState() => _AttendanceState();
+  State<DroppedAttendance> createState() => _DroppedAttendanceState();
 }
 
-class _AttendanceState extends State<Attendance> {
-  final AttendanceController attendanceController =
-      Get.put(AttendanceController());
+class _DroppedAttendanceState extends State<DroppedAttendance> {
+  final DroppedAttendanceController attendance =
+      Get.put(DroppedAttendanceController());
   final controller = Get.put(StudentListController());
-  Map<String, String> attendanceMap = {}; // To track attendance
+  Map<String, String> dropattendanceMap = {}; // To track attendance
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
   String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
   String formattedTime = DateFormat('HH:mm').format(DateTime.now());
@@ -47,10 +47,10 @@ class _AttendanceState extends State<Attendance> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.getStudentList(); // Fetch data after the initial build
     });
-    _checkAndResetAttendanceState();
+    _checkAnddropResetAttendanceState();
   }
 
-  void _showattandanceDialog(BuildContext context) {
+  void _showdroppedDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => WillPopScope(
@@ -68,9 +68,9 @@ class _AttendanceState extends State<Attendance> {
                 ),
               ),
               onPressed: () async {
-                await resetAttendanceState();
+                resetdropAttendanceState();
 
-                Future.delayed(Duration(seconds: 1), () {
+                await Future.delayed(Duration(seconds: 1), () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => MainNavbar()),
@@ -89,58 +89,61 @@ class _AttendanceState extends State<Attendance> {
     );
   }
 
-  Future<void> resetAttendanceState() async {
+  Future<void> resetdropAttendanceState() async {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
-      attendanceMap.clear(); // Reset attendance
+      dropattendanceMap.clear(); // Reset attendance
     });
-    await prefs.remove('attendanceMap'); // Remove attendance data
-    await prefs.remove('lastUpdateDate'); // Reset the date
-    // controller.getStudentList();
+    await prefs.remove('droppedattendanceMap'); // Remove attendance data
+    await prefs.remove('lastDate'); // Reset the date
+    controller.getStudentList();
+
     // Notify other parts of the app if needed
     log('Attendance state has been reset.');
   }
 
   // Load attendance data from SharedPreferences
-  Future<void> _loadAttendanceState() async {
+  Future<void> _loaddropAttendanceState() async {
     final prefs = await SharedPreferences.getInstance();
-    final savedAttendance = prefs.getString('attendanceMap');
+    final savedAttendance = prefs.getString('droppedattendanceMap');
     if (savedAttendance != null) {
       setState(() {
-        attendanceMap = Map<String, String>.from(json.decode(savedAttendance));
+        dropattendanceMap =
+            Map<String, String>.from(json.decode(savedAttendance));
       });
     }
   }
 
   // Save attendance data to SharedPreferences
-  Future<void> _saveAttendanceState() async {
+  Future<void> _savedropAttendanceState() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('attendanceMap', json.encode(attendanceMap));
+    await prefs.setString(
+        'droppedattendanceMap', json.encode(dropattendanceMap));
 
     // Save today's date
     final today = DateTime.now().toIso8601String().split('T')[0];
-    await prefs.setString('lastUpdateDate', today);
+    await prefs.setString('lastDate', today);
   }
 
   // Check if the attendance state needs to be reset
-  Future<void> _checkAndResetAttendanceState() async {
+  Future<void> _checkAnddropResetAttendanceState() async {
     final prefs = await SharedPreferences.getInstance();
 
     // Get the last update date
-    final lastUpdateDate = prefs.getString('lastUpdateDate');
+    final lastDate = prefs.getString('lastDate');
     final today = DateTime.now().toIso8601String().split('T')[0];
 
     // If the date is different or not saved, reset the attendance state
-    if (lastUpdateDate == null || lastUpdateDate != today) {
+    if (lastDate == null || lastDate != today) {
       setState(() {
-        attendanceMap.clear(); // Reset attendance
+        dropattendanceMap.clear(); // Reset attendance
       });
-      await prefs.remove('attendanceMap'); // Clear saved attendance data
-      await prefs.setString('lastUpdateDate', today); // Save today's date
+      await prefs.remove('droppedattendanceMap'); // Clear saved attendance data
+      await prefs.setString('lastDate', today); // Save today's date
     } else {
       // Load the saved attendance state
-      await _loadAttendanceState();
+      await _loaddropAttendanceState();
     }
   }
 
@@ -155,9 +158,12 @@ class _AttendanceState extends State<Attendance> {
           children: [
             Container(
               height: MediaQuery.sizeOf(context).height * 0.26,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0xff6bccc1), Color(0xff6fcf99)],
+                    colors: [
+                      Colors.red.withOpacity(0.5),
+                      Colors.red.withOpacity(0.2)
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -177,9 +183,7 @@ class _AttendanceState extends State<Attendance> {
                       context,
                       MaterialPageRoute(builder: (context) => EmergencyMain()),
                     ),
-                    title: pickdrop == "DROPPED"
-                        ? 'Dropped Attendance'
-                        : 'Picked Attendance',
+                    title: 'Dropped Attendance',
                     firstIcon: Icons.arrow_back,
                     lastWidget: SvgPicture.asset(
                       'assets/svg_images/notification.svg',
@@ -190,14 +194,14 @@ class _AttendanceState extends State<Attendance> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _buildCounterBox(
-                        count: attendanceMap.values
+                        count: dropattendanceMap.values
                             .where((status) => status == "Present")
                             .length,
                         label: "Present",
                         color: Color(0xff0b835c),
                       ),
                       _buildCounterBox(
-                        count: attendanceMap.values
+                        count: dropattendanceMap.values
                             .where((status) => status == "Absent")
                             .length,
                         label: "Absent",
@@ -214,11 +218,11 @@ class _AttendanceState extends State<Attendance> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: GestureDetector(
         onTap: () {
-          _showattandanceDialog(context);
+          _showdroppedDialog(context);
         },
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.green.withOpacity(0.5),
+            color: Colors.red.withOpacity(0.5),
             borderRadius: BorderRadius.circular(8),
           ),
           height: 50,
@@ -234,230 +238,235 @@ class _AttendanceState extends State<Attendance> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(height: getHeight(context) * 0.01),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              InkWell(
-                onTap: () {
-                  var updatedata = {
-                    "schoolId": "@nidisecondaryschool",
-                    "date": "${formattedDate}",
-                    "transportationId": "67189289a610cd23428ebc55"
-                  };
-                  attandancebyprops.getbyprops(updatedata);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => UpdateAttendance(),
-                    ),
-                  );
-                },
-                child: Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        blurRadius: 1,
-                        spreadRadius: 0.5,
-                        offset: const Offset(0.5, 0.5),
+      body: Expanded(
+        child: Column(
+          children: [
+            SizedBox(height: getHeight(context) * 0.01),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {
+                    var updatedata = {
+                      "schoolId": "@nidisecondaryschool",
+                      "date": "${formattedDate}",
+                      "transportationId": "67189289a610cd23428ebc55"
+                    };
+                    attandancebyprops.getbyprops(updatedata);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UpdateDroppedAttendance(),
                       ),
-                    ],
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
-                    height: getHeight(context) * 0.06,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.edit_square,
-                          color: Color(0xff221f1f),
-                        ),
-                        SizedBox(width: getWidth(context) * 0.01),
-                        const Text(
-                          'Edit',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xff363636),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(width: getWidth(context) * 0.02),
-              GestureDetector(
-                onTap: () {
-                  showSortDialog(context);
-                },
-                child: Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        blurRadius: 1,
-                        spreadRadius: 0.5,
-                        offset: const Offset(0.5, 0.5),
-                      ),
-                    ],
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    height: getHeight(context) * 0.06,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.swap_vert,
-                            size: 30, color: Color(0xff221f1f)),
-                        SizedBox(width: getWidth(context) * 0.01),
-                        const Text(
-                          'Sort',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xff363636),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: getHeight(context) * 0.01),
-          Obx(() {
-            if (controller.isLoadingStudentList.value) {
-              return Center(child: CircularProgressIndicator());
-            }
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: SizedBox(
-                height: height * 0.6,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: controller.list.length,
-                  itemBuilder: (context, index) {
-                    final data = controller.list[index];
-                    final studentId = data.id; // Assume student has a unique ID
-                    return _buildStudentTile(
-                      data: data,
-                      isPresent: attendanceMap[studentId] == "Present",
-                      isAbsent: attendanceMap[studentId] == "Absent",
-                      onPresentTap: () async {
-                        if (!attendanceMap.containsKey(studentId)) {
-                          setState(() {
-                            attendanceMap[studentId!] = "Present";
-                          });
-                          _saveAttendanceState(); // Save state
-                          var transportID = await _secureStorage.read(
-                              key: 'transportationId');
-                          var transportname = await _secureStorage.read(
-                              key: 'transporationName');
-                          var school =
-                              await _secureStorage.read(key: 'schoolId');
-
-                          var pickdrop =
-                              await _secureStorage.read(key: 'pickdrop');
-                          var dataofstd = {
-                            // "schoolId": "${school}",
-                            "schoolId": "@nidisecondaryschool",
-                            "date": "${formattedDate}",
-                            "attendaceType": "${pickdrop}",
-                            "user": {
-                              "_id": data.id,
-                              "name": "${data.fullName}",
-                              "profileImage": "${data.profileImage}",
-                              "pickDropLocation":
-                                  "${data.pickDropLocation!.busRoute}"
-                            },
-                            "class": {
-                              "_id": "${data.className!.id}",
-                              "className": "${data.className!.classNameClass}"
-                            },
-                            "transportation": {
-                              "_id": "67189289a610cd23428ebc55",
-
-                              // "_id": "${transportID}",
-                              // "name": "${transportname}"
-                              "name": "5580"
-                            },
-                            "time": "${formattedTime}",
-                            "status": true
-                          };
-                          vechileattendanceRepository.AttendanceData(dataofstd);
-                        }
-                      },
-                      onAbsentTap: () async {
-                        if (!attendanceMap.containsKey(studentId)) {
-                          setState(() {
-                            attendanceMap[studentId!] = "Absent";
-                          });
-                          _saveAttendanceState(); // Save state
-                          var transportID = await _secureStorage.read(
-                              key: 'transportationId');
-                          var transportname = await _secureStorage.read(
-                              key: 'transporationName');
-                          var school =
-                              await _secureStorage.read(key: 'schoolId');
-
-                          var pickdrop =
-                              await _secureStorage.read(key: 'pickdrop');
-                          var dataofstd = {
-                            // "schoolId": "${school}",
-                            "schoolId": "@nidisecondaryschool",
-                            "date": "${formattedDate}",
-                            "attendaceType": "${pickdrop}",
-                            "user": {
-                              "_id": data.id,
-                              "name": "${data.fullName}",
-                              "profileImage": "${data.profileImage}",
-                              "pickDropLocation":
-                                  "${data.pickDropLocation!.busRoute}"
-                            },
-                            "class": {
-                              "_id": "${data.className!.id}",
-                              "className": "${data.className!.classNameClass}"
-                            },
-                            "transportation": {
-                              "_id": "67189289a610cd23428ebc55",
-
-                              // "_id": "${transportID}",
-                              // "name": "${transportname}"
-                              "name": "5580"
-                            },
-                            "time": "${formattedTime}",
-                            "status": false
-                          };
-                          vechileattendanceRepository.AttendanceData(dataofstd);
-                        }
-                      },
                     );
                   },
+                  child: Container(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          blurRadius: 1,
+                          spreadRadius: 0.5,
+                          offset: const Offset(0.5, 0.5),
+                        ),
+                      ],
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
+                      height: getHeight(context) * 0.06,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.edit_square,
+                            color: Color(0xff221f1f),
+                          ),
+                          SizedBox(width: getWidth(context) * 0.01),
+                          const Text(
+                            'Edit',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xff363636),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            );
-          }),
-        ],
+                SizedBox(width: getWidth(context) * 0.02),
+                GestureDetector(
+                  onTap: () {
+                    showSortDialog(context);
+                  },
+                  child: Container(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          blurRadius: 1,
+                          spreadRadius: 0.5,
+                          offset: const Offset(0.5, 0.5),
+                        ),
+                      ],
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      height: getHeight(context) * 0.06,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.swap_vert,
+                              size: 30, color: Color(0xff221f1f)),
+                          SizedBox(width: getWidth(context) * 0.01),
+                          const Text(
+                            'Sort',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xff363636),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: getHeight(context) * 0.01),
+            Obx(() {
+              if (controller.isLoadingStudentList.value) {
+                return Center(child: CircularProgressIndicator());
+              }
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: SizedBox(
+                  height: height * 0.6,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: controller.list.length,
+                    itemBuilder: (context, index) {
+                      final data = controller.list[index];
+                      final studentId =
+                          data.id; // Assume student has a unique ID
+                      return _buildStudentTile(
+                        data: data,
+                        isPresent: dropattendanceMap[studentId] == "Present",
+                        isAbsent: dropattendanceMap[studentId] == "Absent",
+                        onPresentTap: () async {
+                          if (!dropattendanceMap.containsKey(studentId)) {
+                            setState(() {
+                              dropattendanceMap[studentId!] = "Present";
+                            });
+                            // _saveAttendanceState(); // Save state
+                            var transportID = await _secureStorage.read(
+                                key: 'transportationId');
+                            var transportname = await _secureStorage.read(
+                                key: 'transporationName');
+                            var school =
+                                await _secureStorage.read(key: 'schoolId');
+
+                            var pickdrop =
+                                await _secureStorage.read(key: 'pickdrop');
+                            var dataofstd = {
+                              // "schoolId": "${school}",
+                              "schoolId": "@nidisecondaryschool",
+                              "date": "${formattedDate}",
+                              "attendaceType": "${pickdrop}",
+                              "user": {
+                                "_id": data.id,
+                                "name": "${data.fullName}",
+                                "profileImage": "${data.profileImage}",
+                                "pickDropLocation":
+                                    "${data.pickDropLocation!.busRoute}"
+                              },
+                              "class": {
+                                "_id": "${data.className!.id}",
+                                "className": "${data.className!.classNameClass}"
+                              },
+                              "transportation": {
+                                "_id": "67189289a610cd23428ebc55",
+
+                                // "_id": "${transportID}",
+                                // "name": "${transportname}"
+                                "name": "5580"
+                              },
+                              "time": "${formattedTime}",
+                              "status": true
+                            };
+                            vechileattendanceRepository.AttendanceData(
+                                dataofstd);
+                          }
+                        },
+                        onAbsentTap: () async {
+                          if (!dropattendanceMap.containsKey(studentId)) {
+                            setState(() {
+                              dropattendanceMap[studentId!] = "Absent";
+                            });
+                            // _saveAttendanceState(); // Save state
+                            var transportID = await _secureStorage.read(
+                                key: 'transportationId');
+                            var transportname = await _secureStorage.read(
+                                key: 'transporationName');
+                            var school =
+                                await _secureStorage.read(key: 'schoolId');
+
+                            var pickdrop =
+                                await _secureStorage.read(key: 'pickdrop');
+                            var dataofstd = {
+                              // "schoolId": "${school}",
+                              "schoolId": "@nidisecondaryschool",
+                              "date": "${formattedDate}",
+                              "attendaceType": "${pickdrop}",
+                              "user": {
+                                "_id": data.id,
+                                "name": "${data.fullName}",
+                                "profileImage": "${data.profileImage}",
+                                "pickDropLocation":
+                                    "${data.pickDropLocation!.busRoute}"
+                              },
+                              "class": {
+                                "_id": "${data.className!.id}",
+                                "className": "${data.className!.classNameClass}"
+                              },
+                              "transportation": {
+                                "_id": "67189289a610cd23428ebc55",
+
+                                // "_id": "${transportID}",
+                                // "name": "${transportname}"
+                                "name": "5580"
+                              },
+                              "time": "${formattedTime}",
+                              "status": false
+                            };
+                            vechileattendanceRepository.AttendanceData(
+                                dataofstd);
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ),
+              );
+            }),
+          ],
+        ),
       ),
     );
   }
@@ -639,19 +648,19 @@ class _AttendanceState extends State<Attendance> {
             children: [
               CheckboxListTile(
                 title: const Text('By Name'),
-                value: attendanceController.sortParameter.value == 'name',
+                value: attendance.sortParameter.value == 'name',
                 onChanged: (bool? value) {
-                  attendanceController.sortParameter.value = 'name';
-                  attendanceController.sortAttendance();
+                  attendance.sortParameter.value = 'name';
+                  attendance.sortAttendance();
                   Navigator.of(context).pop();
                 },
               ),
               CheckboxListTile(
                 title: const Text('By Location'),
-                value: attendanceController.sortParameter.value == 'location',
+                value: attendance.sortParameter.value == 'location',
                 onChanged: (bool? value) {
-                  attendanceController.sortParameter.value = 'location';
-                  attendanceController.sortAttendance();
+                  attendance.sortParameter.value = 'location';
+                  attendance.sortAttendance();
                   Navigator.of(context).pop();
                 },
               ),

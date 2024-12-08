@@ -18,6 +18,8 @@ class MainNavbar extends StatefulWidget {
 }
 
 class _MainNavbarState extends State<MainNavbar> {
+  final controller = Get.put(ProfileController());
+
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
@@ -34,7 +36,11 @@ class _MainNavbarState extends State<MainNavbar> {
     });
   }
 
-  final controller = Get.put(ProfileController());
+  @override
+  void initState() {
+    super.initState();
+    // controller.getProfile();
+  }
 
   @override
   Widget build(BuildContext context) {

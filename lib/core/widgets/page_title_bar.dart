@@ -27,8 +27,10 @@ class PageTitleBar extends StatelessWidget {
         height: 50, // Height of the container
         width: MediaQuery.of(context).size.width *
             0.9, // Adjust width as per screen size
-        decoration: const BoxDecoration(
-          color: Color(0xffcdeede),
+        decoration: BoxDecoration(
+          color: title != "Dropped Attendance"
+              ? Color(0xffcdeede)
+              : Colors.red.withOpacity(0.2),
           borderRadius: BorderRadius.all(Radius.circular(25)),
         ),
         child: Row(
@@ -40,17 +42,19 @@ class PageTitleBar extends StatelessWidget {
                       context), // Default action is to pop the page
               icon: Icon(
                 firstIcon,
-                color: pageTitleColor,
+                color:
+                    title != "Dropped Attendance" ? pageTitleColor : Colors.red,
               ),
             ),
             const Spacer(),
 
             Text(
               title ?? "",
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: pageTitleColor,
+                color:
+                    title != "Dropped Attendance" ? pageTitleColor : Colors.red,
               ),
             ),
             const Spacer(),

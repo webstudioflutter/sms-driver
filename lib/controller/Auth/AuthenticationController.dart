@@ -1,17 +1,25 @@
 import 'dart:developer';
 
 import 'package:driver_app/Repository/auth/AuthenticationRepository.dart';
+import 'package:driver_app/core/color_constant.dart';
 import 'package:driver_app/screen/navbar/MainNavbar.dart';
-import 'package:driver_app/services/NotificationService.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  final emailController = TextEditingController(text: "driver2@gmail.com");
+  final emailController = TextEditingController(text: "ds@gmail.com");
   final passwordController = TextEditingController(text: "12345678");
 
   var isPasswordVisible = false.obs;
   var isLoading = false.obs;
+
+  // @override
+  // void onClose() {
+  //   // Dispose of the controllers when the controller is closed or disposed
+  //   emailController.dispose();
+  //   passwordController.dispose();
+  //   super.onClose();
+  // }
 
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
@@ -34,22 +42,17 @@ class LoginController extends GetxController {
         "password": passwordController.text,
       };
 
-      final authResponse =
-          await authenticationRepository.sendAuthInfo(authData);
-//       if (authResponse.error == null) {
-        // log("${authResponse.result}");
+      await authenticationRepository.sendAuthInfo(authData);
 
-      if (authResponse.result != null) {
-        await NotificationService.instance.initialize();
-
-        log("${authResponse.result}");
+      if (authResponse!.result != null) {
+        log("${authResponse!.result}");
 
         Get.offAll(() => const MainNavbar()); // Navigate to the main navbar
       } else {
         log("Login Failed");
         Get.snackbar(
           "Login Failed",
-          authResponse.error!,
+          authResponse!.error!,
           snackPosition: SnackPosition.BOTTOM,
         );
       }

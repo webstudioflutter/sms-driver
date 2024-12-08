@@ -5,6 +5,8 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:driver_app/Model/Authenticationmodel.dart';
 import 'package:driver_app/Repository/auth/Basecontroller.dart';
+import 'package:driver_app/core/color_constant.dart';
+import 'package:driver_app/services/NotificationService.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,36 +23,35 @@ class AuthenticationRepository {
   }
 
   /// Sends authentication information to the server.
-  Future<AuthenticationModel> sendAuthInfo(
-      Map<String, dynamic> authData) async {
+  Future<void> sendAuthInfo(Map<String, dynamic> authData) async {
     try {
       final response = await _dio.post(
         '$_appUrl/user/login',
         data: authData,
       );
 
-      final authResponse = AuthenticationModel.fromJson(response.data);
+      authResponse = AuthenticationModel.fromJson(response.data);
 
       // Validate response for DRIVER group and token
-      if (authResponse.token != null) {
-        await _saveAuthToken(authResponse.token!);
-        await _saveDriverId(authResponse.result!.id);
-        await _saveDrivename(authResponse.result!.fullName);
-        await _saveSchoolId(authResponse.result!.username);
-        await _saveTransportationId(authResponse.result!.transporation?.id);
-        await _saveTransportationName(authResponse.result!.transporation!.name);
+      if (authResponse!.token != null) {
+        await NotificationService.instance.initialize();
+        await _saveAuthToken(authResponse!.token!);
+        await _saveDriverId(authResponse!.result!.id);
+        await _saveDrivename(authResponse!.result!.fullName);
+        await _saveSchoolId(authResponse!.result!.username);
+        await _saveTransportationId(authResponse!.result!.transporation?.id);
+        await _saveTransportationName(
+            authResponse!.result!.transporation!.name);
       } else {
         throw Exception("Authentication failed");
       }
-
-      return authResponse;
     } on DioException catch (error) {
       log('DioException: ${error.message}');
-      return AuthenticationModel.withError(baseController.handleError(error));
+      // return AuthenticationModel.withError(baseController.handleError(error));
     } catch (e) {
       log('Error: $e');
-      return AuthenticationModel.withError(
-          baseController.handleError("Unexpected error occurred"));
+      // return AuthenticationModel.withError(
+      //     baseController.handleError("Unexpected error occurred"));
     }
   }
 
@@ -107,6 +108,12 @@ class AuthenticationRepository {
     }
   }
 
+  Future<void> savepickdrop(String? name) async {
+    if (name != null) {
+      await _secureStorage.write(key: 'pickdrop', value: name);
+    }
+  }
+
   /// Saves authentication token to shared preferences and sets `firstTimeUser` flag.
   Future<void> _saveAuthToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
@@ -123,7 +130,7 @@ class AuthenticationRepository {
   Future<void> deleteCurrentToken() async {
     try {
       await FirebaseMessaging.instance.deleteToken();
-      log("Token update empty");
+      log("mahesh token Token update empty");
     } catch (e) {
       print("Error deleting token: $e");
     }

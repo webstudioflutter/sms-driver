@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:driver_app/Repository/home/RouteController.dart';
-import 'package:driver_app/screen/location/map.dart';
+import 'package:driver_app/screen/map/maps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -43,7 +43,7 @@ class Routecontroller extends GetxController {
       final response = await routeRepository.postRouteInfo(data);
 
       if (response['message'] == "Success") {
-        Get.to(LiveTrackingMapPage());
+        Get.to(MapTrackingPage());
         Get.snackbar('Success', 'Request handled successfully!',
             backgroundColor: Colors.green.shade400, colorText: Colors.white);
         resetFields();

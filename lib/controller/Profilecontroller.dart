@@ -29,7 +29,9 @@ class ProfileController extends GetxController {
         var data = {
           "fcmToken": "${fcmtokens}",
         };
-        await updateProfile(data); // Assign the fetched profile
+        Future.delayed(Duration(seconds: 1), () {
+          updateProfile(data);
+        });
       } else {
         profile.value = AuthenticationModel.withError(
             baseController.handleError(Response.error));

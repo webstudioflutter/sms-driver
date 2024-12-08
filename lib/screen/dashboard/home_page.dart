@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:driver_app/controller/Home/RouteController.dart';
 import 'package:driver_app/controller/Profilecontroller.dart';
@@ -6,7 +7,7 @@ import 'package:driver_app/core/constants/string_constants.dart';
 import 'package:driver_app/core/utils/asset_provider.dart';
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/screen/bill/bill_main.dart';
-import 'package:driver_app/screen/dashboard/attendance/attendance.dart';
+import 'package:driver_app/screen/dashboard/attendance/pickedattendance/LoadSwitchExample.dart';
 import 'package:driver_app/screen/dashboard/home_drawer.dart';
 import 'package:driver_app/screen/dashboard/report-issue/report_issue.dart';
 import 'package:driver_app/screen/dashboard/student-list/student_list.dart';
@@ -16,6 +17,7 @@ import 'package:driver_app/screen/servicing/servicing_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -33,7 +35,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    controller.getProfile();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getProfile();
+
+      // controller.getStudentList(); // Fetch data after the initial build
+    });
   }
 
   @override
@@ -163,19 +169,19 @@ class _HomePageState extends State<HomePage> {
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              ClipOval(
-                                child: profile?.profileImage == null
-                                    ? Icon(Icons.image)
-                                    : Image.memory(
+                              CircleAvatar(
+                                maxRadius: getHeight(context) * 0.07,
+                                minRadius: getHeight(context) * 0.02,
+                                backgroundImage: profile!.profileImage ==
+                                            null ||
+                                        profile.profileImage == "fasle" ||
+                                        profile.profileImage == ""
+                                    ? const AssetImage('assets/images/user.png')
+                                    : MemoryImage(
                                         base64Decode(
-                                          profile?.profileImage?.replaceFirst(
-                                                  'data:image/jpeg;base64,',
-                                                  '') ??
-                                              "",
+                                          profile.profileImage!.replaceFirst(
+                                              'data:image/jpeg;base64,', ''),
                                         ),
-                                        height: getHeight(context) * 0.14,
-                                        width: getHeight(context) * 0.14,
-                                        fit: BoxFit.cover,
                                       ),
                               ),
                               Column(
@@ -183,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "${profile?.fullName ?? 'N/A'}",
+                                    "${profile.fullName ?? 'N/A'}",
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
@@ -195,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                                   Padding(
                                     padding: EdgeInsets.only(left: 5.0),
                                     child: Text(
-                                      "License No: ${profile?.lisenceNo ?? 'N/A'}",
+                                      "License No: ${profile.lisenceNo ?? 'N/A'}",
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
@@ -257,12 +263,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Attendance(),
-                ),
-              );
+              _PickDrop(context);
             },
             child: buildStdQuickAccessItem(
               Assets.svgImages.attendance,
@@ -348,6 +349,41 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  void _PickDrop(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            LoadSwitchExample(),
+            Positioned(
+              top: -30,
+              left: 0,
+              right: 0,
+              child: SvgPicture.asset(
+                'assets/svg_images/green-notification.svg',
+                height: 55,
+                width: 55,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> resetAttendanceState() async {
+    // Use SharedPreferences to clear attendance-related data
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('attendanceMap'); // Remove attendance data
+    await prefs.remove('lastUpdateDate'); // Reset the date
+
+    // Notify other parts of the app if needed
+    log('Attendance state has been reset.');
   }
 
   Column _servicingDateContent(BuildContext context) {
@@ -665,6 +701,7 @@ class _HomePageState extends State<HomePage> {
                   GestureDetector(
                     onTap: () {
                       routeController.submitRouteType("PICKED");
+
                       routeController.submitRouteData();
                       Navigator.pop(context);
                       routeController.readingOnStartController.clear();
