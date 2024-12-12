@@ -276,7 +276,7 @@ class _SplashScreenState extends State<SplashScreen>
                     scale: _scaleAnimation6.value,
                     child: Center(
                       child: Lottie.asset(
-                        height: 120,
+                        height: 100,
                         'assets/Animation.json',
                         fit: BoxFit.cover,
                         animate: true,
@@ -295,7 +295,7 @@ class _SplashScreenState extends State<SplashScreen>
                     scale: _scaleAnimation7.value,
                     child: Center(
                       child: Lottie.asset(
-                        height: 100,
+                        height: 90,
                         'assets/Animation.json',
                         fit: BoxFit.cover,
                       ),

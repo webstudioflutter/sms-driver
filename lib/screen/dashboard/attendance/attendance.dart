@@ -71,9 +71,12 @@ class _AttendanceState extends State<Attendance> {
                 await resetAttendanceState();
 
                 Future.delayed(Duration(seconds: 1), () {
-                  Navigator.push(
+                  Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => MainNavbar()),
+                    MaterialPageRoute(
+                      builder: (context) => const MainNavbar(),
+                    ),
+                    (route) => false,
                   );
                 });
               },
@@ -241,9 +244,13 @@ class _AttendanceState extends State<Attendance> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               InkWell(
-                onTap: () {
+                onTap: () async {
+                  final _secureStorage = const FlutterSecureStorage();
+                  var schoolId = await _secureStorage.read(key: 'schoolId');
+                  var transportationId =
+                      await _secureStorage.read(key: 'transportationId');
                   var updatedata = {
-                    "schoolId": "@nidisecondaryschool",
+                    "schoolId": "${schoolId}",
                     "date": "${formattedDate}",
                     "transportationId": "67189289a610cd23428ebc55"
                   };
@@ -581,7 +588,7 @@ class _AttendanceState extends State<Attendance> {
                   width: getWidth(context) * 0.3,
                   child: Text(
                     data.pickDropLocation != null
-                        ? "Location: ${data.pickDropLocation?.busRoute}"
+                        ? "Location: ${data.pickDropLocation!.busRoute}"
                         : "Location: kathmandu",
                     style: const TextStyle(
                       fontSize: 12,
@@ -626,6 +633,7 @@ class _AttendanceState extends State<Attendance> {
   }
 
   void showSortDialog(BuildContext context) {
+    bool? value;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -640,31 +648,31 @@ class _AttendanceState extends State<Attendance> {
               CheckboxListTile(
                 title: const Text('By Name'),
                 value: attendanceController.sortParameter.value == 'name',
-                onChanged: (bool? value) {
-                  attendanceController.sortParameter.value = 'name';
-                  attendanceController.sortAttendance();
+                onChanged: (value) {
+                  value != value;
+                  controller.sortListByName();
                   Navigator.of(context).pop();
                 },
               ),
               CheckboxListTile(
                 title: const Text('By Location'),
                 value: attendanceController.sortParameter.value == 'location',
-                onChanged: (bool? value) {
-                  attendanceController.sortParameter.value = 'location';
-                  attendanceController.sortAttendance();
+                onChanged: (value) {
+                  value != value;
+                  controller.sortListByLocation();
                   Navigator.of(context).pop();
                 },
               ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Close'),
-            ),
-          ],
+          // actions: [
+          //   TextButton(
+          //     onPressed: () {
+          //       Navigator.of(context).pop();
+          //     },
+          //     child: const Text('Close'),
+          //   ),
+          // ],
         );
       },
     );

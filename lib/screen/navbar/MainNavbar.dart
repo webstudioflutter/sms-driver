@@ -1,5 +1,6 @@
 import 'package:driver_app/controller/NotificationController.dart';
 import 'package:driver_app/controller/Profilecontroller.dart';
+import 'package:driver_app/controller/SchoosettingController.dart';
 import 'package:driver_app/core/utils/asset_provider.dart';
 import 'package:driver_app/screen/dashboard/home_page.dart';
 import 'package:driver_app/screen/dashboard/profile/profile_page.dart';
@@ -38,9 +39,12 @@ class _MainNavbarState extends State<MainNavbar> {
 
   @override
   void initState() {
+    ccontroller.getSchoolSetting();
     super.initState();
-    // controller.getProfile();
   }
+
+  final schoolsettingController ccontroller =
+      Get.put(schoolsettingController());
 
   @override
   Widget build(BuildContext context) {
@@ -93,14 +97,14 @@ class _MainNavbarState extends State<MainNavbar> {
                 width: 60,
                 height: 60,
                 decoration: BoxDecoration(
-                  color: const Color(0xff60BF8F), // Green background color
+                  color: const Color(0xff60BF8F),
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.green.withOpacity(0.2), // Shadow color
-                      blurRadius: 10, // Shadow blur radius
-                      offset: const Offset(1, -1), // Shadow position
+                      color: Colors.green.withOpacity(0.2),
+                      blurRadius: 10,
+                      offset: const Offset(1, -1),
                     ),
                   ],
                 ),
@@ -138,10 +142,9 @@ class _MainNavbarState extends State<MainNavbar> {
                   height: 22,
                   color: isSelected ? Colors.green : const Color(0xff516B5E),
                 ),
-                if (index == 3) // Badge for Notification tab
+                if (index == 3)
                   StreamBuilder<int>(
-                    stream: notificationbloc
-                        .unreadCount, // Replace with your actual stream
+                    stream: notificationbloc.unreadCount,
                     builder: (context, snapshot) {
                       if (snapshot.hasData && snapshot.data! > 0) {
                         return Positioned(

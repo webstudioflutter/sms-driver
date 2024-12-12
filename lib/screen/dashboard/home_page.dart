@@ -73,6 +73,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             _quickAccessItems(context),
+            SizedBox(height: 20)
           ],
         ),
       ),
@@ -148,8 +149,20 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(height: 10),
                 SizedBox(
                   height: getHeight(context) * 0.17,
-                  child: Card(
-                    color: const Color(0xffd8f3e1),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Color(0xffD8F3E1),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(16),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 1,
+                            spreadRadius: 0.5,
+                            color: Colors.grey.withOpacity(0.2),
+                            offset: Offset(0.5, 0.5),
+                          )
+                        ]),
                     margin: EdgeInsets.symmetric(
                       horizontal: getWidth(context) * 0.021,
                     ),
@@ -166,23 +179,36 @@ class _HomePageState extends State<HomePage> {
                         } else {
                           // final profile = controller.profile.value!.result!;
                           final profile = controller.profile.value?.result;
+                          String base64String = profile?.profileImage ?? '';
+                          if (base64String.isNotEmpty) {
+                            if (base64String
+                                .startsWith('data:image/jpeg;base64,')) {
+                              base64String = base64String.replaceFirst(
+                                  'data:image/jpeg;base64,', '');
+                            } else if (base64String
+                                .startsWith('data:image/png;base64,')) {
+                              base64String = base64String.replaceFirst(
+                                  'data:image/png;base64,', '');
+                            } else {
+                              throw Exception('Unsupported image format');
+                            }
+                          } else {
+                            print('No profile image available');
+                          }
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               CircleAvatar(
                                 maxRadius: getHeight(context) * 0.07,
                                 minRadius: getHeight(context) * 0.02,
-                                backgroundImage: profile!.profileImage ==
-                                            null ||
-                                        profile.profileImage == "fasle" ||
-                                        profile.profileImage == ""
-                                    ? const AssetImage('assets/images/user.png')
-                                    : MemoryImage(
-                                        base64Decode(
-                                          profile.profileImage!.replaceFirst(
-                                              'data:image/jpeg;base64,', ''),
-                                        ),
-                                      ),
+                                backgroundImage:
+                                    profile!.profileImage == null ||
+                                            profile.profileImage == "false" ||
+                                            profile.profileImage!.isEmpty
+                                        ? AssetImage('assets/images/user.png')
+                                        : MemoryImage(
+                                            base64Decode(base64String),
+                                          ),
                               ),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -772,11 +798,20 @@ class _HomePageState extends State<HomePage> {
 
 Widget buildStdQuickAccessItem(
     String svgAsset, String label, BuildContext context) {
-  return Card(
-    elevation: 2,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10),
-    ),
+  return Container(
+    decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(16),
+        ),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 1,
+            spreadRadius: 0.5,
+            color: Colors.grey.withOpacity(0.2),
+            offset: Offset(0.5, 0.5),
+          )
+        ]),
     child: Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(

@@ -14,10 +14,21 @@ class HistoryMethod extends StatefulWidget {
 class _HistoryMethodState extends State<HistoryMethod> {
   final BillController billController = Get.put(BillController());
 
-  String? selectedBillType = 'Bill Type';
+  String? selectedBillType = 'Others Bill';
   DateTime? selectedDate;
 
-  List<String> billTypes = ['Bill Type', 'Fuel', 'Maintenance'];
+  List<String> billTypes = [
+    'Servicing Bill',
+    'Accident Repair Bill',
+    'Spare Parts Bill',
+    'flat tire Bill',
+    'Repair Bill',
+    'Battery Bill',
+    'Allowances Bill',
+    'Parking Bill',
+    'Traffic Violation Bill',
+    'Others Bill'
+  ];
 
   @override
   void initState() {
@@ -58,7 +69,7 @@ class _HistoryMethodState extends State<HistoryMethod> {
 
       var filteredBills = billsdata.where((bill) {
         final matchesBillType = selectedBillType == null ||
-            selectedBillType == 'Bill Type' ||
+            selectedBillType == 'Others Bill' ||
             bill.billType == selectedBillType;
         final matchesDate = selectedDate == null ||
             bill.date == DateFormat('yyyy-MM-dd').format(selectedDate!);

@@ -34,24 +34,28 @@ class ServicingController extends GetxController {
       final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
       isLoading.value = true;
+      var schoolid = await _secureStorage.read(key: 'schoolId');
+      var driverid = await _secureStorage.read(key: 'driverId');
+      var drivername = await _secureStorage.read(key: 'drivername');
+      var tranname = await _secureStorage.read(key: 'transporationName');
+      var transId = await _secureStorage.read(key: 'transportationId');
 
       final data = {
-        ///---------------Mandatory Properties---------------///
-        "schoolId": "@nidisecondaryschool",
+        "schoolId": "${schoolid}",
         "date": servicingDate.value,
         "billAmount": int.tryParse(totalAmountController.text) ?? 0,
-        "expenseType": "Maintainance",
-        "driverInfo": {"_id": "driverId"},
-        "vehicleInfo": {"_id": "vehicleId"},
-
-        ///---------------Optional Properties---------------///
+        "expenseType": "PICKED",
+        "billType": "Servicing",
+        "billTitle": "Servicing Bill",
+        "driverInfo": {"_id": "${driverid}", "name": "${drivername}"},
+        "vehicleInfo": {"_id": "${transId}", "name": "${tranname}"},
         "partsUsed": partsUsed.toList(),
-        // "billType": "Servicing",
         "billImage": billImage[0],
         "oldPartsImages": damagedPartImage.toList(),
         "newPartsImages": replacedPartImage.toList(),
         "status": true
       };
+
       log("Log servicing data:$data");
       final response = await _repository.postServicingData(servicingData: data);
 

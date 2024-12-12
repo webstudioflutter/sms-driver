@@ -218,7 +218,20 @@ class _NavigateLocationState extends State<NavigateLocation> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Card(
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(16),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 1,
+                                      spreadRadius: 0.5,
+                                      color: Colors.grey.withOpacity(0.2),
+                                      offset: Offset(0.5, 0.5),
+                                    )
+                                  ]),
                               child: Padding(
                                 padding: const EdgeInsets.all(12),
                                 child: Row(

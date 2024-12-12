@@ -28,7 +28,11 @@ class FuelTrackingController extends GetxController {
 
     try {
       final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
-
+      var schoolid = await _secureStorage.read(key: 'schoolId');
+      var driverid = await _secureStorage.read(key: 'driverId');
+      var drivername = await _secureStorage.read(key: 'drivername');
+      var tranname = await _secureStorage.read(key: 'transporationName');
+      var transId = await _secureStorage.read(key: 'transportationId');
       isLoading.value = true;
 
       final data = {
@@ -38,8 +42,8 @@ class FuelTrackingController extends GetxController {
         "fuelRate": int.tryParse(fuelRateController.text) ?? 0,
         // "pumpReadingImage": petrolPumpReadingReceipt.first['fileName'],
         "pumpReadingImage": petrolPumpReadingImage[0],
-        "driverInfo": {"_id": "driverId"}, // Replace with actual driver ID
-        "vehicleInfo": {"_id": "vehicleId"}, // Replace with actual vehicle ID
+        "driverInfo": {"_id": "${driverid}", "name": "${drivername}"},
+        "vehicleInfo": {"_id": "${transId}", "name": "${tranname}"},
         "status": true
       };
       log("Fuel Tracking Data:${data}");

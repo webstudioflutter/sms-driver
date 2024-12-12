@@ -9,18 +9,8 @@ import 'package:get/get.dart';
 class LoginController extends GetxController {
   final emailController = TextEditingController(text: "ds@gmail.com");
   final passwordController = TextEditingController(text: "12345678");
-
   var isPasswordVisible = false.obs;
   var isLoading = false.obs;
-
-  // @override
-  // void onClose() {
-  //   // Dispose of the controllers when the controller is closed or disposed
-  //   emailController.dispose();
-  //   passwordController.dispose();
-  //   super.onClose();
-  // }
-
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
   }
@@ -31,6 +21,8 @@ class LoginController extends GetxController {
         "Error",
         "Email and Password cannot be empty",
         snackPosition: SnackPosition.BOTTOM,
+        colorText: Colors.white,
+        backgroundColor: Colors.red,
       );
       return;
     }
@@ -54,6 +46,8 @@ class LoginController extends GetxController {
           "Login Failed",
           authResponse!.error!,
           snackPosition: SnackPosition.BOTTOM,
+          colorText: Colors.white,
+          backgroundColor: Colors.red,
         );
       }
     } catch (e) {
@@ -62,7 +56,7 @@ class LoginController extends GetxController {
         "Error",
         "An unexpected error occurred",
         snackPosition: SnackPosition.BOTTOM,
-        colorText: Colors.red,
+        colorText: Colors.white,
         backgroundColor: Colors.red,
       );
     } finally {

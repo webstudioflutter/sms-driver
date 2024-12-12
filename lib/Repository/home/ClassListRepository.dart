@@ -18,7 +18,7 @@ class ClassListRepository {
 
     try {
       final response = await _dio.get(
-        '$_appUrl/classess/school/@nidisecondaryschool',
+        '$_appUrl/classess/school/$schoolname',
       );
 
       final classListResponse = ClassListModel.fromJson(response.data);

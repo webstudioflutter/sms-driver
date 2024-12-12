@@ -27,17 +27,21 @@ class Routecontroller extends GetxController {
 
     try {
       final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
-
+      var schoolid = await _secureStorage.read(key: 'schoolId');
+      var driverid = await _secureStorage.read(key: 'driverId');
+      var drivername = await _secureStorage.read(key: 'drivername');
+      var tranname = await _secureStorage.read(key: 'transporationName');
+      var transId = await _secureStorage.read(key: 'transportationId');
       isLoading.value = true;
 
       final data = {
-        "schoolId": "@nidisecondaryschool", // Replace with dynamic value
+        "schoolId": "$schoolid", // Replace with dynamic value
         "date": DateTime.now().toIso8601String().split('T').first,
         "readingOnStart": int.tryParse(readingOnStartController.text) ?? 0,
         "readingOnStop": int.tryParse(readingOnStopController.text) ?? 0,
         "isPickedDrop": routeType.value,
-        "driverInfo": {"_id": "driverId"}, // Replace with actual driver ID
-        "vehicleInfo": {"_id": "vehicleId"}, // Replace with actual vehicle ID
+        "driverInfo": {"_id": "${driverid}", "name": "${drivername}"},
+        "vehicleInfo": {"_id": "${transId}", "name": "${tranname}"},
       };
       log("Route Data:${data}");
       final response = await routeRepository.postRouteInfo(data);

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:driver_app/controller/NotificationController.dart';
 import 'package:driver_app/core/color_constant.dart';
+import 'package:driver_app/firebase_options.dart';
 import 'package:driver_app/screen/SplashScreen/SplashScreen.dart';
 import 'package:driver_app/services/socket_io_client.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,7 +11,8 @@ import 'package:get/get.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(
     // DevicePreview(
     //   enabled: !kReleaseMode,

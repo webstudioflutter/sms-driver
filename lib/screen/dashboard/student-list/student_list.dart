@@ -4,6 +4,7 @@ import 'package:driver_app/controller/Home/StudentListController.dart';
 import 'package:driver_app/controller/Home/classListController.dart';
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/core/widgets/page_title_bar.dart';
+import 'package:driver_app/core/widgets/responsive_text.dart';
 import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -188,7 +189,12 @@ class _StudentListState extends State<StudentList> {
                           items: classDropdownItems.map((String item) {
                             return DropdownMenuItem<String>(
                               value: item,
-                              child: Text(item),
+                              child: ResponsiveText(
+                                item,
+                                maxLines: 1,
+                                fontSize: 12,
+                                textOverflow: TextOverflow.ellipsis,
+                              ),
                             );
                           }).toList(),
                           onChanged: (String? newValue) {
@@ -199,7 +205,6 @@ class _StudentListState extends State<StudentList> {
                         ),
                       ),
                     ),
-                    SizedBox(width: getWidth(context) * 0.02),
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 8),
                       padding: const EdgeInsets.symmetric(horizontal: 4),

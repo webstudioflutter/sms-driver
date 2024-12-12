@@ -21,27 +21,26 @@ class AuthenticationRepository {
     _dio = baseController.dio;
     _appUrl = baseController.appUrl;
   }
-
-  /// Sends authentication information to the server.
   Future<void> sendAuthInfo(Map<String, dynamic> authData) async {
     try {
       final response = await _dio.post(
         '$_appUrl/user/login',
         data: authData,
       );
-
       authResponse = AuthenticationModel.fromJson(response.data);
-
-      // Validate response for DRIVER group and token
-      if (authResponse!.token != null) {
-        await NotificationService.instance.initialize();
-        await _saveAuthToken(authResponse!.token!);
-        await _saveDriverId(authResponse!.result!.id);
-        await _saveDrivename(authResponse!.result!.fullName);
-        await _saveSchoolId(authResponse!.result!.username);
-        await _saveTransportationId(authResponse!.result!.transporation?.id);
-        await _saveTransportationName(
-            authResponse!.result!.transporation!.name);
+      if (authResponse!.result!.group == "DRIVER") {
+        if (authResponse!.token != null) {
+          await NotificationService.instance.initialize();
+          await _saveAuthToken(authResponse!.token!);
+          await _saveDriverId(authResponse!.result!.id);
+          await _saveDrivename(authResponse!.result!.fullName);
+          await _saveSchoolId(authResponse!.result!.username);
+          await _saveTransportationId(authResponse!.result!.transporation?.id);
+          await _saveTransportationName(
+              authResponse!.result!.transporation!.name);
+        } else {
+          throw Exception("You are not Driver??");
+        }
       } else {
         throw Exception("Authentication failed");
       }

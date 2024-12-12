@@ -1,10 +1,15 @@
+import 'dart:convert';
+
+import 'package:driver_app/controller/SchoosettingController.dart';
+import 'package:driver_app/core/utils/asset_provider.dart';
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/screen/bill/bill_main.dart';
-import 'package:driver_app/screen/dashboard/attendance/attendance.dart';
 import 'package:driver_app/screen/fuel/fuel_tracking.dart';
+import 'package:driver_app/screen/map/maps.dart';
 import 'package:driver_app/screen/servicing/servicing_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePageDrawer extends StatefulWidget {
@@ -17,162 +22,143 @@ class HomePageDrawer extends StatefulWidget {
 }
 
 class _HomePageDrawerState extends State<HomePageDrawer> {
-  Future<void> _makePhoneCall() async {
-    final Uri phoneUri = Uri(
-      scheme: 'tel',
-      path: '+1234567890', // Replace with your desired phone number
-    );
+  final schoolsettingController controller = Get.put(schoolsettingController());
 
-    if (await canLaunchUrl(phoneUri)) {
-      await launchUrl(phoneUri);
-    } else {
-      throw 'Could not launch $phoneUri';
-    }
+  @override
+  void initState() {
+    // TODO: implement initState
+    controller.getSchoolSetting();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
+        height: height,
         color: const Color(0xff36a674),
         child: Column(
           children: [
-            _headerPart(context),
-            Expanded(child: _buildDrawerOptions(context)),
-            // const Padding(
-            //   padding: EdgeInsets.symmetric(horizontal: 10.0),
-            //   child: Divider(color: Colors.white54),
-            // ),
-            // _logoutButton(context),
-            // SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Center _headerPart(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.only(
-          top: getHeight(context) * 0.09,
-          bottom: getHeight(context) * 0.03,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ClipOval(
-              child: Image.network(
-                'https://img.freepik.com/free-vector/gradient-high-school-logo-design_23-2149626932.jpg?t=st=1731222465~exp=1731226065~hmac=373644b2dd9c85880d024478d228c20810da4d9e6bc4fb3f07c8fcef59a5a57a&w=740',
-                width: getHeight(context) * 0.07,
-                height: getHeight(context) * 0.07,
-                fit: BoxFit.cover,
+            Center(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: getHeight(context) * 0.09,
+                  left: 10,
+                  bottom: getHeight(context) * 0.01,
+                ),
+                child: Row(
+                  children: [
+                    ClipOval(
+                      child: Obx(() {
+                        return CircleAvatar(
+                          maxRadius: getHeight(context) * 0.04,
+                          minRadius: getHeight(context) * 0.02,
+                          backgroundImage: controller.list.first.schoolLogo ==
+                                      null ||
+                                  controller.list.first.schoolLogo == "fasle" ||
+                                  controller.list.first.schoolLogo == ""
+                              ? const AssetImage('assets/images/user.png')
+                              : MemoryImage(
+                                  base64Decode(
+                                    controller.list.first.schoolLogo!
+                                        .replaceFirst(
+                                            'data:image/jpeg;base64,', ''),
+                                  ),
+                                ),
+                        );
+                      }),
+                    ),
+                    SizedBox(width: getWidth(context) * 0.04),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Obx(
+                          () => Text(
+                            "${controller.list.first.schoolId}",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => Text(
+                            "Offday: ${controller.list.first.offDays!.first}",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-            SizedBox(width: getWidth(context) * 0.04),
-            const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Bright Horizons School',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  'GoSchool',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
+            Divider(),
+            Expanded(child: _buildDrawerOptions(context)),
           ],
         ),
       ),
     );
   }
-
-  // Container _logoutButton(BuildContext context) {
-  //   return Container(
-  //     width: MediaQuery.sizeOf(context).width * 0.7,
-  //     height: 50,
-  //     decoration: BoxDecoration(
-  //       borderRadius: BorderRadius.circular(8),
-  //       color: Colors.white,
-  //     ),
-  //     child: Center(
-  //       child: GestureDetector(
-  //         onTap: () {
-  //           Get.offAll(DriverLoginScreen());
-  //         },
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Icon(
-  //               Icons.logout_outlined,
-  //               color: Color(0xfff24b3f),
-  //             ),
-  //             SizedBox(width: 8),
-  //             Text(
-  //               'Logout',
-  //               style: TextStyle(
-  //                 color: Color(0xfff24b3f),
-  //                 fontSize: 16,
-  //                 fontWeight: FontWeight.w500,
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Widget _buildDrawerOptions(BuildContext context) {
     return ListView(
+      shrinkWrap: true,
       padding: const EdgeInsets.only(left: 8.0),
       children: [
+        // DrawerCard(
+        //   svgAsset: 'assets/svg_images/drawer/attendance.svg',
+        //   label: 'Attendance',
+        //   destination: Attendance(),
+        // ),
         DrawerCard(
-          svgAsset: 'assets/svg_images/drawer/attendance.svg',
-          label: 'Attendance',
-          destination: Attendance(),
-        ),
-        const DrawerCard(
           svgAsset: 'assets/svg_images/location.svg',
           label: 'Live Overview',
-          // destination: AssignmentScreen(),
+          destination: MapTrackingPage(),
         ),
-        const DrawerCard(
-          svgAsset: 'assets/svg_images/drawer/maintenance.svg',
-          label: 'Maintenance',
-          // destination: AssignmentScreen(),
-        ),
+        // const DrawerCard(
+        //   svgAsset: 'assets/svg_images/drawer/maintenance.svg',
+        //   label: 'Servicing',
+        //   destination: ServicingMain(),
+        // ),
         DrawerCard(
-          svgAsset: 'assets/svg_images/drawer/fuel-tracking.svg',
-          label: 'Fuel Tracking',
+          svgAsset: Assets.svgImages.fuel,
+          label: 'Fuel Re-Filling',
           destination: FuelTrackingMain(),
         ),
-        const DrawerCard(
-          svgAsset: 'assets/svg_images/drawer/servicing.svg',
+        DrawerCard(
+          svgAsset: Assets.svgImages.servicing,
           label: 'Servicing',
           destination: ServicingMain(),
         ),
-        const DrawerCard(
-          svgAsset: 'assets/svg_images/drawer/servicing.svg',
+        DrawerCard(
+          svgAsset: Assets.svgImages.billupload,
           label: 'Bill Upload',
           destination: BillMain(),
         ),
         DrawerCard(
           svgAsset: 'assets/svg_images/drawer/quick-call.svg',
           label: 'Quick Call',
-          onPressed: _makePhoneCall,
+          onPressed: () async {
+            final Uri phoneUri = Uri(
+              scheme: 'tel',
+              path: controller.list.first.contactNo != ""
+                  ? "${controller.list.first.contactNo}"
+                  : '1234567890', // Replace with your desired phone number
+            );
+
+            if (await canLaunchUrl(phoneUri)) {
+              await launchUrl(phoneUri);
+            } else {
+              throw 'Could not launch $phoneUri';
+            }
+          },
         ),
       ],
     );

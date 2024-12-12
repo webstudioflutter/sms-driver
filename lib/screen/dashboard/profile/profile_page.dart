@@ -107,7 +107,20 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Card(
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(16),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 1,
+                      spreadRadius: 0.5,
+                      color: Colors.grey.withOpacity(0.2),
+                      offset: Offset(0.5, 0.5),
+                    )
+                  ]),
               child: Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Column(
@@ -263,7 +276,20 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
-            Card(
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(16),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 1,
+                      spreadRadius: 0.5,
+                      color: Colors.grey.withOpacity(0.2),
+                      offset: Offset(0.5, 0.5),
+                    )
+                  ]),
               child: Padding(
                 padding: EdgeInsets.only(
                   top: getHeight(context) * 0.01,
@@ -476,8 +502,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 } else if (controller.profile.value == null) {
                   return const Center(child: Text("Data not found"));
                 } else {
-                  final profile = controller.profile.value!.result!;
-
+                  final profile = controller.profile.value!.result;
+                  String base64String = profile?.profileImage ?? '';
+                  if (base64String.isNotEmpty) {
+                    if (base64String.startsWith('data:image/jpeg;base64,')) {
+                      base64String = base64String.replaceFirst(
+                          'data:image/jpeg;base64,', '');
+                    } else if (base64String
+                        .startsWith('data:image/png;base64,')) {
+                      base64String = base64String.replaceFirst(
+                          'data:image/png;base64,', '');
+                    } else {
+                      throw Exception('Unsupported image format');
+                    }
+                  } else {
+                    print('No profile image available');
+                  }
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 25.0),
                     child: Column(
@@ -487,16 +527,15 @@ class _ProfilePageState extends State<ProfilePage> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
                           child: CircleAvatar(
-                            maxRadius: 60,
-                            backgroundImage: _profileImage != null
-                                ? FileImage(_profileImage!)
-                                : (profile.profileImage == null ||
-                                        profile.profileImage!.isEmpty
-                                    ? const AssetImage('assets/images/user.png')
-                                    : MemoryImage(
-                                        base64Decode(
-                                            ("${profile.profileImage!.replaceFirst('data:image/jpeg;base64,', '')}")),
-                                      )) as ImageProvider,
+                            maxRadius: getHeight(context) * 0.07,
+                            minRadius: getHeight(context) * 0.02,
+                            backgroundImage: profile!.profileImage == null ||
+                                    profile.profileImage == "false" ||
+                                    profile.profileImage!.isEmpty
+                                ? AssetImage('assets/images/user.png')
+                                : MemoryImage(
+                                    base64Decode(base64String),
+                                  ),
                           ),
                         ),
                         // Take Photo Option

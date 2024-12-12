@@ -71,9 +71,12 @@ class _DroppedAttendanceState extends State<DroppedAttendance> {
                 resetdropAttendanceState();
 
                 await Future.delayed(Duration(seconds: 1), () {
-                  Navigator.push(
+                  Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => MainNavbar()),
+                    MaterialPageRoute(
+                      builder: (context) => const MainNavbar(),
+                    ),
+                    (route) => false,
                   );
                 });
               },
@@ -650,8 +653,7 @@ class _DroppedAttendanceState extends State<DroppedAttendance> {
                 title: const Text('By Name'),
                 value: attendance.sortParameter.value == 'name',
                 onChanged: (bool? value) {
-                  attendance.sortParameter.value = 'name';
-                  attendance.sortAttendance();
+                  controller.sortListByName();
                   Navigator.of(context).pop();
                 },
               ),
@@ -659,8 +661,8 @@ class _DroppedAttendanceState extends State<DroppedAttendance> {
                 title: const Text('By Location'),
                 value: attendance.sortParameter.value == 'location',
                 onChanged: (bool? value) {
-                  attendance.sortParameter.value = 'location';
-                  attendance.sortAttendance();
+                  controller.sortListByLocation();
+
                   Navigator.of(context).pop();
                 },
               ),

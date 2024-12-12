@@ -23,7 +23,7 @@ class StudentListRepository {
     try {
       // Make the API request
       final response = await _dio.get(
-        '$_appUrl/user/transportation/67189289a610cd23428ebc55',
+        '$_appUrl/user/transportation/$transportationId',
       );
 
       // Check if 'count' field exists and is non-zero in the response

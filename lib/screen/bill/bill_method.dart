@@ -134,7 +134,6 @@ class _BillMethodState extends State<BillMethod> {
 
   @override
   void initState() {
-    // TODO: implement initState
     _controller.postbill();
     super.initState();
   }
@@ -287,7 +286,6 @@ class _BillMethodState extends State<BillMethod> {
                           _profileImage = null;
                           _profileBase64 = null;
                         });
-                        postBillController.postGetBills(data);
                         _profileBase64 = null;
                         amountcontroller.text.isBlank;
                       },
@@ -400,8 +398,18 @@ class _BillMethodState extends State<BillMethod> {
                       ''; // If no value selected, set to empty string
                 });
               },
-              items: ['Fuel', 'Maintenance']
-                  .map<DropdownMenuItem<String>>((String value) {
+              items: [
+                'Servicing Bill',
+                'Accident Repair Bill',
+                'Spare Parts Bill',
+                'flat tire Bill',
+                'Repair Bill',
+                'Battery Bill',
+                'Allowances Bill',
+                'Parking Bill',
+                'Traffic Violation Bill',
+                'Others Bill'
+              ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),

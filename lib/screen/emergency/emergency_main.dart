@@ -1,7 +1,6 @@
 import 'package:driver_app/screen/dashboard/home_page.dart';
 import 'package:driver_app/screen/emergency/emergency_confirmation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class EmergencyMain extends StatelessWidget {
   const EmergencyMain({super.key});
@@ -10,60 +9,6 @@ class EmergencyMain extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[900],
-      // appBar: PreferredSize(
-      //   preferredSize: const Size.fromHeight(90), // Custom height
-      //   child: Stack(
-      //     clipBehavior: Clip.none,
-      //     children: [
-      //       Positioned(
-      //         top: 20,
-      //         left: 10,
-      //         right: 10,
-      //         child: Column(
-      //           children: [
-      //             Padding(
-      //               padding: const EdgeInsets.all(8.0),
-      //               child: Container(
-      //                 height: 50,
-      //                 decoration: const BoxDecoration(
-      //                   color: Color(0xffff3333),
-      //                   borderRadius: BorderRadius.all(Radius.circular(25)),
-      //                 ),
-      //                 child: TextFormField(
-      //                   cursorColor: const Color(0xffcdeede),
-      //                   decoration: InputDecoration(
-      //                     labelText: "Report",
-      //                     labelStyle: const TextStyle(color: Colors.white),
-      //                     prefixIcon: IconButton(
-      //                       icon: const Icon(Icons.arrow_back,
-      //                           color: Colors.white),
-      //                       onPressed: () {
-      //                         Navigator.push(
-      //                             context,
-      //                             MaterialPageRoute(
-      //                                 builder: (context) => const BillMain()));
-      //                       },
-      //                     ),
-      //                     border: InputBorder.none,
-      //                     focusedBorder: InputBorder.none,
-      //                     enabledBorder: InputBorder.none,
-      //                     suffixIcon: IconButton(
-      //                       icon: const Icon(Icons.close, color: Colors.white),
-      //                       onPressed: () {
-      //                         Navigator.of(context).pop();
-      //                       },
-      //                     ),
-      //                   ),
-      //                 ),
-      //               ),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
-
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(100), // Custom height
         child: Stack(
@@ -112,32 +57,6 @@ class EmergencyMain extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // child: TextFormField(
-                      //   cursorColor: const Color(0xffcdeede),
-                      //   decoration: InputDecoration(
-                      //     hintText: "Emergency",
-                      //     labelStyle: const TextStyle(color: Colors.white),
-                      //     prefixIcon: IconButton(
-                      //       icon: const Icon(Icons.arrow_back,
-                      //           color: Colors.white),
-                      //       onPressed: () {
-                      //         Navigator.of(context).pop();
-                      //       },
-                      //     ),
-                      //     border: InputBorder.none,
-                      //     focusedBorder: InputBorder.none,
-                      //     enabledBorder: InputBorder.none,
-                      //     suffixIcon: IconButton(
-                      //       icon: const Icon(Icons.close, color: Colors.white),
-                      //       onPressed: () {
-                      //         Navigator.push(
-                      //             context,
-                      //             MaterialPageRoute(
-                      //                 builder: (context) => const HomePage()));
-                      //       },
-                      //     ),
-                      //   ),
-                      // ),
                     ),
                   ),
                 ],
@@ -146,7 +65,6 @@ class EmergencyMain extends StatelessWidget {
           ],
         ),
       ),
-
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -190,10 +108,11 @@ class EmergencyMain extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: GridView.count(
+                physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 crossAxisCount: 2,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
                 children: const [
                   EmergencyOption(
                       svgPath: 'assets/images/medical.png',
@@ -203,13 +122,14 @@ class EmergencyMain extends StatelessWidget {
                   EmergencyOption(
                       svgPath: 'assets/images/fire.png', label: 'Fire'),
                   EmergencyOption(
-                      svgPath: 'assets/svg_images/weather.svg',
+                      svgPath: 'assets/images/severe-weather.png',
                       label: 'Severe Weather'),
                   EmergencyOption(
-                      svgPath: 'assets/svg_images/security.svg',
+                      svgPath: 'assets/images/crisis.png',
                       label: 'Security Threat'),
                   EmergencyOption(
-                      svgPath: 'assets/svg_images/others.svg', label: 'Others'),
+                      svgPath: 'assets/images/magnifying-glass.png',
+                      label: 'Others'),
                 ],
               ),
             ),
@@ -230,11 +150,20 @@ class EmergencyOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.grey[800],
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
+    return Container(
+      decoration: BoxDecoration(
+          color: Color(0xff676767),
+          borderRadius: BorderRadius.all(
+            Radius.circular(16),
+          ),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 1,
+              spreadRadius: 0.5,
+              color: Colors.grey.withOpacity(0.2),
+              offset: Offset(0.5, 0.5),
+            )
+          ]),
       child: InkWell(
         onTap: () {
           Navigator.push(
@@ -245,7 +174,7 @@ class EmergencyOption extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
+            Image.asset(
               svgPath,
               height: 50,
               width: 50,

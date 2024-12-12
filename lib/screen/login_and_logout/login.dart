@@ -56,12 +56,18 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
               child: Container(
                 padding: const EdgeInsets.all(16.0),
                 decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(64),
-                    topRight: Radius.circular(64),
-                  ),
-                ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(62),
+                      topRight: Radius.circular(62),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(0.5, 0.5),
+                          blurRadius: 1,
+                          spreadRadius: 0.5),
+                    ]),
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),

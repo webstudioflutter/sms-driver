@@ -1,6 +1,7 @@
 import 'package:driver_app/controller/Home/FuelTrackingController.dart';
 import 'package:driver_app/core/widgets/FileUploadedWidget.dart';
 import 'package:driver_app/core/widgets/custom_app_bar.dart';
+import 'package:driver_app/screen/navbar/MainNavbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,7 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
     return Scaffold(
       appBar: customBar(
         context: context,
-        title: 'Fuel Tracking',
+        title: 'Fuel Re-Filling',
       ),
       body: Obx(() => SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
@@ -95,6 +96,13 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
                       ? null
                       : () {
                           _controller.submitFuelTrackingData();
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MainNavbar(),
+                            ),
+                            (route) => false,
+                          );
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xffff6448),

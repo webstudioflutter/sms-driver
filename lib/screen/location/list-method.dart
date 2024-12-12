@@ -263,7 +263,20 @@ class _AddressListState extends State<AddressList> {
             itemBuilder: (context, index) {
               final address = widget.addresses[index];
               final isExpanded = expandedStates[index];
-              return Card(
+              return Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(16),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 1,
+                        spreadRadius: 0.5,
+                        color: Colors.grey.withOpacity(0.2),
+                        offset: Offset(0.5, 0.5),
+                      )
+                    ]),
                 margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                 child: InkWell(
                   onTap: () => _toggleExpand(index),

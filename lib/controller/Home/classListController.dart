@@ -18,7 +18,6 @@ class classListController extends GetxController {
 
       final response = await classListRepository.fetchClassList();
 
-      // Check if the response has valid data, and assign it to the model.
       if (response.result != null && response.result!.isNotEmpty) {
         classListModel.value = response;
       } else {
@@ -38,32 +37,3 @@ class classListController extends GetxController {
     }
   }
 }
-
-
-  // Future<void> getStudentList() async {
-  //   try {
-  //     isLoadingStudentList.value = true;
-
-  //     final response = await studentListRepository.fetchStudentList();
-
-  //     // Check if the response has valid data, and assign it to the model.
-  //     if (response.count != null && response.result!.isNotEmpty) {
-  //       studentListModel.value = response;
-  //     } else {
-  //       // Avoid throwing an error, just handle the empty case gracefully.
-  //       studentListModel.value = null;
-  //       log('No data found hai ta');
-  //     }
-  //   } catch (e) {
-  //     log('Error: $e');
-  //     studentListModel.value = null;
-  //     Get.snackbar(
-  //       'Error',
-  //       'An error occurred. Please try again.',
-  //       backgroundColor: Colors.red.shade400,
-  //     );
-  //   } finally {
-  //     isLoadingStudentList.value = false;
-  //   }
-  // }
-

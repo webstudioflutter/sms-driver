@@ -32,6 +32,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:driver_app/Model/BillModel.dart';
 import 'package:driver_app/Repository/auth/Basecontroller.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class BillRepository {
   late final Dio _dio;
@@ -41,14 +42,14 @@ class BillRepository {
     _dio = baseController.dio;
     appUrl = baseController.appUrl;
   }
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
   Future<BillModel> BillData() async {
-    try {
-      // Sending a GET request to fetch vehicle expenses
-      Response response =
-          await _dio.get('$appUrl/vehicle-expenses/school/testflutter');
+    var id = await _secureStorage.read(key: 'schoolId');
 
-      // Check if the response is not empty and parse the data into a BillModel
+    try {
+      Response response = await _dio.get('$appUrl/vehicle-expenses/school/$id');
+
       if (response.data != null) {
         log(" ${response.data}");
         return BillModel.fromJson(response.data);

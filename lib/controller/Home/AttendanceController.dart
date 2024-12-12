@@ -7,28 +7,17 @@ import 'package:get/get.dart';
 
 class AttendanceController extends GetxController {
   final AttendanceRepository _repository = AttendanceRepository();
-
   var presentStudent = 0.obs;
   var absentStudent = 0.obs;
-
-  // var attendanceStatus = Map<String, bool>().obs; // Map to track student status by ID
-
   var isLoading = false.obs;
   var attendanceModel = Rx<AttendanceModel?>(null);
   var sortParameter = ''.obs;
-
   Future<void> fetchStudentList() async {
     try {
       isLoading.value = true;
-
       final response = await _repository.fetchStudentList();
-
       if (response.count != null && response.count != 0) {
         attendanceModel.value = response; // Assign the response to the model
-        // Initialize attendance status map
-        // for (var student in response.result!) {
-        //   attendanceStatus[student.sId ?? ""] = false; // Default to absent
-        // }
         sortAttendance(); // Sort data after fetching
       } else {
         attendanceModel.value = null;
@@ -82,9 +71,9 @@ class AttendanceController extends GetxController {
     attendanceModel.refresh(); // Notify UI to update
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-    fetchStudentList(); // Fetch data when the controller is initialized
-  }
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   fetchStudentList(); // Fetch data when the controller is initialized
+  // }
 }

@@ -39,20 +39,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
     "Air Filter",
     "Others",
   ];
-  /////-----------Chips for parts replaced----//////
-  // List to store selected items
   final List<String> selectedItems = [];
-  /////-----------Chips for parts replaced----//////
-
-//   List<bool> checkboxValues = List.filled(8, false);
-// // Update the controller's partsUsed list
-//   void updatePartsUsed() {
-//     servicingController.partsUsed.clear();
-//     servicingController.partsUsed.value = [
-//       for (int i = 0; i < checkboxLabels.length; i++)
-//         if (checkboxValues[i]) checkboxLabels[i],
-//     ];
-//   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -168,20 +155,9 @@ class _LogServicingFormState extends State<LogServicingForm> {
           ),
           SizedBox(height: 5),
 
-          // FileUploadedWidget(
-          //   svgname: "assets/svg_images/upload_image_receipt.svg",
-          //   title: "Tap to Upload Image of Receipt ",
-          //   files: damagedFiles,
-          //   onFileUpload: (file) {
-          //     setState(() {
-          //       damagedFiles.add(file);
-          //     });
-          //   },
-          // ),
-
           FileUploadedWidget(
               svgname: "assets/svg_images/upload_image_receipt.svg",
-              title: "Tap to Upload Image of Receipt",
+              title: "Tap to Upload Image of damagedPart",
               files: servicingFiles,
               onSubmitImages: (base64ImagesList) {
                 setState(() {
@@ -210,7 +186,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
 
           FileUploadedWidget(
             svgname: "assets/svg_images/upload_image_receipt.svg",
-            title: "Tap to Upload Image of Receipt ",
+            title: "Tap to Upload Image of replacedPart ",
             files: replacedFiles,
             onSubmitImages: (base64ImagesList) {
               setState(() {
@@ -219,39 +195,6 @@ class _LogServicingFormState extends State<LogServicingForm> {
               });
             },
           ),
-
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     OutlinedButton(
-          //       onPressed: () {
-          //         Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //                 builder: (context) => const ServicingMain()));
-          //       },
-          //       style: OutlinedButton.styleFrom(
-          //         padding: const EdgeInsets.all(10),
-          //         shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(12),
-          //         ),
-          //       ),
-          //       child: SizedBox(
-          //         // width: 150,
-          //         width: getWidth(context) * 0.39,
-          //         child: const Text(
-          //           textAlign: TextAlign.center,
-          //           'Cancel',
-          //           style: TextStyle(
-          //               color: Colors.black,
-          //               fontSize: 16,
-          //               fontWeight: FontWeight.w500),
-          //         ),
-          //       ),
-          //     ),
-
-          //   ],
-          // ),
         ],
       ),
     );
@@ -298,47 +241,6 @@ class _LogServicingFormState extends State<LogServicingForm> {
       ],
     );
   }
-
-  // Widget _buildCheckboxSection() {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Row(
-  //         children: [
-  //           const Text(
-  //             'Parts Replaced',
-  //             style: TextStyle(
-  //                 color: Colors.black,
-  //                 fontSize: 16,
-  //                 fontWeight: FontWeight.w500),
-  //           ),
-  //           const SizedBox(width: 8),
-  //           SvgPicture.asset('assets/svg_images/part_replacement.svg'),
-  //         ],
-  //       ),
-  //       const SizedBox(height: 5),
-  //       GridView.builder(
-  //         shrinkWrap: true,
-  //         itemCount: checkboxLabels.length,
-  //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-  //           crossAxisCount: 2,
-  //           childAspectRatio: 3.5,
-  //         ),
-  //         itemBuilder: (context, index) {
-  //           return CheckboxListTile(
-  //             title: Text(checkboxLabels[index]),
-  //             value: checkboxValues[index],
-  //             onChanged: (value) {
-  //               setState(() {
-  //                 checkboxValues[index] = value!;
-  //               });
-  //             },
-  //           );
-  //         },
-  //       )
-  //     ],
-  //   );
-  // }
 
   // Total Amount section
   Widget _buildTotalAmountSection() {
@@ -398,10 +300,8 @@ class _LogServicingFormState extends State<LogServicingForm> {
             SvgPicture.asset('assets/svg_images/part_replacement.svg'),
           ],
         ),
-        ///-----------Chips for parts replaced----//////
         Wrap(
-          spacing: 3.0, // Horizontal space between chips
-          //runSpacing: 5.0, // Vertical space between rows
+          spacing: 3.0,
           children: checkboxLabels.map((label) {
             final bool isSelected = selectedItems.contains(label);
 
@@ -423,35 +323,6 @@ class _LogServicingFormState extends State<LogServicingForm> {
             );
           }).toList(),
         ),
-
-        /////-----------Chips for parts replaced----//////
-
-        // GridView.builder(
-        //   shrinkWrap: true,
-        //   physics: const NeverScrollableScrollPhysics(),
-        //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        //     crossAxisCount: 2,
-        //     mainAxisSpacing: 10,
-        //     crossAxisSpacing: 10,
-        //     childAspectRatio: 6,
-        //   ),
-        //   itemCount: checkboxLabels.length,
-        //   itemBuilder: (context, index) {
-        //     return CheckboxListTile(
-        //       controlAffinity: ListTileControlAffinity.leading,
-        //       contentPadding: EdgeInsets.zero,
-        //       title: Text(checkboxLabels[index]),
-        //       value: checkboxValues[index],
-        //       onChanged: (value) {
-        //         setState(() {
-        //           checkboxValues[index] = value!;
-        //         });
-        //         updatePartsUsed(); // Update controller's list
-        //       },
-        //     );
-        //   },
-        // ),
-      
       ],
     );
   }

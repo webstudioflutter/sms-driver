@@ -1,6 +1,5 @@
 import 'package:driver_app/core/utils/asset_provider.dart';
 import 'package:driver_app/screen/bill/bill_main.dart';
-import 'package:driver_app/screen/dashboard/attendance/attendance.dart';
 import 'package:driver_app/screen/dashboard/report-issue/report_issue.dart';
 import 'package:driver_app/screen/dashboard/student-list/student_list.dart';
 import 'package:driver_app/screen/fuel/fuel_tracking.dart';
@@ -17,11 +16,6 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final List<Map<String, dynamic>> features = [
-    {
-      'label': 'Attendance',
-      'destination': Attendance(),
-      'icon': Assets.svgImages.attendance,
-    },
     {
       'label': 'fuel filling',
       'destination': FuelTrackingMain(),
@@ -77,40 +71,30 @@ class _SearchScreenState extends State<SearchScreen> {
             Row(
               children: [
                 IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  onPressed: () {},
                   icon: Icon(Icons.arrow_back),
                 ),
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.only(right: 10),
-                    height: 35.0, // Set your desired height
+                    height: 35.0,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(
-                          255, 237, 239, 248), // Set the background color
-                      borderRadius:
-                          BorderRadius.circular(20.0), // Set the border radius
+                      color: Color.fromARGB(255, 237, 239, 248),
+                      borderRadius: BorderRadius.circular(20.0),
                     ),
                     child: Center(
                       child: TextField(
-                        autofocus: true,
                         cursorColor: Colors.grey,
                         cursorHeight: 16,
                         onChanged: updateSearchQuery,
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.symmetric(
-                              horizontal: 10.0,
-                              vertical: 9), // Add padding here
+                              horizontal: 10.0, vertical: 9),
                           hintText: 'Search',
-                          hintStyle: TextStyle(
-                              color: Colors
-                                  .grey.shade400), // Customize hint text color
-                          border: InputBorder.none, // Remove the border
-                          focusedBorder:
-                              InputBorder.none, // Remove the focused border
-                          enabledBorder:
-                              InputBorder.none, // Remove the enabled border
+                          hintStyle: TextStyle(color: Colors.grey.shade400),
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
                         ),
                       ),
                     ),

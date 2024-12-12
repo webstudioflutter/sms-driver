@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ServicingHistoryController extends GetxController {
-
   var isLoading = false.obs;
   var servicingHistoryModel = Rx<ServicingHistoryModel?>(null);
   @override
@@ -21,11 +20,9 @@ class ServicingHistoryController extends GetxController {
 
       final response = await servicingHistoryRepo.fetchServicingHistory();
 
-      // Check if the response has valid data, and assign it to the model.
       if (response.result != null && response.result!.isNotEmpty) {
         servicingHistoryModel.value = response;
       } else {
-        // Avoid throwing an error, just handle the empty case gracefully.
         servicingHistoryModel.value = null;
         log('No data found');
       }
@@ -41,5 +38,4 @@ class ServicingHistoryController extends GetxController {
       isLoading.value = false;
     }
   }
-
 }

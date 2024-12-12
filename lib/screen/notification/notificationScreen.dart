@@ -27,11 +27,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   String formatBattleTime(String battleTime) {
-    // Parse the battle time string to a DateTime object
     DateTime dateTime = DateTime.parse(battleTime);
-    // Get the current time
     DateTime now = DateTime.now();
-    // Calculate the time difference
     Duration difference = now.difference(dateTime);
     if (difference.inMinutes < 1) {
       return 'Just now';
@@ -39,9 +36,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
       return '${difference.inMinutes} min ago';
     } else if (difference.inHours < 24) {
       int hours = difference.inHours;
-      int minutes = difference.inMinutes.remainder(60); // Get remaining minutes
+      int minutes = difference.inMinutes.remainder(60);
       if (minutes > 0) {
-        //  return '${hours}h ${minutes}min ago';
         return '$hours hours ago';
       } else {
         return '${hours}h ago';
@@ -49,7 +45,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
     } else if (difference.inDays < 30) {
       return '${difference.inDays} days ago';
     } else {
-      // Format the date if it's more than 30 days ago
       return DateFormat('yyyy-MM-dd').format(dateTime);
     }
   }
@@ -65,12 +60,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
       _refreshPage();
     });
   }
-
-  // @override
-  // void dispose() {
-  //   _timer?.cancel();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +108,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 return DataNotFound();
               } else {
                 final data = snapshot.data!.result!;
+                if (data.isEmpty || snapshot.data!.count == 0) {
+                  return Center(
+                    child: Image.asset(
+                      "assets/images/notification.png",
+                      height: 200,
+                      width: 200,
+                    ),
+                  );
+                }
                 return Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
@@ -284,24 +282,3 @@ class _NotificationScreenState extends State<NotificationScreen> {
     }
   }
 }
-
-// Container(
-            //   margin: EdgeInsets.symmetric(vertical: 5),
-            //   padding: EdgeInsets.symmetric(horizontal: 8),
-            //   decoration: BoxDecoration(
-            //       color: Colors.white,
-            //       borderRadius: BorderRadius.circular(16),
-            //       boxShadow: [
-            //         BoxShadow(
-            //           blurRadius: 1,
-            //           offset: Offset(0.5, 0.5),
-            //           spreadRadius: 1,
-            //           color: Colors.grey.withOpacity(0.5),
-            //         ),
-            //       ]),
-            //   child: Image.asset(image != null
-            //       ? "${base64Decode(
-            //           image.replaceFirst('data:image/jpeg;base64,', ''),
-            //         )}"
-            //       : 'assets/images/sublogo.png'),
-            // )

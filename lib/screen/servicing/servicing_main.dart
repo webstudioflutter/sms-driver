@@ -15,18 +15,6 @@ class ServicingMain extends StatefulWidget {
 class _ServicingMainState extends State<ServicingMain> {
   final servicingHistroyController = Get.put(ServicingHistoryController());
 
-  final List<Map<String, String>> servicehistory = [
-    {
-      'date': '07 August, 2024',
-      'items': 'Brake Pads, Wiper Blades,Air Filler',
-      'price': 'Rs.25000'
-    },
-    {
-      'date': '07 August, 2024',
-      'items': 'Brake Pads, Wiper Blades,Air Filler',
-      'price': 'Rs.25000'
-    }
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,11 +165,9 @@ class _ServicingMainState extends State<ServicingMain> {
   Widget _servingHistoryContent() {
     return Expanded(
       child: ListView.builder(
-        // itemCount: servicehistory.length,
         itemCount: servicingHistroyController
             .servicingHistoryModel.value?.result?.length,
         itemBuilder: (context, index) {
-          // final item = servicehistory[index];
           final item = servicingHistroyController
               .servicingHistoryModel.value?.result![index];
           return Padding(
