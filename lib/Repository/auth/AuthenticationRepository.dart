@@ -63,7 +63,8 @@ class AuthenticationRepository {
   /// Determines if this is the first time the user is using the app.
   Future<bool> isFirstTimeUser() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('firstTimeUser') ?? true;
+    bool? firstTimeUser = prefs.getBool('firstTimeUser');
+    return firstTimeUser == null || firstTimeUser;
   }
 
   /// Saves driver ID to secure storage.
