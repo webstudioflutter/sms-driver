@@ -35,7 +35,7 @@ class _ServicingMainState extends State<ServicingMain> {
               true) {
             return const Center(
               child: Text(
-                'No attendance data available.',
+                'No servicing data found.',
                 style: TextStyle(color: Colors.red),
               ),
             );
