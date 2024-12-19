@@ -147,7 +147,7 @@ class _StudentListState extends State<StudentList> {
         // Generate sorted dropdown items dynamically
         List<String> classDropdownItems = classcontroller
             .classListModel.value!.result!
-            .map((element) => "Class ${element.className}")
+            .map((element) => "Class ${element.className} ${element.section}")
             .toList();
         return Column(
           children: [
@@ -251,6 +251,7 @@ class _StudentListState extends State<StudentList> {
                 ),
               ],
             ),
+            /////////////////////////////////
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -258,7 +259,7 @@ class _StudentListState extends State<StudentList> {
                   itemCount: controller.list
                       .where((data) {
                         bool matchesClass = classSelectedValue == null ||
-                            "Class ${data.className!.classNameClass}" ==
+                            "Class ${data.className!.classNameClass} ${data.className!.section}" ==
                                 classSelectedValue;
                         bool matchesLocation = locationSelectedValue == null ||
                             data.pickDropLocation?.busRoute ==
@@ -271,7 +272,7 @@ class _StudentListState extends State<StudentList> {
                   itemBuilder: (context, index) {
                     var filteredList = controller.list.where((data) {
                       bool matchesClass = classSelectedValue == null ||
-                          "Class ${data.className!.classNameClass}" ==
+                          "Class ${data.className!.classNameClass} ${data.className!.section}" ==
                               classSelectedValue;
                       bool matchesLocation = locationSelectedValue == null ||
                           data.pickDropLocation?.busRoute ==
@@ -281,6 +282,7 @@ class _StudentListState extends State<StudentList> {
                     }).toList();
 
                     var data = filteredList[index];
+                    if (filteredList.isEmpty) return Text("no value");
 
                     return Container(
                       margin: const EdgeInsets.symmetric(
@@ -332,7 +334,7 @@ class _StudentListState extends State<StudentList> {
                                 SizedBox(height: 2),
                                 Text(
                                   data.className != null
-                                      ? "Class : ${data.className!.classNameClass}"
+                                      ? "Class ${data.className!.classNameClass} ${data.className!.section}"
                                       : "",
                                   style: TextStyle(
                                     fontSize: 12,
