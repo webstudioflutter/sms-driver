@@ -94,7 +94,7 @@ class _MyAccountState extends State<MyAccount> {
                               onTap: () async {
                                 final newContact = await numberController(
                                   context,
-                                  title: "Edit Contact Information",
+                                  title: "Edit Contact",
                                   initialValue: "${profile.contactNumber}",
                                 );
                               },

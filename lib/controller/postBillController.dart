@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 class PostBillController extends GetxController {
   var postbill = Rxn<PostBillModel>();
   var isLoading = false.obs;
+  var bills = <Result>[].obs;
 
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
   Future<void> postGetBills(Map<String, dynamic> data) async {
@@ -32,6 +33,8 @@ class PostBillController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  
 }
 
 var postBillController = PostBillController();

@@ -32,17 +32,14 @@ class PostBillRepository {
         body: json.encode(data),
       );
 
-     
       if (response.statusCode == 200) {
         log("Success: ${response.body}");
-        return PostBillModel.fromJson(
-            json.decode(response.body)); 
+        return PostBillModel.fromJson(json.decode(response.body));
       } else {
         log("Error response: ${response.statusCode} - ${response.body}");
         return PostBillModel.withError("Error: ${response.statusCode}");
       }
     } on DioError catch (dioError) {
-    
       log('DioError: ${dioError.message}\nStacktrace: ${dioError.stackTrace}',
           name: 'PostBillRepository');
       return PostBillModel.withError(baseController.handleError(dioError));
