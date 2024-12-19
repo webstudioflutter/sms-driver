@@ -20,6 +20,7 @@ class ServicingHistoryModel {
 
 class Result {
   DriverInfo? driverInfo;
+  String? billType;
   DriverInfo? vehicleInfo;
   List<String>? partsUsed;
   List<String>? oldPartsImages;
@@ -35,6 +36,7 @@ class Result {
 
   Result(
       {this.driverInfo,
+      this.billType,
       this.vehicleInfo,
       this.partsUsed,
       this.oldPartsImages,
@@ -52,6 +54,7 @@ class Result {
     driverInfo = json['driverInfo'] != null
         ? new DriverInfo.fromJson(json['driverInfo'])
         : null;
+    billType = json['billType'] ?? "";
     vehicleInfo = json['vehicleInfo'] != null
         ? new DriverInfo.fromJson(json['vehicleInfo'])
         : null;
@@ -73,7 +76,6 @@ class DriverInfo {
   String? sId;
 
   DriverInfo({this.sId});
-
   DriverInfo.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
   }

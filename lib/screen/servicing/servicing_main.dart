@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:driver_app/controller/Home/ServicingHistoryController.dart';
 import 'package:driver_app/core/widgets/custom_app_bar.dart';
 import 'package:driver_app/screen/servicing/log_servicing_form.dart';
@@ -14,6 +16,11 @@ class ServicingMain extends StatefulWidget {
 
 class _ServicingMainState extends State<ServicingMain> {
   final servicingHistroyController = Get.put(ServicingHistoryController());
+  @override
+  void initState() {
+    servicingHistroyController.fetchServicingHistoryList();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,13 +170,16 @@ class _ServicingMainState extends State<ServicingMain> {
   }
 
   Widget _servingHistoryContent() {
+    var data = servicingHistroyController.servicingHistoryModel.value!.result!
+        .where((datas) {
+      return datas.billType == "Servicing Bill";
+    }).toList();
+    log("${data}");
     return Expanded(
       child: ListView.builder(
-        itemCount: servicingHistroyController
-            .servicingHistoryModel.value?.result?.length,
+        itemCount: data.length,
         itemBuilder: (context, index) {
-          final item = servicingHistroyController
-              .servicingHistoryModel.value?.result![index];
+          final item = data[index];
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
@@ -177,10 +187,10 @@ class _ServicingMainState extends State<ServicingMain> {
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 4,
-                    offset: const Offset(0, 4),
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 0.5,
+                    blurRadius: 1,
+                    offset: const Offset(0.5, 0.5),
                   ),
                 ],
                 borderRadius: BorderRadius.circular(8),
@@ -198,7 +208,7 @@ class _ServicingMainState extends State<ServicingMain> {
                         const SizedBox(width: 4),
                         Text(
                           // item['date'] ?? '',
-                          item?.date ?? "",
+                          item.date ?? "",
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -209,8 +219,8 @@ class _ServicingMainState extends State<ServicingMain> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      (item?.partsUsed?.isNotEmpty ?? false)
-                          ? item?.partsUsed?.join(', ') ?? "No parts found"
+                      (item.partsUsed?.isNotEmpty ?? false)
+                          ? item.partsUsed?.join(', ') ?? "No parts found"
                           : "No parts found",
                       style: const TextStyle(
                         fontSize: 16,
@@ -222,7 +232,7 @@ class _ServicingMainState extends State<ServicingMain> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      "Rs ${item?.billAmount}",
+                      "Rs ${item.billAmount}",
                       style: const TextStyle(
                         color: Color(0xff545454),
                         fontSize: 14,
