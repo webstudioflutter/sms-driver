@@ -26,6 +26,11 @@ class _StudentListState extends State<StudentList> {
   String? locationSelectedValue;
   List<String> locationDropdownItems = [];
   List<String> classDropdownItems = [];
+  Future<void> _refreshPage() async {
+    controller.getStudentList();
+    classcontroller.getClassList();
+    await Future.delayed(const Duration(seconds: 1));
+  }
 
   @override
   void initState() {
@@ -40,6 +45,9 @@ class _StudentListState extends State<StudentList> {
             .toSet()
             .toList();
       });
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _refreshPage();
     });
   }
 
@@ -149,115 +157,131 @@ class _StudentListState extends State<StudentList> {
             .classListModel.value!.result!
             .map((element) => "Class ${element.className} ${element.section}")
             .toList();
-        return Column(
-          children: [
-            SizedBox(height: getHeight(context) * 0.01),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            blurRadius: 1,
-                            spreadRadius: 0.5,
-                            offset: const Offset(0.5, 0.5),
-                          ),
-                        ],
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        height: getHeight(context) * 0.06,
-                        child: DropdownButton<String>(
-                          value: classSelectedValue,
-                          hint: const Text(
-                            'Class',
-                            style: TextStyle(
-                              color: Color(0xff221f1f),
+        return RefreshIndicator(
+          onRefresh: _refreshPage,
+          child: Column(
+            children: [
+              SizedBox(height: getHeight(context) * 0.01),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              blurRadius: 1,
+                              spreadRadius: 0.5,
+                              offset: const Offset(0.5, 0.5),
                             ),
-                          ),
-                          iconEnabledColor: Color(0xff221f1f),
-                          items: classDropdownItems.map((String item) {
-                            return DropdownMenuItem<String>(
-                              value: item,
-                              child: ResponsiveText(
-                                item,
-                                maxLines: 1,
-                                fontSize: 12,
-                                textOverflow: TextOverflow.ellipsis,
+                          ],
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          height: getHeight(context) * 0.06,
+                          child: DropdownButton<String>(
+                            value: classSelectedValue,
+                            hint: const Text(
+                              'Class',
+                              style: TextStyle(
+                                color: Color(0xff221f1f),
                               ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              classSelectedValue = newValue;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            blurRadius: 1,
-                            spreadRadius: 0.5,
-                            offset: const Offset(0.5, 0.5),
-                          ),
-                        ],
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        height: getHeight(context) * 0.06,
-                        child: DropdownButton<String>(
-                          value: locationSelectedValue,
-                          hint: const Text(
-                            'Location',
-                            style: TextStyle(
-                              color: Color(0xff221f1f),
                             ),
+                            iconEnabledColor: Color(0xff221f1f),
+                            items: classDropdownItems.map((String item) {
+                              return DropdownMenuItem<String>(
+                                value: item,
+                                child: ResponsiveText(
+                                  item,
+                                  maxLines: 1,
+                                  fontSize: 12,
+                                  textOverflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                classSelectedValue = newValue;
+                              });
+                            },
                           ),
-                          iconEnabledColor: Color(0xff221f1f),
-                          items: locationDropdownItems.map((String item) {
-                            return DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(item),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              locationSelectedValue = newValue;
-                            });
-                          },
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            /////////////////////////////////
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView.builder(
-                  itemCount: controller.list
-                      .where((data) {
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              blurRadius: 1,
+                              spreadRadius: 0.5,
+                              offset: const Offset(0.5, 0.5),
+                            ),
+                          ],
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          height: getHeight(context) * 0.06,
+                          child: DropdownButton<String>(
+                            value: locationSelectedValue,
+                            hint: const Text(
+                              'Location',
+                              style: TextStyle(
+                                color: Color(0xff221f1f),
+                              ),
+                            ),
+                            iconEnabledColor: Color(0xff221f1f),
+                            items: locationDropdownItems.map((String item) {
+                              return DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(item),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                locationSelectedValue = newValue;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              /////////////////////////////////
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                    itemCount: controller.list
+                        .where((data) {
+                          bool matchesClass = classSelectedValue == null ||
+                              "Class ${data.className!.classNameClass} ${data.className!.section}" ==
+                                  classSelectedValue;
+                          bool matchesLocation =
+                              locationSelectedValue == null ||
+                                  data.pickDropLocation?.busRoute ==
+                                      locationSelectedValue;
+
+                          return matchesClass || matchesLocation;
+                        })
+                        .toList()
+                        .length,
+                    itemBuilder: (context, index) {
+                      var filteredList = controller.list.where((data) {
                         bool matchesClass = classSelectedValue == null ||
                             "Class ${data.className!.classNameClass} ${data.className!.section}" ==
                                 classSelectedValue;
@@ -266,132 +290,120 @@ class _StudentListState extends State<StudentList> {
                                 locationSelectedValue;
 
                         return matchesClass || matchesLocation;
-                      })
-                      .toList()
-                      .length,
-                  itemBuilder: (context, index) {
-                    var filteredList = controller.list.where((data) {
-                      bool matchesClass = classSelectedValue == null ||
-                          "Class ${data.className!.classNameClass} ${data.className!.section}" ==
-                              classSelectedValue;
-                      bool matchesLocation = locationSelectedValue == null ||
-                          data.pickDropLocation?.busRoute ==
-                              locationSelectedValue;
+                      }).toList();
 
-                      return matchesClass || matchesLocation;
-                    }).toList();
+                      var data = filteredList[index];
+                      if (filteredList.isEmpty) return Text("no value");
 
-                    var data = filteredList[index];
-                    if (filteredList.isEmpty) return Text("no value");
-
-                    return Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 6),
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            blurRadius: 1,
-                            spreadRadius: 0.5,
-                            offset: const Offset(0.5, 0.5),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 7.0, vertical: 16),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              maxRadius: 30,
-                              minRadius: 30,
-                              backgroundImage: data.profileImage == null ||
-                                      data.profileImage == "fasle" ||
-                                      data.profileImage == ""
-                                  ? const AssetImage('assets/images/user.png')
-                                  : MemoryImage(
-                                      base64Decode(
-                                        data.profileImage!.replaceFirst(
-                                            'data:image/jpeg;base64,', ''),
-                                      ),
-                                    ),
-                            ),
-                            SizedBox(width: getHeight(context) * 0.01),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${data.fullName}",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xff221f1f),
-                                  ),
-                                ),
-                                SizedBox(height: 2),
-                                Text(
-                                  data.className != null
-                                      ? "Class ${data.className!.classNameClass} ${data.className!.section}"
-                                      : "",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Color(0xff676767),
-                                  ),
-                                ),
-                                Text(
-                                  data.pickDropLocation != null
-                                      ? "${data.pickDropLocation!.busRoute}"
-                                      : "",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Color(0xff676767),
-                                  ),
-                                ),
-                                Text(
-                                  data.contactNumber != null
-                                      ? "${data.contactNumber}"
-                                      : "",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Color(0xff676767),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Spacer(),
-                            IconButton(
-                              onPressed: () async {
-                                var phoneNumber =
-                                    await "tel:${data.contactNumber}";
-                                final Uri callUri = Uri.parse(phoneNumber);
-
-                                if (await canLaunchUrl(callUri)) {
-                                  await launchUrl(callUri);
-                                } else {
-                                  Get.showSnackbar(
-                                    GetSnackBar(
-                                      message: 'Cannot call phone',
-                                      duration: Duration(seconds: 1),
-                                      snackPosition: SnackPosition.BOTTOM,
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                }
-                              },
-                              icon: const Icon(Icons.call),
+                      return Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              blurRadius: 1,
+                              spreadRadius: 0.5,
+                              offset: const Offset(0.5, 0.5),
                             ),
                           ],
                         ),
-                      ),
-                    );
-                  },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 7.0, vertical: 16),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                maxRadius: 30,
+                                minRadius: 30,
+                                backgroundImage: data.profileImage == null ||
+                                        data.profileImage == "fasle" ||
+                                        data.profileImage == ""
+                                    ? const AssetImage('assets/images/user.png')
+                                    : MemoryImage(
+                                        base64Decode(
+                                          data.profileImage!.replaceFirst(
+                                              'data:image/jpeg;base64,', ''),
+                                        ),
+                                      ),
+                              ),
+                              SizedBox(width: getHeight(context) * 0.01),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${data.fullName}",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff221f1f),
+                                    ),
+                                  ),
+                                  SizedBox(height: 2),
+                                  Text(
+                                    data.className != null
+                                        ? "Class ${data.className!.classNameClass} ${data.className!.section}"
+                                        : "",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xff676767),
+                                    ),
+                                  ),
+                                  Text(
+                                    data.pickDropLocation != null
+                                        ? "${data.pickDropLocation!.busRoute}"
+                                        : "",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xff676767),
+                                    ),
+                                  ),
+                                  Text(
+                                    data.contactNumber != null
+                                        ? "${data.contactNumber}"
+                                        : "",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xff676767),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Spacer(),
+                              IconButton(
+                                onPressed: () async {
+                                  var phoneNumber =
+                                      await "tel:${data.contactNumber}";
+                                  final Uri callUri = Uri.parse(phoneNumber);
+
+                                  if (await canLaunchUrl(callUri)) {
+                                    await launchUrl(callUri);
+                                  } else {
+                                    Get.showSnackbar(
+                                      GetSnackBar(
+                                        message: 'Cannot call phone',
+                                        duration: Duration(seconds: 1),
+                                        snackPosition: SnackPosition.BOTTOM,
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  }
+                                },
+                                icon: const Icon(Icons.call),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       }),
     );

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:driver_app/controller/Home/RouteController.dart';
+import 'package:driver_app/controller/Home/ServicingHistoryController.dart';
 import 'package:driver_app/controller/Profilecontroller.dart';
 import 'package:driver_app/core/constants/string_constants.dart';
 import 'package:driver_app/core/utils/asset_provider.dart';
@@ -29,16 +30,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  // final TextEditingController _routeController = TextEditingController();
+  final servicingHistroyController = Get.put(ServicingHistoryController());
+
   final ProfileController controller = Get.put(ProfileController());
   final routeController = Get.put(Routecontroller());
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.getProfile();
-
-      // controller.getStudentList(); // Fetch data after the initial build
+      servicingHistroyController.fetchServicingHistoryList();
     });
   }
 
@@ -49,34 +51,36 @@ class _HomePageState extends State<HomePage> {
       key: _scaffoldKey,
       drawer: const HomePageDrawer(),
       appBar: _appBarContent(context),
-      body: Padding(
-        padding: EdgeInsets.only(
-          left: 16.0,
-          right: 16.0,
-          top: getHeight(context) * 0.02,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: getHeight(context) * 0.02),
-            _fuelLevelContent(),
-            SizedBox(height: getHeight(context) * 0.02),
-            _servicingDateContent(context),
-            SizedBox(height: getHeight(context) * 0.02),
-            const Text(
-              'Quick Access',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Color(0xff363636),
+      body: Obx(() {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 16.0,
+            right: 16.0,
+            top: getHeight(context) * 0.02,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: getHeight(context) * 0.02),
+              _fuelLevelContent(),
+              SizedBox(height: getHeight(context) * 0.02),
+              _servicingDateContent(),
+              SizedBox(height: getHeight(context) * 0.02),
+              const Text(
+                'Quick Access',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xff363636),
+                ),
               ),
-            ),
-            _quickAccessItems(context),
-            SizedBox(height: 20)
-          ],
-        ),
-      ),
+              _quickAccessItems(context),
+              SizedBox(height: 20)
+            ],
+          ),
+        );
+      }),
     );
   }
 
@@ -412,50 +416,79 @@ class _HomePageState extends State<HomePage> {
     log('Attendance state has been reset.');
   }
 
-  Column _servicingDateContent(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            const Text(
-              'Next Servicing Date',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Color(0xff363636),
+  Widget _servicingDateContent() {
+    var nextServiceDateString = servicingHistroyController
+            .servicingHistoryModel.value?.result?[0].nextServiceDate ??
+        "";
+
+    int remainingDays = 0;
+    if (nextServiceDateString.isNotEmpty) {
+      try {
+        DateTime nextServiceDate = DateTime.parse(nextServiceDateString);
+        DateTime today = DateTime.now();
+        remainingDays = nextServiceDate.difference(today).inDays;
+      } catch (e) {
+        print("Error parsing date: $e");
+        // remainingDays = -1;
+        // Use -1 to indicate an error
+      }
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              const Text(
+                'Next Servicing Date',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xff545454),
+                ),
               ),
-            ),
-            const SizedBox(width: 5),
-            SvgPicture.asset(
-              'assets/svg_images/scheduled-maintenance.svg',
-              height: 25,
-              width: 25,
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            const Icon(Icons.calendar_month),
-            const Text(
-              '5th November',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Color(0xff221f1f),
+              const SizedBox(width: 10),
+              SvgPicture.asset(
+                'assets/svg_images/scheduled-maintenance.svg',
+                height: 25,
+                width: 25,
+                color: Color(0xff545454),
               ),
-            ),
-            SizedBox(width: MediaQuery.sizeOf(context).width * 0.04),
-            const Text(
-              '13 days from today',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: Color(0xff999999),
+            ],
+          ),
+          const SizedBox(height: 5),
+          Row(
+            children: [
+              const Icon(Icons.calendar_month),
+              const SizedBox(width: 5),
+              Text(
+                nextServiceDateString.isNotEmpty
+                    ? nextServiceDateString
+                    : "You haven't input the next Servicing date",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xff363636),
+                ),
               ),
-            ),
-          ],
-        ),
-      ],
+              SizedBox(width: MediaQuery.sizeOf(context).width * 0.04),
+              Text(
+                remainingDays > 0
+                    ? "$remainingDays days from today"
+                    : (remainingDays == 0
+                        ? "Today is the servicing day"
+                        : "Invalid or past date"),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: remainingDays > 0 ? Colors.red : Colors.grey,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

@@ -10,6 +10,8 @@ class ServicingController extends GetxController {
   final ServicingRepository _repository = ServicingRepository();
 
   var servicingDate = ''.obs;
+  var nextservicingDate = ''.obs;
+
   var partsUsed = <String>[].obs;
   final TextEditingController totalAmountController = TextEditingController();
   var billImage = <String>[].obs;
@@ -21,7 +23,8 @@ class ServicingController extends GetxController {
   Future<void> submitServicingData(BuildContext context) async {
     if (servicingDate.isEmpty ||
             totalAmountController.text.isEmpty ||
-            billImage.isEmpty
+            billImage.isEmpty ||
+            nextservicingDate.isEmpty
         //partsUsed.isEmpty ||
         // damagedPartImage.isEmpty ||
         // replacedPartImage.isEmpty
@@ -44,6 +47,7 @@ class ServicingController extends GetxController {
       final data = {
         "schoolId": "${schoolid}",
         "date": servicingDate.value,
+        "nextServiceDate": "${nextservicingDate.value}",
         "billAmount": int.tryParse(totalAmountController.text) ?? 0,
         "expenseType": "PICKED",
         "billType": "Servicing Bill",

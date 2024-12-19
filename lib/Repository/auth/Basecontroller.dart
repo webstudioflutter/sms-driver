@@ -36,16 +36,14 @@ class BaseController {
         },
       ),
       LogInterceptor(requestBody: true, responseBody: true),
+      //ture off for debug console print responses
     ]);
   }
-
-  // Method to retrieve the authentication token from shared preferences
   Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');
   }
 
-  // Error handling method
   String handleError(dynamic error) {
     String errorDescription = 'Unexpected error occurred';
 

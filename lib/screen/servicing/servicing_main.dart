@@ -130,6 +130,22 @@ class _ServicingMainState extends State<ServicingMain> {
   }
 
   Widget _servicingDateContent() {
+    var nextServiceDateString = servicingHistroyController
+            .servicingHistoryModel.value?.result?[0].nextServiceDate ??
+        "";
+
+    int remainingDays = 0;
+    if (nextServiceDateString.isNotEmpty) {
+      try {
+        DateTime nextServiceDate = DateTime.parse(nextServiceDateString);
+        DateTime today = DateTime.now();
+        remainingDays = nextServiceDate.difference(today).inDays;
+      } catch (e) {
+        print("Error parsing date: $e");
+        // remainingDays = -1; // Use -1 to indicate an error
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -158,8 +174,10 @@ class _ServicingMainState extends State<ServicingMain> {
             children: [
               const Icon(Icons.calendar_month),
               const SizedBox(width: 5),
-              const Text(
-                '5th November',
+              Text(
+                nextServiceDateString.isNotEmpty
+                    ? nextServiceDateString
+                    : "You haven't input the next Servicing date",
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -167,12 +185,16 @@ class _ServicingMainState extends State<ServicingMain> {
                 ),
               ),
               SizedBox(width: MediaQuery.sizeOf(context).width * 0.04),
-              const Text(
-                '13 days from today',
+              Text(
+                remainingDays > 0
+                    ? "$remainingDays days from today"
+                    : (remainingDays == 0
+                        ? "Today is the servicing day"
+                        : "Invalid or past date"),
                 style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xff999999),
+                  fontWeight: FontWeight.w500,
+                  color: remainingDays > 0 ? Colors.red : Colors.grey,
                 ),
               ),
             ],

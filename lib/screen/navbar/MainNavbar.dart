@@ -1,3 +1,4 @@
+import 'package:driver_app/controller/Home/ServicingController.dart';
 import 'package:driver_app/controller/NotificationController.dart';
 import 'package:driver_app/controller/Profilecontroller.dart';
 import 'package:driver_app/controller/SchoosettingController.dart';
@@ -20,6 +21,7 @@ class MainNavbar extends StatefulWidget {
 
 class _MainNavbarState extends State<MainNavbar> {
   final controller = Get.put(ProfileController());
+  final servicecontroller = Get.put(ServicingController());
 
   int _selectedIndex = 0;
 
@@ -40,6 +42,7 @@ class _MainNavbarState extends State<MainNavbar> {
   @override
   void initState() {
     ccontroller.getSchoolSetting();
+    servicecontroller.resetFields();
     super.initState();
   }
 

@@ -103,8 +103,8 @@ class _MyAccountState extends State<MyAccount> {
                             UserInfoRow(
                               leadingIcon: 'assets/svg_images/home_profile.svg',
                               title: 'Home Address',
-                              subtitle: profile.address!.city != null
-                                  ? "${profile.address!.street}${profile.address!.city}"
+                              subtitle: profile.address!.location != null
+                                  ? "${profile.address!.location}, ${profile.address!.country}"
                                   : 'N/A',
                               suffixIcon: Icons.edit_square,
                               onTap: () async {
@@ -112,7 +112,7 @@ class _MyAccountState extends State<MyAccount> {
                                   context,
                                   title: "Edit Home Address",
                                   initialValue: profile.address != null
-                                      ? "${profile.address!.street}, ${profile.address!.city}"
+                                      ? "${profile.address!.location}, ${profile.address!.country}"
                                       : '',
                                 );
                               },
@@ -129,13 +129,17 @@ class _MyAccountState extends State<MyAccount> {
                             UserInfoRow(
                               leadingIcon: 'assets/svg_images/bus.svg',
                               title: 'Assigned Vehicle',
-                              subtitle: profile.transporation?.name ?? 'N/A',
+                              subtitle: profile.transporation != ""
+                                  ? "${profile.transporation!.name}"
+                                  : 'N/A',
                             ),
                             SizedBox(height: getHeight(context) * 0.025),
                             UserInfoRow(
                               leadingIcon: 'assets/svg_images/employee-man.svg',
                               title: 'Years of Experience',
-                              subtitle: "${profile.experiencedYear}" ?? 'N/A',
+                              subtitle: profile.experiencedYear != null
+                                  ? "${profile.experiencedYear}"
+                                  : "0",
                             ),
                           ],
                         ),

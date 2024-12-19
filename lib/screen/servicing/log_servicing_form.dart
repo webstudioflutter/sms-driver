@@ -51,8 +51,25 @@ class _LogServicingFormState extends State<LogServicingForm> {
     if (picked != null) {
       setState(() {
         servicingController.servicingDate.value = '';
-        _selectedDate = "${picked.day}/${picked.month}/${picked.year}";
+        _selectedDate = "${picked.year}-${picked.month}-${picked.day}";
         servicingController.servicingDate.value = _selectedDate;
+      });
+    }
+  }
+
+  Future<void> _selectnextDate(BuildContext context) async {
+    final nextpicked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2400),
+    );
+    if (nextpicked != null) {
+      setState(() {
+        servicingController.nextservicingDate.value = '';
+        _selectedDate =
+            "${nextpicked.year}-${nextpicked.month}-${nextpicked.day}";
+        servicingController.nextservicingDate.value = _selectedDate;
       });
     }
   }
@@ -64,8 +81,6 @@ class _LogServicingFormState extends State<LogServicingForm> {
         context: context,
         title: 'Servicing',
       ),
-
-      ///For submit button
       bottomNavigationBar: Obx(
         () {
           return Padding(
@@ -106,14 +121,13 @@ class _LogServicingFormState extends State<LogServicingForm> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          _buildnextServiceDateSection(),
           _buildServiceDateSection(),
           const SizedBox(height: 15),
           _buildCheckboxSection(),
           const SizedBox(height: 25),
           _buildTotalAmountSection(),
           const SizedBox(height: 15),
-
-          //Servicing File
           Row(
             children: [
               const Text(
@@ -229,7 +243,6 @@ class _LogServicingFormState extends State<LogServicingForm> {
               suffixIcon: const Icon(Icons.calendar_month_outlined),
             ),
             child: Text(
-              // servicingController.servicingDate=_selectedDate,
               servicingController.servicingDate.value,
               style: TextStyle(
                   fontSize: 14,
@@ -242,7 +255,46 @@ class _LogServicingFormState extends State<LogServicingForm> {
     );
   }
 
-  // Total Amount section
+  Widget _buildnextServiceDateSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            const Text(
+              'Next Service Date',
+              style: TextStyle(
+                  color: Color(0xff676767),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(width: 8),
+            SvgPicture.asset('assets/svg_images/bill_date.svg'),
+          ],
+        ),
+        const SizedBox(height: 5),
+        InkWell(
+          onTap: () => _selectnextDate(context),
+          child: InputDecorator(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              suffixIcon: const Icon(Icons.calendar_month_outlined),
+            ),
+            child: Text(
+              servicingController.nextservicingDate.value,
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildTotalAmountSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,7 +334,6 @@ class _LogServicingFormState extends State<LogServicingForm> {
     );
   }
 
-  // Checkbox Section
   Widget _buildCheckboxSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

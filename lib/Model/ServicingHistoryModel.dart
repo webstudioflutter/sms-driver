@@ -21,6 +21,7 @@ class ServicingHistoryModel {
 class Result {
   DriverInfo? driverInfo;
   String? billType;
+  String? nextServiceDate;
   DriverInfo? vehicleInfo;
   List<String>? partsUsed;
   List<String>? oldPartsImages;
@@ -36,6 +37,7 @@ class Result {
 
   Result(
       {this.driverInfo,
+      this.nextServiceDate,
       this.billType,
       this.vehicleInfo,
       this.partsUsed,
@@ -55,6 +57,7 @@ class Result {
         ? new DriverInfo.fromJson(json['driverInfo'])
         : null;
     billType = json['billType'] ?? "";
+    nextServiceDate = json['nextServiceDate'] ?? "";
     vehicleInfo = json['vehicleInfo'] != null
         ? new DriverInfo.fromJson(json['vehicleInfo'])
         : null;
