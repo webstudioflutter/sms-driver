@@ -98,230 +98,273 @@ class _ProfilePageState extends State<ProfilePage> {
       key: _scaffoldKey,
       drawer: const HomePageDrawer(),
       appBar: _appBarContent(context),
-      body: Padding(
-        padding: EdgeInsets.only(
-          top: getHeight(context) * 0.13,
-          right: 10,
-          left: 10,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(16),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 1,
-                      spreadRadius: 0.5,
-                      color: Colors.grey.withOpacity(0.2),
-                      offset: Offset(0.5, 0.5),
-                    )
-                  ]),
-              child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MyAccount()));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 20.0),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset('assets/svg_images/profile.svg'),
-                            const SizedBox(width: 10),
-                            SizedBox(
-                              child: const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'General Information',
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xff545454),
-                                    ),
-                                  ),
-                                  Text(
-                                    'View your personal and work details',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Color(0xffababab),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Spacer(),
-                            const Icon(
-                              Icons.chevron_right,
-                              size: 35,
-                              color: Color(0xff999999),
-                            ),
-                          ],
-                        ),
-                      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(
+              top: getHeight(context) * 0.13, right: 10, left: 10, bottom: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(16),
                     ),
-                    Divider(),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset('assets/svg_images/lock.svg'),
-                          const SizedBox(width: 10),
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 1,
+                        spreadRadius: 0.5,
+                        color: Colors.grey.withOpacity(0.2),
+                        offset: Offset(0.5, 0.5),
+                      )
+                    ]),
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Column(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MyAccount()));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 20.0),
+                          child: Row(
                             children: [
-                              Text(
-                                'Face ID / Touch ID',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xff545454),
+                              SvgPicture.asset('assets/svg_images/profile.svg'),
+                              const SizedBox(width: 10),
+                              SizedBox(
+                                child: const Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'General Information',
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xff545454),
+                                      ),
+                                    ),
+                                    Text(
+                                      'View your personal and work details',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Color(0xffababab),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Text(
-                                'Manage your device security',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xffababab),
-                                ),
+                              const Spacer(),
+                              const Icon(
+                                Icons.chevron_right,
+                                size: 35,
+                                color: Color(0xff999999),
                               ),
                             ],
                           ),
-                          const SizedBox(width: 5),
-                          const Spacer(),
-                          Switch(value: false, onChanged: (value) {})
-                        ],
+                        ),
                       ),
-                    ),
-                    Divider(),
-                    InkWell(
-                      onTap: () {
-                        showLogoutConfirmation(context);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10.0, bottom: 20),
+                      Divider(),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
+                            SvgPicture.asset('assets/svg_images/lock.svg'),
+                            const SizedBox(width: 10),
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SvgPicture.asset(
-                                    'assets/svg_images/logout.svg'),
-                                const SizedBox(width: 10),
-                                SizedBox(
-                                  width: getWidth(context) * 0.6,
-                                  child: const Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Log out',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          color: Color(0xff545454),
-                                        ),
-                                      ),
-                                      Text(
-                                        'Further secure your account for safety',
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Color(0xffababab),
-                                        ),
-                                      ),
-                                    ],
+                                Text(
+                                  'Face ID / Touch ID',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xff545454),
+                                  ),
+                                ),
+                                Text(
+                                  'Manage your device security',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xffababab),
                                   ),
                                 ),
                               ],
                             ),
-                            const Icon(
-                              Icons.chevron_right,
-                              size: 35,
-                              color: Color(0xff999999),
-                            ),
+                            const SizedBox(width: 5),
+                            const Spacer(),
+                            Switch(value: false, onChanged: (value) {})
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 5.0),
-              child: Text(
-                'More',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xff454951),
-                ),
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(16),
+                      Divider(),
+                      InkWell(
+                        onTap: () {
+                          showLogoutConfirmation(context);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10.0, bottom: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  SvgPicture.asset(
+                                      'assets/svg_images/logout.svg'),
+                                  const SizedBox(width: 10),
+                                  SizedBox(
+                                    width: getWidth(context) * 0.6,
+                                    child: const Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Log out',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xff545454),
+                                          ),
+                                        ),
+                                        Text(
+                                          'Further secure your account for safety',
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Color(0xffababab),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Icon(
+                                Icons.chevron_right,
+                                size: 35,
+                                color: Color(0xff999999),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 1,
-                      spreadRadius: 0.5,
-                      color: Colors.grey.withOpacity(0.2),
-                      offset: Offset(0.5, 0.5),
-                    )
-                  ]),
-              child: Padding(
-                padding: EdgeInsets.only(
-                  top: getHeight(context) * 0.01,
-                  bottom: getHeight(context) * 0.01,
-                  left: 5,
                 ),
-                child: Row(
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 5.0),
+                child: Text(
+                  'More',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xff454951),
+                  ),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(16),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 1,
+                        spreadRadius: 0.5,
+                        color: Colors.grey.withOpacity(0.2),
+                        offset: Offset(0.5, 0.5),
+                      )
+                    ]),
+                child: Column(
                   children: [
-                    SvgPicture.asset('assets/svg_images/notification2.svg'),
-                    const SizedBox(width: 10),
-                    const Text(
-                      'Help & Support',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xff545454),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: getHeight(context) * 0.01,
+                        bottom: getHeight(context) * 0.01,
+                        left: 5,
+                      ),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                              'assets/svg_images/notification2.svg'),
+                          const SizedBox(width: 10),
+                          const Text(
+                            'Help & Support',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xff545454),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          const Spacer(),
+                          const Icon(
+                            Icons.chevron_right,
+                            size: 35,
+                            color: Color(0xff999999),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 5),
-                    const Spacer(),
-                    const Icon(
-                      Icons.chevron_right,
-                      size: 35,
-                      color: Color(0xff999999),
+                    Divider(),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: getHeight(context) * 0.01,
+                        bottom: getHeight(context) * 0.01,
+                        left: 5,
+                      ),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 18,
+                            backgroundColor: const Color(0x1160bf8f),
+                            child: SvgPicture.asset(
+                                'assets/svg_images/language.svg',
+                                width: 24.0,
+                                height: 24.0,
+                                color: const Color(0xff60bf8f)),
+                          ),
+                          const SizedBox(width: 10),
+                          const Text(
+                            'Change Language',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xff545454),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          const Spacer(),
+                          const Icon(
+                            Icons.chevron_right,
+                            size: 35,
+                            color: Color(0xff999999),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
