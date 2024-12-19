@@ -16,10 +16,20 @@ class ServicingMain extends StatefulWidget {
 
 class _ServicingMainState extends State<ServicingMain> {
   final servicingHistroyController = Get.put(ServicingHistoryController());
+  Future<void> _refreshPage() async {
+    servicingHistroyController.fetchServicingHistoryList();
+
+    await Future.delayed(const Duration(seconds: 1));
+  }
+
   @override
   void initState() {
-    servicingHistroyController.fetchServicingHistoryList();
     super.initState();
+    servicingHistroyController.fetchServicingHistoryList();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _refreshPage();
+    });
   }
 
   @override
@@ -50,34 +60,37 @@ class _ServicingMainState extends State<ServicingMain> {
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                _servicingDateContent(),
-                const SizedBox(height: 5),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      const Text(
-                        'Servicing History',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
+            child: RefreshIndicator(
+              onRefresh: _refreshPage,
+              child: Column(
+                children: [
+                  _servicingDateContent(),
+                  const SizedBox(height: 5),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Servicing History',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xff545454),
+                          ),
+                        ),
+                        const SizedBox(width: 15),
+                        SvgPicture.asset(
+                          'assets/svg_images/history.svg',
+                          height: 25,
+                          width: 25,
                           color: Color(0xff545454),
                         ),
-                      ),
-                      const SizedBox(width: 15),
-                      SvgPicture.asset(
-                        'assets/svg_images/history.svg',
-                        height: 25,
-                        width: 25,
-                        color: Color(0xff545454),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                _servingHistoryContent(),
-              ],
+                  _servingHistoryContent(),
+                ],
+              ),
             ),
           );
         }),
