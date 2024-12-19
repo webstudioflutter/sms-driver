@@ -28,6 +28,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  updateLanguage(Locale locale) {
+    Get.back();
+    Get.updateLocale(locale);
+  }
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final servicingHistroyController = Get.put(ServicingHistoryController());
@@ -67,8 +72,8 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: getHeight(context) * 0.02),
               _servicingDateContent(),
               SizedBox(height: getHeight(context) * 0.02),
-              const Text(
-                'Quick Access',
+              Text(
+                'Quick_Access'.tr,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,

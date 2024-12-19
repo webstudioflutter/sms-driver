@@ -23,6 +23,50 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final List locale = [
+    {'name': 'English', 'locale': const Locale('en', 'US')},
+    {'name': 'हिन्दी', 'locale': const Locale('hi', 'IN')},
+    {'name': 'नेपाली', 'locale': const Locale('nep', 'NPL')},
+    {'name': 'Arabic', 'locale': const Locale('arb', 'ARB')},
+  ];
+
+  updateLanguage(Locale locale) {
+    Get.back();
+    Get.updateLocale(locale);
+  }
+
+  buildDialogue(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (builder) {
+          return AlertDialog(
+            title: const Text("Change Language"),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                          onTap: () {
+                            print(locale[index]['name']);
+                            updateLanguage(locale[index]['locale']);
+                          },
+                          child: Text(locale[index]['name'])),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const Divider(
+                      color: Colors.blue,
+                    );
+                  },
+                  itemCount: locale.length),
+            ),
+          );
+        });
+  }
+
   final ImagePicker _picker = ImagePicker();
   List<Map<String, dynamic>> uploadedFiles = [];
 
@@ -137,11 +181,11 @@ class _ProfilePageState extends State<ProfilePage> {
                               SvgPicture.asset('assets/svg_images/profile.svg'),
                               const SizedBox(width: 10),
                               SizedBox(
-                                child: const Column(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'General Information',
+                                      'info'.tr,
                                       maxLines: 1,
                                       style: TextStyle(
                                         overflow: TextOverflow.ellipsis,
@@ -322,42 +366,47 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Divider(),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: getHeight(context) * 0.01,
-                        bottom: getHeight(context) * 0.01,
-                        left: 5,
-                      ),
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 18,
-                            backgroundColor: const Color(0x1160bf8f),
-                            child: SvgPicture.asset(
-                                'assets/svg_images/language.svg',
-                                width: 24.0,
-                                height: 24.0,
-                                color: const Color(0xff60bf8f)),
-                          ),
-                          const SizedBox(width: 10),
-                          const Text(
-                            'Change Language',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xff545454),
+                    InkWell(
+                      onTap: () {
+                        buildDialogue(context);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: getHeight(context) * 0.01,
+                          bottom: getHeight(context) * 0.01,
+                          left: 5,
+                        ),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 18,
+                              backgroundColor: const Color(0x1160bf8f),
+                              child: SvgPicture.asset(
+                                  'assets/svg_images/language.svg',
+                                  width: 24.0,
+                                  height: 24.0,
+                                  color: const Color(0xff60bf8f)),
                             ),
-                          ),
-                          const SizedBox(width: 5),
-                          const Spacer(),
-                          const Icon(
-                            Icons.chevron_right,
-                            size: 35,
-                            color: Color(0xff999999),
-                          ),
-                        ],
+                            const SizedBox(width: 10),
+                            const Text(
+                              'Change Language',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xff545454),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            const Spacer(),
+                            const Icon(
+                              Icons.chevron_right,
+                              size: 35,
+                              color: Color(0xff999999),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
