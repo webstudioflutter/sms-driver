@@ -1,5 +1,6 @@
 import 'package:driver_app/controller/BillController.dart';
 import 'package:driver_app/core/utils/util.dart';
+import 'package:driver_app/screen/bill/edit_bill.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -32,8 +33,8 @@ class _HistoryMethodState extends State<HistoryMethod> {
 
   @override
   void initState() {
-    super.initState();
     billController.getBills();
+    super.initState();
   }
 
   String formatDate(DateTime date) {
@@ -205,49 +206,73 @@ class _HistoryMethodState extends State<HistoryMethod> {
                       color: Colors.white,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 1,
-                          blurRadius: 4,
-                          offset: const Offset(0, 4),
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 0.5,
+                          blurRadius: 1,
+                          offset: const Offset(0.5, 0.5),
                         ),
                       ],
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Icon(Icons.calendar_month_outlined,
-                                  color: Colors.grey),
-                              const SizedBox(width: 4),
+                              Row(
+                                children: [
+                                  const Icon(Icons.calendar_month_outlined,
+                                      color: Colors.grey),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    item.date!,
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xffadadad)),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 5),
                               Text(
-                                item.date!,
+                                "Bill Type : ${item.billType}",
                                 style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xff545454),
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                'Rs ${item.billAmount}',
+                                style: const TextStyle(
+                                    color: Color(0xff545454),
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xffadadad)),
+                                    fontWeight: FontWeight.w500),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 5),
-                          Text(
-                            "Bill Type : ${item.billType}",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xff545454),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditBillMethod(
+                                            totalAmount:
+                                                item.billAmount!.toDouble(),
+                                            billType: item.billType!,
+                                            Date: item.date!,
+                                            billImage: item.billImage!,
+                                            billId: item.id!,
+                                          )));
+                            },
+                            child: const Icon(
+                              Icons.edit_square,
+                              color: Colors.grey,
                             ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            'Rs ${item.billAmount}',
-                            style: const TextStyle(
-                                color: Color(0xff545454),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500),
                           ),
                         ],
                       ),

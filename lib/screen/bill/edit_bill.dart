@@ -3,8 +3,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
-import 'package:driver_app/controller/postBillController.dart';
+import 'package:driver_app/Model/BillModel.dart';
+import 'package:driver_app/controller/BillController.dart';
 import 'package:driver_app/core/utils/util.dart';
+import 'package:driver_app/core/widgets/custom_app_bar.dart';
+import 'package:driver_app/screen/bill/bill_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -13,24 +16,42 @@ import 'package:get/get.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 
-class BillMethod extends StatefulWidget {
-  BillMethod({super.key});
+class EditBillMethod extends StatefulWidget {
+  final String billId;
+  final double totalAmount;
+  final String billType;
+  final String Date;
+  final String billImage;
+
+  EditBillMethod(
+      {super.key,
+      required this.totalAmount,
+      required this.billType,
+      required this.Date,
+      required this.billImage,
+      required this.billId});
 
   @override
-  _BillMethodState createState() => _BillMethodState();
+  _EditBillMethodState createState() => _EditBillMethodState();
 }
 
-class _BillMethodState extends State<BillMethod> {
-  final _controller = Get.put(PostBillController());
+class _EditBillMethodState extends State<EditBillMethod> {
+  late TextEditingController amountcontroller;
+  late TextEditingController _photoController;
+
+  final BillController billController = Get.find<BillController>();
+
+  final formkey = GlobalKey<FormState>();
   String selectedDate = 'Select Date';
-  String billType = '';
+  String bill_type = '';
   double totalAmount = 0.0;
-  TextEditingController amountcontroller = TextEditingController();
+
   List<Map<String, dynamic>> uploadedFiles = [];
   var billImage = <String>[].obs;
   File? _profileImage;
   String? _profileBase64;
   final ImagePicker _picker = ImagePicker();
+  Result? data;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -114,7 +135,7 @@ class _BillMethodState extends State<BillMethod> {
   }
 
   void showSubmitDialog() {
-    if (billType.isEmpty ||
+    if (bill_type.isEmpty ||
         selectedDate.isEmpty ||
         totalAmount <= 0 ||
         billImage.isEmpty) {
@@ -145,187 +166,179 @@ class _BillMethodState extends State<BillMethod> {
     );
   }
 
+  List<String> items = [
+    'Servicing Bill',
+    'Accident Repair Bill',
+    'Spare Parts Bill',
+    'flat tire Bill',
+    'Repair Bill',
+    'Battery Bill',
+    'Allowances Bill',
+    'Parking Bill',
+    'Traffic Violation Bill',
+    'Others Bill'
+  ];
+
   @override
   void initState() {
-    _controller.postbill();
     super.initState();
+    bill_type = items.contains(widget.billType) ? widget.billType : "";
+    amountcontroller = TextEditingController(text: '${widget.totalAmount}');
+    selectedDate = widget.Date;
+    _photoController = TextEditingController(text: widget.billImage);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Obx(() {
-      return _controller.isLoading.value
-          ? const Center(child: CircularProgressIndicator())
-          : ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                _buildBillTypeSection(),
-                const SizedBox(height: 10),
-                _buildBillDateSection(),
-                const SizedBox(height: 10),
-                _buildTotalAmountSection(),
-                const SizedBox(height: 15),
-                if (_profileBase64 == null || _profileBase64!.isEmpty)
-                  DottedBorder(
+    String base64String = widget.billImage ?? '';
+    if (base64String.isNotEmpty) {
+      if (base64String.startsWith('data:image/jpeg;base64,')) {
+        base64String = base64String.replaceFirst('data:image/jpeg;base64,', '');
+      } else if (base64String.startsWith('data:image/png;base64,')) {
+        base64String = base64String.replaceFirst('data:image/png;base64,', '');
+      } else {
+        throw Exception('Unsupported image format');
+      }
+    } else {
+      print('No profile image available');
+    }
+    return Scaffold(
+        appBar: customBar(
+          context: context,
+          title: 'Edit Bill',
+        ),
+        body: Form(
+          key: formkey,
+          child: ListView(
+            padding: EdgeInsets.all(16),
+            children: [
+              _buildBillTypeSection(),
+              const SizedBox(height: 10),
+              _buildBillDateSection(),
+              const SizedBox(height: 10),
+              _buildTotalAmountSection(),
+              const SizedBox(height: 15),
+              if (_profileBase64 == null)
+                DottedBorder(
+                  color: Theme.of(context).primaryColor,
+                  strokeWidth: 1,
+                  dashPattern: const [8, 4],
+                  borderType: BorderType.RRect,
+                  radius: const Radius.circular(8),
+                  child: InkWell(
+                    onTap: pickImage,
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      alignment: Alignment.center,
+                      child: Image.memory(base64Decode(base64String)),
+                    ),
+                  ),
+                ),
+              if (_profileBase64 != null && _profileBase64!.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 100),
+                  child: DottedBorder(
                     color: Theme.of(context).primaryColor,
                     strokeWidth: 1,
                     dashPattern: const [8, 4],
                     borderType: BorderType.RRect,
                     radius: const Radius.circular(8),
-                    child: InkWell(
-                      onTap: pickImage,
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/svg_images/upload_icon.svg',
-                              height: 48,
-                              width: 48,
+                    child: _profileImage != null
+                        ? Image.file(
+                            height: 250,
+                            width: width,
+                            _profileImage!,
+                            fit: BoxFit.fill,
+                          )
+                        : Center(
+                            child: Text(
+                              'No image selected',
+                              style: TextStyle(color: Colors.black),
                             ),
-                            const SizedBox(height: 10),
-                            Text(
-                              'Tap to upload your bill',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                          ],
-                        ),
-                      ),
-                    ),
+                          ),
                   ),
-                if (_profileBase64 != null && _profileBase64!.isNotEmpty)
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 100),
-                    child: DottedBorder(
-                      color: Theme.of(context).primaryColor,
-                      strokeWidth: 1,
-                      dashPattern: const [8, 4],
-                      borderType: BorderType.RRect,
-                      radius: const Radius.circular(8),
-                      child: _profileImage != null
-                          ? Image.file(
-                              height: 250,
-                              width: width,
-                              _profileImage!,
-                              fit: BoxFit.fill,
-                            )
-                          : Center(
-                              child: Text(
-                                'No image selected',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                    ),
-                  ),
-                const SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    OutlinedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.all(10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: SizedBox(
-                        width: getWidth(context) * 0.39,
-                        child: const Text(
-                          textAlign: TextAlign.center,
-                          'Cancel',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        final FlutterSecureStorage _secureStorage =
-                            const FlutterSecureStorage();
-                        String? driverId =
-                            await _secureStorage.read(key: 'driverId');
-                        String? drivername =
-                            await _secureStorage.read(key: 'drivername');
-                        String? schoolname =
-                            await _secureStorage.read(key: 'schoolId');
-                        String? transportationId =
-                            await _secureStorage.read(key: 'transportationId');
-                        String? transporationName =
-                            await _secureStorage.read(key: 'transporationName');
-
-                        var data = {
-                          "schoolId": "${schoolname}",
-                          "date": selectedDate,
-                          "expenseType": "PICKED",
-                          "billType": "${billType}",
-                          "billTitle": "",
-                          "billAmount": "${amountcontroller.text}",
-                          "nextServiceDate": "",
-                          "partsUsed": [""],
-                          "oldPartsImages": [""],
-                          "billImage":
-                              "data:image/jpeg;base64,${_profileBase64}",
-                          "newPartsImages": [""],
-                          "driverInfo": {
-                            "_id": "${driverId}",
-                            "name": "${drivername}"
-                          },
-                          "vehicleInfo": {
-                            "_id": "${transportationId}",
-                            "name": "${transporationName}"
-                          },
-                          "status": true
-                        };
-
-                        await _controller.postGetBills(data);
-                        showSubmitDialog();
-                        setState(() {
-                          selectedDate = 'Select Date';
-                          billType = '';
-                          amountcontroller.clear();
-                          _profileImage = null;
-                          _profileBase64 = null;
-                        });
-                        _profileBase64 = null;
-                        amountcontroller.text.isBlank;
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(10),
-                        backgroundColor: const Color(0xff60BF8F),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: SizedBox(
-                        width: getWidth(context) * 0.39,
-                        child: const Text(
-                          textAlign: TextAlign.center,
-                          'Submit',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
-              ],
-            );
-    }));
+              const SizedBox(height: 15),
+              ElevatedButton(
+                onPressed: () async {
+                  if (formkey.currentState!.validate()) {
+                    final FlutterSecureStorage _secureStorage =
+                        const FlutterSecureStorage();
+                    String? driverId =
+                        await _secureStorage.read(key: 'driverId');
+                    String? drivername =
+                        await _secureStorage.read(key: 'drivername');
+                    String? schoolname =
+                        await _secureStorage.read(key: 'schoolId');
+                    String? transportationId =
+                        await _secureStorage.read(key: 'transportationId');
+                    String? transporationName =
+                        await _secureStorage.read(key: 'transporationName');
+
+                    var data = {
+                      "schoolId": "${schoolname}",
+                      "date": selectedDate,
+                      "expenseType": "PICKED",
+                      "billType": bill_type,
+                      "billTitle": "",
+                      "billAmount": amountcontroller.text,
+                      "nextServiceDate": "",
+                      "partsUsed": [""],
+                      "oldPartsImages": [""],
+                      "billImage": _profileBase64 != null
+                          ? "data:image/jpeg;base64,${_profileBase64}"
+                          : widget.billImage,
+                      "newPartsImages": [""],
+                      "driverInfo": {
+                        "_id": "${driverId}",
+                        "name": "${drivername}"
+                      },
+                      "vehicleInfo": {
+                        "_id": "${transportationId}",
+                        "name": "${transporationName}"
+                      },
+                      "status": true
+                    };
+
+                    await billController.patchBills(widget.billId, data);
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => BillMain()),
+                      ModalRoute.withName('/'),
+                    );
+                    setState(() {
+                      selectedDate = 'Select Date';
+                      bill_type = '';
+                      amountcontroller.clear();
+                      _profileImage = null;
+                      _profileBase64 = null;
+                    });
+                    _profileBase64 = null;
+                    amountcontroller.text.isBlank;
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(10),
+                  backgroundColor: const Color(0xff60BF8F),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: SizedBox(
+                  width: getWidth(context) * 0.39,
+                  child: const Text(
+                    textAlign: TextAlign.center,
+                    'Update',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 
   Future<void> pickImage() async {
@@ -395,9 +408,7 @@ class _BillMethodState extends State<BillMethod> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: DropdownButton<String>(
-              value: billType.isEmpty
-                  ? null
-                  : billType, // Use null when there's no selection
+              value: bill_type.isEmpty ? null : bill_type,
               hint: const Text(
                 'Select Bill Type',
                 style: TextStyle(
@@ -407,22 +418,10 @@ class _BillMethodState extends State<BillMethod> {
               ),
               onChanged: (String? newValue) {
                 setState(() {
-                  billType = newValue ??
-                      ''; // If no value selected, set to empty string
+                  bill_type = newValue ?? '';
                 });
               },
-              items: [
-                'Servicing Bill',
-                'Accident Repair Bill',
-                'Spare Parts Bill',
-                'flat tire Bill',
-                'Repair Bill',
-                'Battery Bill',
-                'Allowances Bill',
-                'Parking Bill',
-                'Traffic Violation Bill',
-                'Others Bill'
-              ].map<DropdownMenuItem<String>>((String value) {
+              items: items.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -432,7 +431,7 @@ class _BillMethodState extends State<BillMethod> {
               underline: Container(),
             ),
           ),
-        ),
+        )
       ],
     );
   }
