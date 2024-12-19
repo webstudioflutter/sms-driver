@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:driver_app/Repository/home/ServicingRepository.dart';
+import 'package:driver_app/screen/navbar/MainNavbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,7 @@ class ServicingController extends GetxController {
 
   var isLoading = false.obs;
 
-  Future<void> submitServicingData() async {
+  Future<void> submitServicingData(BuildContext context) async {
     if (servicingDate.isEmpty ||
             totalAmountController.text.isEmpty ||
             billImage.isEmpty
@@ -45,7 +46,7 @@ class ServicingController extends GetxController {
         "date": servicingDate.value,
         "billAmount": int.tryParse(totalAmountController.text) ?? 0,
         "expenseType": "PICKED",
-        "billType": "Servicing",
+        "billType": "Servicing Bill",
         "billTitle": "Servicing Bill",
         "driverInfo": {"_id": "${driverid}", "name": "${drivername}"},
         "vehicleInfo": {
@@ -67,10 +68,14 @@ class ServicingController extends GetxController {
         isLoading.value = false;
 
         log(response['message']);
+        resetFields();
         Get.snackbar('Success', 'Servicing record added successfully!',
             backgroundColor: Colors.green.shade400, colorText: Colors.white);
-
-        resetFields();
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MainNavbar()),
+          ModalRoute.withName('/'),
+        );
       } else {
         Get.snackbar(
           'Error',

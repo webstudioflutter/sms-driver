@@ -8,11 +8,6 @@ import 'package:get/get.dart';
 class ServicingHistoryController extends GetxController {
   var isLoading = false.obs;
   var servicingHistoryModel = Rx<ServicingHistoryModel?>(null);
-  @override
-  void onInit() {
-    super.onInit();
-    fetchServicingHistoryList(); // Call the method during initialization
-  }
 
   Future<void> fetchServicingHistoryList() async {
     try {

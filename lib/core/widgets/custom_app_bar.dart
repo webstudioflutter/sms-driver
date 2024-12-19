@@ -41,6 +41,7 @@
 
 import 'package:driver_app/core/color_constant.dart';
 import 'package:driver_app/screen/emergency/emergency_main.dart';
+import 'package:driver_app/screen/navbar/MainNavbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -89,7 +90,11 @@ PreferredSize customBar({
                       color: pageTitleColor,
                     ),
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainNavbar()),
+                        ModalRoute.withName('/'),
+                      );
                     },
                   ),
                   Text(

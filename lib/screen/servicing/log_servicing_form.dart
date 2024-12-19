@@ -74,7 +74,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
               onPressed: servicingController.isLoading.value
                   ? null // Disable the button while loading
                   : () {
-                      servicingController.submitServicingData();
+                      servicingController.submitServicingData(context);
                     },
               style: ElevatedButton.styleFrom(
                 padding:
