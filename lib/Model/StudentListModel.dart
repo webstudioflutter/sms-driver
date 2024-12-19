@@ -82,7 +82,6 @@ class Result {
   String? createdBy;
   DateTime? createdAt;
   int? v;
-  String? studentId;
   String? libraryId;
   String? motherTongue;
   String? session;
@@ -131,7 +130,6 @@ class Result {
     this.createdBy,
     this.createdAt,
     this.v,
-    this.studentId,
     this.libraryId,
     this.motherTongue,
     this.session,
@@ -216,7 +214,6 @@ class Result {
             ? null
             : DateTime.parse(json["createdAt"]),
         v: json["__v"],
-        studentId: json["studentId"],
         libraryId: json["libraryId"],
         motherTongue: json["motherTongue"],
         session: json["session"],
@@ -283,7 +280,6 @@ class Result {
         "createdBy": createdBy,
         "createdAt": createdAt?.toIso8601String(),
         "__v": v,
-        "studentId": studentId,
         "libraryId": libraryId,
         "motherTongue": motherTongue,
         "session": session,

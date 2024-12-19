@@ -22,7 +22,7 @@ class ServicingHistoryRepository {
     try {
       final response = await _dio
           .get('$_appUrl/vehicle-expenses/vehicle/676295ff3a54d833ca691dd7');
-
+      log("transportationId${response}");
       final servicingHistory = ServicingHistoryModel.fromJson(response.data);
 
       if (servicingHistory.count != 0 && servicingHistory.result?.length != 0) {

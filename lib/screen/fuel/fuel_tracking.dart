@@ -1,4 +1,5 @@
 import 'package:driver_app/controller/Home/FuelTrackingController.dart';
+import 'package:driver_app/core/constants/string_constants.dart';
 import 'package:driver_app/core/widgets/FileUploadedWidget.dart';
 import 'package:driver_app/core/widgets/custom_app_bar.dart';
 import 'package:driver_app/screen/navbar/MainNavbar.dart';
@@ -22,7 +23,7 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
     return Scaffold(
       appBar: customBar(
         context: context,
-        title: 'Fuel Re-Filling',
+        title: kFuelTracking,
       ),
       body: Obx(() => SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),

@@ -1,10 +1,8 @@
 import 'dart:async';
 
-import 'package:driver_app/controller/NotificationController.dart';
 import 'package:driver_app/core/color_constant.dart';
 import 'package:driver_app/firebase_options.dart';
 import 'package:driver_app/screen/SplashScreen/SplashScreen.dart';
-import 'package:driver_app/services/socket_io_client.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,15 +29,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    socketSetup.initSocket();
-    notificationbloc.notificationdata();
-    Timer.periodic(Duration(seconds: 1000), (timer) {
-      notificationbloc.notificationdata();
-    });
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   socketSetup.initSocket();
+  //   notificationbloc.notificationdata();
+  //   Timer.periodic(Duration(seconds: 1000), (timer) {
+  //     notificationbloc.notificationdata();
+  //   });
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
