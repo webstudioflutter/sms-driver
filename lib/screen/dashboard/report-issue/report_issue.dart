@@ -108,7 +108,7 @@ class _ReportIssueState extends State<ReportIssue> {
     return Scaffold(
       appBar: customBar(
         context: context,
-        title: 'Report Issue',
+        title: 'report_issue'.tr,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -220,8 +220,8 @@ class _ReportIssueState extends State<ReportIssue> {
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'SUBMIT ISSUE',
+                  Text(
+                    'submit_issue'.tr,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -335,8 +335,8 @@ class _ReportIssueState extends State<ReportIssue> {
                       width: 48,
                     ),
                     const SizedBox(height: 10),
-                    const Text(
-                      'Tap to Upload Images',
+                    Text(
+                      'upload_image'.tr,
                       style: TextStyle(fontSize: 14, color: Colors.black54),
                     ),
                   ],
@@ -351,8 +351,8 @@ class _ReportIssueState extends State<ReportIssue> {
   Row addPhotoTitle(BuildContext context) {
     return Row(
       children: [
-        const Text(
-          'Add Photo',
+        Text(
+          'add_photo'.tr,
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -381,7 +381,7 @@ class _ReportIssueState extends State<ReportIssue> {
             onTap: () {},
             child: buildStdQuickAccessItem(
               "assets/images/car-engine.png",
-              'Engine Light',
+              'engine'.tr,
               context,
             ),
           ),
@@ -389,7 +389,7 @@ class _ReportIssueState extends State<ReportIssue> {
             onTap: () {},
             child: buildStdQuickAccessItem(
               "assets/images/brake-disc.png",
-              'Brake Issue',
+              'brake'.tr,
               context,
             ),
           ),
@@ -397,7 +397,7 @@ class _ReportIssueState extends State<ReportIssue> {
             onTap: () {},
             child: buildStdQuickAccessItem(
               "assets/images/flat-tire.png",
-              'Flat Tire',
+              'tire'.tr,
               context,
             ),
           ),
@@ -405,7 +405,7 @@ class _ReportIssueState extends State<ReportIssue> {
             onTap: () async {},
             child: buildStdQuickAccessItem(
               "assets/images/battery.png",
-              'Battery Issue',
+              'battery'.tr,
               context,
             ),
           ),
@@ -413,7 +413,7 @@ class _ReportIssueState extends State<ReportIssue> {
             onTap: () {},
             child: buildStdQuickAccessItem(
               "assets/images/transmission.png",
-              'Transmission',
+              'transmission'.tr,
               context,
             ),
           ),
@@ -421,7 +421,7 @@ class _ReportIssueState extends State<ReportIssue> {
             onTap: () {},
             child: buildStdQuickAccessItem(
               "assets/images/application.png",
-              'Others',
+              'others'.tr,
               context,
             ),
           ),
@@ -433,8 +433,8 @@ class _ReportIssueState extends State<ReportIssue> {
   Row issueTitle(BuildContext context) {
     return Row(
       children: [
-        const Text(
-          'Select Issue',
+        Text(
+          'select_issue'.tr,
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
