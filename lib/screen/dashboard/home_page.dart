@@ -445,8 +445,8 @@ class _HomePageState extends State<HomePage> {
         children: [
           Row(
             children: [
-              const Text(
-                'Next Servicing Date',
+              Text(
+                'servicingdate'.tr,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -470,7 +470,7 @@ class _HomePageState extends State<HomePage> {
               Text(
                 nextServiceDateString.isNotEmpty
                     ? nextServiceDateString
-                    : "You haven't input the next Servicing date",
+                    : "servicngerror".tr,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -480,10 +480,10 @@ class _HomePageState extends State<HomePage> {
               SizedBox(width: MediaQuery.sizeOf(context).width * 0.04),
               Text(
                 remainingDays > 0
-                    ? "$remainingDays days from today"
+                    ? "$remainingDays remeaningdays".tr
                     : (remainingDays == 0
-                        ? "Today is the servicing day"
-                        : "Invalid or past date"),
+                        ? "todayserviceing".tr
+                        : "servicerror".tr),
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -502,8 +502,8 @@ class _HomePageState extends State<HomePage> {
       children: [
         Row(
           children: [
-            const Text(
-              'Fuel Level',
+            Text(
+              'fuellevel'.tr,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -577,8 +577,8 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Enter Today's Starting KM",
+                        Text(
+                          "todaykm".tr,
                           style: TextStyle(
                             fontSize: 18,
                             color: Color(0xff60bf8f),
@@ -601,12 +601,12 @@ class _HomePageState extends State<HomePage> {
                             style: TextStyle(fontSize: 20),
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
-                                return 'Please enter starting KM';
+                                return 'kmnull'.tr;
                               }
                               // Check if the value is a valid number
                               final number = double.tryParse(value);
                               if (number == null) {
-                                return 'Please enter a valid number';
+                                return 'numbererror'.tr;
                               }
                               // Check for negative values
                               if (number < 0) {
@@ -614,7 +614,7 @@ class _HomePageState extends State<HomePage> {
                               }
                               // Optional: Check if the length is too long
                               if (value.length > 10) {
-                                return 'Please enter a valid value';
+                                return 'numbererror'.tr;
                               }
                               return null;
                             },
