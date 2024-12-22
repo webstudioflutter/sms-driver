@@ -33,23 +33,23 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
                 _buildQuantitySlider(),
                 const SizedBox(height: 16),
                 _buildTextField(
-                  label: 'Odometer Reading',
+                  label: 'odo_reading'.tr,
                   icon: Icons.speed,
                   controller: _controller.odometerController,
-                  hint: 'Enter Reading on Odometer',
+                  hint: 'odo_reading_hint'.tr,
                 ),
                 const SizedBox(height: 16),
                 _buildTextField(
-                  label: 'Fuel Rate',
+                  label: 'fuel_rate'.tr,
                   icon: Icons.attach_money,
                   controller: _controller.fuelRateController,
-                  hint: 'Enter current fuel rate',
+                  hint: 'fuel_rate_hint'.tr,
                 ),
                 const SizedBox(height: 16),
                 Row(
                   children: [
-                    const Text(
-                      'Petrol Pump Reading',
+                    Text(
+                      'Petrol_reading'.tr,
                       style: TextStyle(
                         color: Color(0xff545454),
                         fontSize: 16,
@@ -73,7 +73,7 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
 
                 FileUploadedWidget(
                   svgname: "assets/svg_images/upload_image_receipt.svg",
-                  title: "Tap to Upload Image of Receipt ",
+                  title: 'Petrol_reading_hint'.tr,
                   files: petrolPumpReadingFiles,
                   // onFileUpload: (file) {
                   //   setState(() {
@@ -117,8 +117,8 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
-                              'ADD FUEL RECORD',
+                            Text(
+                              'add_fuel_record'.tr,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
@@ -167,8 +167,8 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
         // ),
         Row(
           children: [
-            const Text(
-              'Quantity',
+            Text(
+              'quantity'.tr,
               style: TextStyle(
                 color: Color(0xff545454),
                 fontSize: 16,

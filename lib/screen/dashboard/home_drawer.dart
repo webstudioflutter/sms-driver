@@ -55,14 +55,17 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
                           minRadius: getHeight(context) * 0.02,
                           backgroundImage: controller.list.first.schoolLogo ==
                                       null ||
-                                  controller.list.first.schoolLogo == "fasle" ||
-                                  controller.list.first.schoolLogo == ""
+                                  controller.list.first.schoolLogo!.isEmpty ||
+                                  !controller.list.first.schoolLogo!
+                                      .startsWith('data:image')
                               ? const AssetImage('assets/images/user.png')
+                                  as ImageProvider
                               : MemoryImage(
                                   base64Decode(
                                     controller.list.first.schoolLogo!
                                         .replaceFirst(
-                                            'data:image/jpeg;base64,', ''),
+                                            RegExp(r'data:image/[^;]+;base64,'),
+                                            ''),
                                   ),
                                 ),
                         );
@@ -119,7 +122,7 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
         // ),
         DrawerCard(
           svgAsset: 'assets/svg_images/location.svg',
-          label: 'Live Overview',
+          label: 'overview'.tr,
           destination: MapTrackingPage(),
         ),
         // const DrawerCard(
@@ -129,22 +132,22 @@ class _HomePageDrawerState extends State<HomePageDrawer> {
         // ),
         DrawerCard(
           svgAsset: Assets.svgImages.fuel,
-          label: 'Fuel Re-Filling',
+          label: 'fuel_refill'.tr,
           destination: FuelTrackingMain(),
         ),
         DrawerCard(
           svgAsset: Assets.svgImages.servicing,
-          label: 'Servicing',
+          label: 'servicing'.tr,
           destination: ServicingMain(),
         ),
         DrawerCard(
           svgAsset: Assets.svgImages.billupload,
-          label: 'Bill Upload',
+          label: 'Bill_title'.tr,
           destination: BillMain(),
         ),
         DrawerCard(
           svgAsset: 'assets/svg_images/drawer/quick-call.svg',
-          label: 'Quick Call',
+          label: 'quick_call'.tr,
           onPressed: () async {
             final Uri phoneUri = Uri(
               scheme: 'tel',

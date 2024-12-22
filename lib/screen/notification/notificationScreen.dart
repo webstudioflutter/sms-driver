@@ -10,6 +10,7 @@ import 'package:driver_app/screen/error/notfoundpage.dart';
 import 'package:driver_app/screen/error/servererror.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -72,7 +73,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           elevation: 2,
           title: Center(
             child: ResponsiveText(
-              "Notification",
+              'notification'.tr,
               fontSize: 16,
               fontWeight: FontWeight.w600,
               textColor: Colors.white,

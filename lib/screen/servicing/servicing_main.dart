@@ -38,7 +38,7 @@ class _ServicingMainState extends State<ServicingMain> {
         backgroundColor: Colors.white,
         appBar: customBar(
           context: context,
-          title: 'Servicing',
+          title: 'servicing'.tr,
         ),
         body: Obx(() {
           // Loading state
@@ -70,8 +70,8 @@ class _ServicingMainState extends State<ServicingMain> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
-                        const Text(
-                          'Servicing History',
+                        Text(
+                          'servicing_history'.tr,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -114,10 +114,10 @@ class _ServicingMainState extends State<ServicingMain> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const SizedBox(
+                child: SizedBox(
                   width: 350,
                   child: Text(
-                    "LOG SERVICING",
+                    'log_servicing'.tr,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
@@ -152,8 +152,8 @@ class _ServicingMainState extends State<ServicingMain> {
         children: [
           Row(
             children: [
-              const Text(
-                'Next Servicing Date',
+              Text(
+                'nextservicingdate'.tr,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,

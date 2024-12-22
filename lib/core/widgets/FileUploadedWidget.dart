@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 // class FileUploadedWidget extends StatefulWidget {
@@ -426,13 +427,13 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
       ),
       builder: (BuildContext context) {
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
                 leading: SvgPicture.asset('assets/svg_images/take_photo.svg'),
-                title: const Text('Take Photograph'),
+                title: Text('take_photo'.tr),
                 onTap: () async {
                   Navigator.pop(context);
                   final pickedFile =
@@ -451,7 +452,7 @@ class _FileUploadedWidgetState extends State<FileUploadedWidget> {
               ),
               ListTile(
                 leading: SvgPicture.asset('assets/svg_images/select_album.svg'),
-                title: const Text('Select from album'),
+                title: Text('select_album'.tr),
                 onTap: () async {
                   Navigator.pop(context);
                   final pickedFile = await ImagePicker()

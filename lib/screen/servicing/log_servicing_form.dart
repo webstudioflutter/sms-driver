@@ -30,14 +30,14 @@ class _LogServicingFormState extends State<LogServicingForm> {
   final List<String> base64ReplaceImage = [];
 
   List<String> checkboxLabels = [
-    "Brake Pads",
-    "Battery",
-    "Starter Motor",
-    "Spark Plugs",
-    "Tires",
-    "Wiper Blades",
-    "Air Filter",
-    "Others",
+    'brake_pads'.tr,
+    'battery_replaced'.tr,
+    'starter_motor'.tr,
+    'spark_plug'.tr,
+    'tires'.tr,
+    'wiper'.tr,
+    'airfilter'.tr,
+    'others'.tr,
   ];
   final List<String> selectedItems = [];
 
@@ -79,7 +79,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
     return Scaffold(
       appBar: customBar(
         context: context,
-        title: 'Servicing',
+        title: 'servicing'.tr,
       ),
       bottomNavigationBar: Obx(
         () {
@@ -105,8 +105,8 @@ class _LogServicingFormState extends State<LogServicingForm> {
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       ),
                     )
-                  : const Text(
-                      'Submit',
+                  : Text(
+                      'submit'.tr,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
@@ -130,8 +130,8 @@ class _LogServicingFormState extends State<LogServicingForm> {
           const SizedBox(height: 15),
           Row(
             children: [
-              const Text(
-                'Servicing Bill',
+              Text(
+                'servicing_bill'.tr,
                 style: TextStyle(
                     color: Color(0xff676767),
                     fontSize: 16,
@@ -145,7 +145,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
 
           FileUploadedWidget(
               svgname: "assets/svg_images/upload_image_receipt.svg",
-              title: "Tap to Upload Image of Receipt",
+              title: 'servicing_bill_upload'.tr,
               files: servicingFiles,
               onSubmitImages: (base64ImagesList) {
                 setState(() {
@@ -156,8 +156,8 @@ class _LogServicingFormState extends State<LogServicingForm> {
 
           Row(
             children: [
-              const Text(
-                'Damaged Part',
+              Text(
+                'damagedPart'.tr,
                 style: TextStyle(
                     color: Color(0xff676767),
                     fontSize: 16,
@@ -171,7 +171,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
 
           FileUploadedWidget(
               svgname: "assets/svg_images/upload_image_receipt.svg",
-              title: "Tap to Upload Image of damagedPart",
+              title: 'damagedPartImage'.tr,
               files: servicingFiles,
               onSubmitImages: (base64ImagesList) {
                 setState(() {
@@ -185,8 +185,8 @@ class _LogServicingFormState extends State<LogServicingForm> {
           ///Replaced Part
           Row(
             children: [
-              const Text(
-                'Replaced Part',
+              Text(
+                'replacedPart'.tr,
                 style: TextStyle(
                     color: Color(0xff676767),
                     fontSize: 16,
@@ -200,7 +200,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
 
           FileUploadedWidget(
             svgname: "assets/svg_images/upload_image_receipt.svg",
-            title: "Tap to Upload Image of replacedPart ",
+            title: 'replacedPartImage'.tr,
             files: replacedFiles,
             onSubmitImages: (base64ImagesList) {
               setState(() {
@@ -221,8 +221,8 @@ class _LogServicingFormState extends State<LogServicingForm> {
       children: [
         Row(
           children: [
-            const Text(
-              'Servicing Date',
+            Text(
+              'servicing_date'.tr,
               style: TextStyle(
                   color: Color(0xff676767),
                   fontSize: 16,
@@ -261,8 +261,8 @@ class _LogServicingFormState extends State<LogServicingForm> {
       children: [
         Row(
           children: [
-            const Text(
-              'Next Service Date',
+            Text(
+              'nextservicingdate'.tr,
               style: TextStyle(
                   color: Color(0xff676767),
                   fontSize: 16,
@@ -301,8 +301,8 @@ class _LogServicingFormState extends State<LogServicingForm> {
       children: [
         Row(
           children: [
-            const Text(
-              'Total Amount',
+            Text(
+              'total_amount'.tr,
               style: TextStyle(
                   color: Color(0xff676767),
                   fontSize: 16,
@@ -320,7 +320,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
           controller: servicingController.totalAmountController,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-            hintText: 'Enter Total Amount',
+            hintText: 'tot_amt_hint'.tr,
             hintStyle: const TextStyle(
               fontSize: 14,
               color: Colors.grey,
@@ -340,8 +340,8 @@ class _LogServicingFormState extends State<LogServicingForm> {
       children: [
         Row(
           children: [
-            const Text(
-              'Parts Replaced',
+            Text(
+              'parts_replaced'.tr,
               style: TextStyle(
                   color: Color(0xff676767),
                   fontSize: 16,
@@ -382,7 +382,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
     showDialog(
       context: context,
       builder: (context) {
-        return const AlertDialog(
+        return AlertDialog(
           title: CircleAvatar(
               radius: 30,
               backgroundColor: Color(0x33008000),
@@ -391,7 +391,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
                 color: Colors.green,
                 size: 30,
               )),
-          content: Text('Your bill has been sucessfully upload!'),
+          content: Text('upload_msg'.tr),
         );
       },
     );
