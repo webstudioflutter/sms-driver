@@ -24,47 +24,71 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final List locale = [
-    {'name': 'English', 'locale': const Locale('en', 'US')},
-    {'name': 'हिन्दी', 'locale': const Locale('hi', 'IN')},
-    {'name': 'नेपाली', 'locale': const Locale('nep', 'NPL')},
-    {'name': 'Arabic', 'locale': const Locale('arb', 'ARB')},
+    {
+      'name': 'English',
+      'locale': const Locale('en', 'US'),
+      'flag': 'assets/images/us.png',
+    },
+    {
+      'name': 'नेपाली',
+      'locale': const Locale('nep', 'NPL'),
+      'flag': 'assets/images/np.png',
+    },
+    {
+      'name': 'हिन्दी',
+      'locale': const Locale('hi', 'IN'),
+      'flag': 'assets/images/in.png',
+    },
+    {
+      'name': 'Arabic',
+      'locale': const Locale('arb', 'ARB'),
+      'flag': 'assets/images/ar.png',
+    },
   ];
-
-  updateLanguage(Locale locale) {
-    Get.back();
-    Get.updateLocale(locale);
-  }
 
   buildDialogue(BuildContext context) {
     showDialog(
-        context: context,
-        builder: (builder) {
-          return AlertDialog(
-            title: const Text("Change Language"),
-            content: SizedBox(
-              width: double.maxFinite,
-              child: ListView.separated(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                          onTap: () {
-                            print(locale[index]['name']);
-                            updateLanguage(locale[index]['locale']);
-                          },
-                          child: Text(locale[index]['name'])),
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const Divider(
-                      color: Colors.blue,
-                    );
-                  },
-                  itemCount: locale.length),
+      context: context,
+      builder: (builder) {
+        return AlertDialog(
+          title: const Text("Change Language"),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.updateLocale(locale[index]['locale']);
+                      Get.back();
+                    },
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          locale[index]['flag'],
+                          width: 24,
+                          height: 24,
+                        ),
+                        const SizedBox(width: 20),
+                        Text(locale[index]['name']),
+                      ],
+                    ),
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const Divider(
+                  color: Colors.blue,
+                );
+              },
+              itemCount: locale.length,
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   final ImagePicker _picker = ImagePicker();
