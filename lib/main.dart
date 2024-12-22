@@ -6,6 +6,7 @@ import 'package:driver_app/core/color_constant.dart';
 import 'package:driver_app/screen/SplashScreen/SplashScreen.dart';
 import 'package:driver_app/services/NotificationService.dart';
 import 'package:driver_app/services/socket_io_client.dart';
+import 'package:driver_app/translate/localLanguage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,6 +51,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      translations: LocalString(),
+      locale: const Locale('en', 'US'),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
