@@ -116,8 +116,8 @@ class _EmergencyConfirmationPageState extends State<EmergencyConfirmationPage> {
                               Navigator.of(context).pop();
                             },
                           ),
-                          const Text(
-                            "Emergency",
+                          Text(
+                            'emergency'.tr,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -218,8 +218,8 @@ class _EmergencyConfirmationPageState extends State<EmergencyConfirmationPage> {
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'By clicking this red button, you\'re activating the SOS alert, sharing your live location, and placing an emergency call.',
+            Text(
+              'btn_msg'.tr,
               softWrap: true,
               textAlign: TextAlign.center,
               style: TextStyle(

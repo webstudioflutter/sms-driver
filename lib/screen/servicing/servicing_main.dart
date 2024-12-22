@@ -153,7 +153,7 @@ class _ServicingMainState extends State<ServicingMain> {
           Row(
             children: [
               Text(
-                'Next_servicing_date'.tr,
+                'nextservicingdate'.tr,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,

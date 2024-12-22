@@ -89,7 +89,7 @@ class _StudentListState extends State<StudentList> {
                             builder: (context) => EmergencyMain(),
                           ));
                     },
-                    title: 'Student List',
+                    title: 'student_list_title'.tr,
                     firstIcon: Icons.arrow_back,
                     lastWidget: SvgPicture.asset(
                         'assets/svg_images/notification.svg',
@@ -129,7 +129,7 @@ class _StudentListState extends State<StudentList> {
                             ),
                           ),
                           Text(
-                            'Total Student',
+                            'total_student'.tr,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -189,8 +189,8 @@ class _StudentListState extends State<StudentList> {
                           height: getHeight(context) * 0.06,
                           child: DropdownButton<String>(
                             value: classSelectedValue,
-                            hint: const Text(
-                              'Class',
+                            hint: Text(
+                              'class'.tr,
                               style: TextStyle(
                                 color: Color(0xff221f1f),
                               ),
@@ -236,8 +236,8 @@ class _StudentListState extends State<StudentList> {
                           height: getHeight(context) * 0.06,
                           child: DropdownButton<String>(
                             value: locationSelectedValue,
-                            hint: const Text(
-                              'Location',
+                            hint: Text(
+                              'location'.tr,
                               style: TextStyle(
                                 color: Color(0xff221f1f),
                               ),

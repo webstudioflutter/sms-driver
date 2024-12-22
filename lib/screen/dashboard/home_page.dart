@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:driver_app/controller/Home/RouteController.dart';
 import 'package:driver_app/controller/Home/ServicingHistoryController.dart';
 import 'package:driver_app/controller/Profilecontroller.dart';
-import 'package:driver_app/core/constants/string_constants.dart';
 import 'package:driver_app/core/utils/asset_provider.dart';
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/screen/bill/bill_main.dart';
@@ -303,7 +302,7 @@ class _HomePageState extends State<HomePage> {
             },
             child: buildStdQuickAccessItem(
               Assets.svgImages.attendance,
-              kAttendance,
+              "attendance".tr,
               context,
             ),
           ),
@@ -318,7 +317,7 @@ class _HomePageState extends State<HomePage> {
             },
             child: buildStdQuickAccessItem(
               Assets.svgImages.fuel,
-              kFuelTracking,
+              'fuel'.tr,
               context,
             ),
           ),
@@ -333,7 +332,7 @@ class _HomePageState extends State<HomePage> {
             },
             child: buildStdQuickAccessItem(
               Assets.svgImages.report,
-              kReportIssue,
+              'report_issue'.tr,
               context,
             ),
           ),
@@ -348,7 +347,7 @@ class _HomePageState extends State<HomePage> {
             },
             child: buildStdQuickAccessItem(
               Assets.svgImages.servicing,
-              kServicing,
+              'servicing'.tr,
               context,
             ),
           ),
@@ -363,7 +362,7 @@ class _HomePageState extends State<HomePage> {
             },
             child: buildStdQuickAccessItem(
               Assets.svgImages.billupload,
-              kBillUpload,
+              'Bill_title'.tr,
               context,
             ),
           ),
@@ -378,7 +377,7 @@ class _HomePageState extends State<HomePage> {
             },
             child: buildStdQuickAccessItem(
               Assets.svgImages.studentlist,
-              kStudentList,
+              'student_list_title'.tr,
               context,
             ),
           ),
@@ -447,7 +446,7 @@ class _HomePageState extends State<HomePage> {
           Row(
             children: [
               Text(
-                'servicingdate'.tr,
+                'nextservicingdate'.tr,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -717,9 +716,9 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(18),
                               color: const Color(0xff60bf8f),
                             ),
-                            child: const Center(
+                            child: Center(
                               child: Text(
-                                'Start Route',
+                                'Start_route'.tr,
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),

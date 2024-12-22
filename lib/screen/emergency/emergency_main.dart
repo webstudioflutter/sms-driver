@@ -1,6 +1,7 @@
 import 'package:driver_app/screen/dashboard/home_page.dart';
 import 'package:driver_app/screen/emergency/emergency_confirmation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class EmergencyMain extends StatelessWidget {
   const EmergencyMain({super.key});
@@ -38,8 +39,8 @@ class EmergencyMain extends StatelessWidget {
                               Navigator.of(context).pop();
                             },
                           ),
-                          const Text(
-                            "Report",
+                          Text(
+                            'report'.tr,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -87,8 +88,8 @@ class EmergencyMain extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             // Title
-            const Text(
-              'Raise SOS Alert',
+            Text(
+              'Raise_alert'.tr,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
@@ -96,8 +97,8 @@ class EmergencyMain extends StatelessWidget {
               ),
             ),
             // Subtitle
-            const Text(
-              'Only use SOS in emergencies',
+            Text(
+              'sub_msg'.tr,
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 14,
@@ -113,23 +114,23 @@ class EmergencyMain extends StatelessWidget {
                 crossAxisCount: 2,
                 mainAxisSpacing: 8,
                 crossAxisSpacing: 8,
-                children: const [
+                children: [
                   EmergencyOption(
                       svgPath: 'assets/images/medical.png',
-                      label: 'Medical Emergency'),
+                      label: 'medical'.tr),
                   EmergencyOption(
-                      svgPath: 'assets/images/accident.png', label: 'Accident'),
+                      svgPath: 'assets/images/accident.png',
+                      label: 'accident'.tr),
                   EmergencyOption(
-                      svgPath: 'assets/images/fire.png', label: 'Fire'),
+                      svgPath: 'assets/images/fire.png', label: 'fire'.tr),
                   EmergencyOption(
                       svgPath: 'assets/images/severe-weather.png',
-                      label: 'Severe Weather'),
+                      label: 'weather'.tr),
                   EmergencyOption(
-                      svgPath: 'assets/images/crisis.png',
-                      label: 'Security Threat'),
+                      svgPath: 'assets/images/crisis.png', label: 'threat'.tr),
                   EmergencyOption(
                       svgPath: 'assets/images/magnifying-glass.png',
-                      label: 'Others'),
+                      label: 'other'.tr),
                 ],
               ),
             ),

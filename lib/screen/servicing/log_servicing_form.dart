@@ -262,7 +262,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
         Row(
           children: [
             Text(
-              'Next_servicing_date'.tr,
+              'nextservicingdate'.tr,
               style: TextStyle(
                   color: Color(0xff676767),
                   fontSize: 16,

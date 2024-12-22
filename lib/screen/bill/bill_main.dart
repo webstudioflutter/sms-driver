@@ -1,6 +1,7 @@
 import 'package:driver_app/core/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import 'bill_method.dart';
 import 'history_method.dart';
@@ -22,7 +23,7 @@ class _BillMainState extends State<BillMain> {
       child: Scaffold(
         appBar: customBar(
           context: context,
-          title: 'Bill Upload',
+          title: 'Bill_title'.tr,
         ),
         body: Container(
           color: const Color(0xffFAFAFA),
@@ -48,8 +49,8 @@ class _BillMainState extends State<BillMain> {
                               : Colors.grey,
                         ),
                         const SizedBox(width: 8),
-                        const Text(
-                          'Bill',
+                        Text(
+                          'bill'.tr,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -71,8 +72,8 @@ class _BillMainState extends State<BillMain> {
                               : Colors.grey,
                         ),
                         const SizedBox(width: 8),
-                        const Text(
-                          'History',
+                        Text(
+                          'history'.tr,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,

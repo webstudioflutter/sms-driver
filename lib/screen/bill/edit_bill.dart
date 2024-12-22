@@ -42,7 +42,7 @@ class _EditBillMethodState extends State<EditBillMethod> {
   final BillController billController = Get.find<BillController>();
 
   final formkey = GlobalKey<FormState>();
-  String selectedDate = 'Select Date';
+  String selectedDate = 'bill_date_hint'.tr;
   String bill_type = '';
   double totalAmount = 0.0;
 
@@ -160,23 +160,22 @@ class _EditBillMethodState extends State<EditBillMethod> {
                 color: Colors.green,
                 size: 30,
               )),
-          content: Text("Your bill was Uploaded Successfully."),
+          content: Text('success_upload'.tr),
         );
       },
     );
   }
 
   List<String> items = [
-    'Servicing Bill',
-    'Accident Repair Bill',
-    'Spare Parts Bill',
-    'flat tire Bill',
-    'Repair Bill',
-    'Battery Bill',
-    'Allowances Bill',
-    'Parking Bill',
-    'Traffic Violation Bill',
-    'Others Bill'
+    'accident_bill'.tr,
+    'part_bill'.tr,
+    'tire_bill'.tr,
+    'repair_bill'.tr,
+    'battery_bill'.tr,
+    'allowance_bill'.tr,
+    'parking_bill'.tr,
+    'violation_bill'.tr,
+    'other_bill'.tr,
   ];
 
   @override
@@ -205,7 +204,7 @@ class _EditBillMethodState extends State<EditBillMethod> {
     return Scaffold(
         appBar: customBar(
           context: context,
-          title: 'Edit Bill',
+          title: 'edit_bill'.tr,
         ),
         body: Form(
           key: formkey,
@@ -307,7 +306,7 @@ class _EditBillMethodState extends State<EditBillMethod> {
                       ModalRoute.withName('/'),
                     );
                     setState(() {
-                      selectedDate = 'Select Date';
+                      selectedDate = 'bill_date_hint'.tr;
                       bill_type = '';
                       amountcontroller.clear();
                       _profileImage = null;
@@ -326,9 +325,9 @@ class _EditBillMethodState extends State<EditBillMethod> {
                 ),
                 child: SizedBox(
                   width: getWidth(context) * 0.39,
-                  child: const Text(
+                  child: Text(
                     textAlign: TextAlign.center,
-                    'Update',
+                    'update'.tr,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -356,7 +355,7 @@ class _EditBillMethodState extends State<EditBillMethod> {
             children: [
               ListTile(
                 leading: SvgPicture.asset('assets/svg_images/take_photo.svg'),
-                title: const Text('Take Photograph'),
+                title: Text('take_photo'.tr),
                 onTap: () async {
                   Navigator.pop(context);
                   takePhoto();
@@ -364,7 +363,7 @@ class _EditBillMethodState extends State<EditBillMethod> {
               ),
               ListTile(
                 leading: SvgPicture.asset('assets/svg_images/select_album.svg'),
-                title: const Text('Select from album'),
+                title: Text('select_album'.tr),
                 onTap: () async {
                   Navigator.pop(context);
                   selectFromGallery();
@@ -384,8 +383,8 @@ class _EditBillMethodState extends State<EditBillMethod> {
       children: [
         Row(
           children: [
-            const Text(
-              'Bill Type',
+            Text(
+              'bill_type'.tr,
               style: TextStyle(
                 color: Color(0xff676767),
                 fontSize: 16,
@@ -409,8 +408,8 @@ class _EditBillMethodState extends State<EditBillMethod> {
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: DropdownButton<String>(
               value: bill_type.isEmpty ? null : bill_type,
-              hint: const Text(
-                'Select Bill Type',
+              hint: Text(
+                'bill_type_hint'.tr,
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey,
@@ -443,8 +442,8 @@ class _EditBillMethodState extends State<EditBillMethod> {
       children: [
         Row(
           children: [
-            const Text(
-              'Bill Date',
+            Text(
+              'bill_date'.tr,
               style: TextStyle(
                   color: Color(0xff676767),
                   fontSize: 16,
@@ -490,8 +489,8 @@ class _EditBillMethodState extends State<EditBillMethod> {
       children: [
         Row(
           children: [
-            const Text(
-              'Total Amount',
+            Text(
+              'total_amount'.tr,
               style: TextStyle(
                   color: Color(0xff676767),
                   fontSize: 16,
@@ -514,7 +513,7 @@ class _EditBillMethodState extends State<EditBillMethod> {
           },
           controller: amountcontroller,
           decoration: InputDecoration(
-            hintText: 'Enter Total Amount',
+            hintText: 'tot_amt_hint'.tr,
             hintStyle: const TextStyle(
               fontSize: 14,
               color: Colors.grey,

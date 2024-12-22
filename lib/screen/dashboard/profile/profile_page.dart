@@ -51,7 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (builder) {
         return AlertDialog(
-          title: const Text("Change Language"),
+          title: Text('change_language'.tr),
           content: SizedBox(
             width: double.maxFinite,
             child: ListView.separated(
@@ -219,7 +219,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                     ),
                                     Text(
-                                      'View your personal and work details',
+                                      'info_sub'.tr,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: TextStyle(
@@ -247,11 +247,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           children: [
                             SvgPicture.asset('assets/svg_images/lock.svg'),
                             const SizedBox(width: 10),
-                            const Column(
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Face ID / Touch ID',
+                                  'face_id'.tr,
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
@@ -259,7 +259,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                 ),
                                 Text(
-                                  'Manage your device security',
+                                  'face_id_hint'.tr,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: TextStyle(
@@ -292,12 +292,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                   const SizedBox(width: 10),
                                   SizedBox(
                                     width: getWidth(context) * 0.6,
-                                    child: const Column(
+                                    child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Log out',
+                                          'log_out'.tr,
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
@@ -305,7 +305,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ),
                                         ),
                                         Text(
-                                          'Further secure your account for safety',
+                                          'log_out_hint'.tr,
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           style: TextStyle(
@@ -331,10 +331,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 5.0),
                 child: Text(
-                  'More',
+                  'more'.tr,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -369,8 +369,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           SvgPicture.asset(
                               'assets/svg_images/notification2.svg'),
                           const SizedBox(width: 10),
-                          const Text(
-                            'Help & Support',
+                          Text(
+                            'help'.tr,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(
@@ -412,8 +412,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   color: const Color(0xff60bf8f)),
                             ),
                             const SizedBox(width: 10),
-                            const Text(
-                              'Change Language',
+                            Text(
+                              'change_language'.tr,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: TextStyle(
@@ -488,7 +488,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Text(
-                      "Profile",
+                      'profile'.tr,
                       style: const TextStyle(
                         color: pageTitleColor,
                         fontSize: 16,
@@ -675,7 +675,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 SizedBox(
                                     width: MediaQuery.sizeOf(context).width *
                                         0.02),
-                                const Text('Take Photograph',
+                                Text('take_photo'.tr,
                                     style: TextStyle(fontSize: 16)),
                               ],
                             ),
@@ -702,7 +702,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 SizedBox(
                                     width: MediaQuery.sizeOf(context).width *
                                         0.02),
-                                const Text('Select from album',
+                                Text('select_album'.tr,
                                     style: TextStyle(fontSize: 16)),
                               ],
                             ),
@@ -727,7 +727,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 SizedBox(
                                     width: MediaQuery.sizeOf(context).width *
                                         0.02),
-                                const Text('Remove Profile Picture',
+                                Text('remove_profile'.tr,
                                     style: TextStyle(
                                         fontSize: 16, color: Colors.red)),
                               ],
@@ -756,9 +756,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           child: SizedBox(
                             width: MediaQuery.sizeOf(context).width * 0.39,
-                            child: const Text(
+                            child: Text(
                               textAlign: TextAlign.center,
-                              'Update Profile',
+                              'update_profile'.tr,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
@@ -788,7 +788,7 @@ class _ProfilePageState extends State<ProfilePage> {
           builder: (context, setState) {
             return AlertDialog(
               title: const Icon(Icons.logout, color: Colors.red),
-              content: const Text('Are you sure you want to log out?'),
+              content: Text('Login_confirm'.tr),
               actions: isLoading
                   ? <Widget>[const Center(child: CircularProgressIndicator())]
                   : <Widget>[
@@ -800,7 +800,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Text('Cancel',
+                        child: Text('cancel_btn'.tr,
                             style: TextStyle(color: Colors.black)),
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -814,7 +814,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Text('Yes',
+                        child: Text('yes'.tr,
                             style: TextStyle(color: Colors.white)),
                         onPressed: () async {
                           setState(() {

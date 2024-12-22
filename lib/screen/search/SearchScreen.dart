@@ -6,6 +6,7 @@ import 'package:driver_app/screen/fuel/fuel_tracking.dart';
 import 'package:driver_app/screen/servicing/servicing_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -90,7 +91,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.symmetric(
                               horizontal: 10.0, vertical: 9),
-                          hintText: 'Search',
+                          hintText: 'search'.tr,
                           hintStyle: TextStyle(color: Colors.grey.shade400),
                           border: InputBorder.none,
                           focusedBorder: InputBorder.none,

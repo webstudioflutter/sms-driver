@@ -22,7 +22,7 @@ class _MyAccountState extends State<MyAccount> {
       drawer: HomePageDrawer(),
       appBar: customBar(
         context: context,
-        title: 'My Account',
+        title: 'myacc'.tr,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -45,8 +45,8 @@ class _MyAccountState extends State<MyAccount> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Personal Details',
+                            Text(
+                              'personal_det'.tr,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 15,
@@ -55,13 +55,13 @@ class _MyAccountState extends State<MyAccount> {
                             SizedBox(height: getHeight(context) * 0.025),
                             UserInfoRow(
                               leadingIcon: 'assets/svg_images/circle-user.svg',
-                              title: 'Full Name',
+                              title: 'full_name'.tr,
                               subtitle: profile.fullName ?? 'N/A',
                             ),
                             SizedBox(height: getHeight(context) * 0.025),
                             UserInfoRow(
                               leadingIcon: 'assets/svg_images/legal.svg',
-                              title: 'License Number',
+                              title: 'Lice_no'.tr,
                               subtitle: profile.lisenceNo != null
                                   ? profile.lisenceNo.toString()
                                   : "N/A",
@@ -69,7 +69,7 @@ class _MyAccountState extends State<MyAccount> {
                             SizedBox(height: getHeight(context) * 0.025),
                             UserInfoRow(
                               leadingIcon: 'assets/svg_images/id-badge.svg',
-                              title: 'Citizenship Number',
+                              title: 'citizenship_no'.tr,
                               subtitle: profile.citizenshipNo != null
                                   ? "${profile.citizenshipNo}"
                                   : 'N/A',
@@ -78,7 +78,7 @@ class _MyAccountState extends State<MyAccount> {
                             UserInfoRow(
                               leadingIcon:
                                   'assets/svg_images/blood-test-tube.svg',
-                              title: 'Blood Group',
+                              title: 'blood_grp'.tr,
                               subtitle: profile.bloodGroup != null
                                   ? "${profile.bloodGroup}"
                                   : 'N/A',
@@ -86,7 +86,7 @@ class _MyAccountState extends State<MyAccount> {
                             SizedBox(height: getHeight(context) * 0.025),
                             UserInfoRow(
                               leadingIcon: 'assets/svg_images/phone-call.svg',
-                              title: 'Contact Information',
+                              title: 'contact'.tr,
                               subtitle: profile.contactNumber != null
                                   ? "${profile.contactNumber}"
                                   : 'N/A',
@@ -94,7 +94,7 @@ class _MyAccountState extends State<MyAccount> {
                               onTap: () async {
                                 final newContact = await numberController(
                                   context,
-                                  title: "Edit Contact",
+                                  title: 'edit_contact'.tr,
                                   initialValue: "${profile.contactNumber}",
                                 );
                               },
@@ -102,7 +102,7 @@ class _MyAccountState extends State<MyAccount> {
                             SizedBox(height: getHeight(context) * 0.025),
                             UserInfoRow(
                               leadingIcon: 'assets/svg_images/home_profile.svg',
-                              title: 'Home Address',
+                              title: 'address'.tr,
                               subtitle: profile.address!.location != null
                                   ? "${profile.address!.location}, ${profile.address!.country}"
                                   : 'N/A',
@@ -110,7 +110,7 @@ class _MyAccountState extends State<MyAccount> {
                               onTap: () async {
                                 final newAddress = await showAddressEditDialog(
                                   context,
-                                  title: "Edit Home Address",
+                                  title: 'edit_address'.tr,
                                   initialValue: profile.address != null
                                       ? "${profile.address!.location}, ${profile.address!.country}"
                                       : '',
@@ -118,8 +118,8 @@ class _MyAccountState extends State<MyAccount> {
                               },
                             ),
                             SizedBox(height: getHeight(context) * 0.025),
-                            const Text(
-                              'Other Information',
+                            Text(
+                              'other_info'.tr,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 15,
@@ -128,7 +128,7 @@ class _MyAccountState extends State<MyAccount> {
                             SizedBox(height: getHeight(context) * 0.025),
                             UserInfoRow(
                               leadingIcon: 'assets/svg_images/bus.svg',
-                              title: 'Assigned Vehicle',
+                              title: 'assigned_vehicle'.tr,
                               subtitle: profile.transporation != ""
                                   ? "${profile.transporation!.name}"
                                   : 'N/A',
@@ -136,7 +136,7 @@ class _MyAccountState extends State<MyAccount> {
                             SizedBox(height: getHeight(context) * 0.025),
                             UserInfoRow(
                               leadingIcon: 'assets/svg_images/employee-man.svg',
-                              title: 'Years of Experience',
+                              title: 'experience'.tr,
                               subtitle: profile.experiencedYear != null
                                   ? "${profile.experiencedYear}"
                                   : "0",

@@ -15,20 +15,19 @@ class HistoryMethod extends StatefulWidget {
 class _HistoryMethodState extends State<HistoryMethod> {
   final BillController billController = Get.put(BillController());
 
-  String? selectedBillType = 'Others Bill';
+  String? selectedBillType = 'other_bill'.tr;
   DateTime? selectedDate;
 
   List<String> billTypes = [
-    'Servicing Bill',
-    'Accident Repair Bill',
-    'Spare Parts Bill',
-    'flat tire Bill',
-    'Repair Bill',
-    'Battery Bill',
-    'Allowances Bill',
-    'Parking Bill',
-    'Traffic Violation Bill',
-    'Others Bill'
+    'accident_bill'.tr,
+    'part_bill'.tr,
+    'tire_bill'.tr,
+    'repair_bill'.tr,
+    'battery_bill'.tr,
+    'allowance_bill'.tr,
+    'parking_bill'.tr,
+    'violation_bill'.tr,
+    'other_bill'.tr,
   ];
 
   String formatDate(DateTime date) {
@@ -79,7 +78,7 @@ class _HistoryMethodState extends State<HistoryMethod> {
 
       var filteredBills = billsdata.where((bill) {
         final matchesBillType = selectedBillType == null ||
-            selectedBillType == 'Others Bill' ||
+            selectedBillType == 'other_bill'.tr ||
             bill.billType == selectedBillType;
         final matchesDate = selectedDate == null ||
             bill.date == DateFormat('yyyy-MM-dd').format(selectedDate!);
@@ -104,8 +103,8 @@ class _HistoryMethodState extends State<HistoryMethod> {
                           fontWeight: FontWeight.w900,
                         ),
                         value: selectedBillType,
-                        hint: const Text(
-                          'Bill Type',
+                        hint: Text(
+                          'bill_type'.tr,
                           style: TextStyle(
                             fontSize: 19,
                             color: Color(0xff545454),
@@ -170,7 +169,7 @@ class _HistoryMethodState extends State<HistoryMethod> {
                             children: [
                               Text(
                                 selectedDate == null
-                                    ? 'Choose Date'
+                                    ? 'choose_date'.tr
                                     : formatDate(selectedDate!),
                                 style: const TextStyle(
                                     color: Color(0xff545454), fontSize: 16),

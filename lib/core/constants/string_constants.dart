@@ -1,10 +1,12 @@
+import 'package:get/get.dart';
+
 const kHome = "Home";
 const kDepartment = "Department:";
 const kQuickAccess = "Quick Access";
 const kUpcomingClasses = "Upcoming Classes";
 const kAnnouncement = "Announcement";
-const kAttendance = "Attendance";
-const kFuelTracking = "Fuel";
+var kAttendance = 'attendance'.tr;
+var kFuelTracking = 'fuel'.tr;
 const kReportIssue = "Report Issue";
 const kServicing = 'Servicing';
 const kBillUpload = 'Bill Upload';
