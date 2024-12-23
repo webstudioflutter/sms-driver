@@ -193,43 +193,45 @@ class _MyAccountState extends State<MyAccount> {
     required String title,
     required String initialValue,
   }) {
-    final TextEditingController textController =
-        TextEditingController(text: initialValue);
-    final TextEditingController streetController =
-        TextEditingController(text: initialValue);
+    final TextEditingController textController = TextEditingController();
+    final TextEditingController streetController = TextEditingController();
 
     return showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(title),
-        content: Column(
-          children: [
-            TextField(
-              controller: textController,
-              decoration: InputDecoration(labelText: "Enter new city"),
-            ),
-            TextField(
-              controller: streetController,
-              decoration: InputDecoration(
-                labelText: "Enter new street",
+        content: Container(
+          height: 150,
+          child: Column(
+            children: [
+              TextField(
+                controller: textController,
+                decoration: InputDecoration(labelText: "Enter location"),
               ),
-            ),
-          ],
+              TextField(
+                controller: streetController,
+                decoration: InputDecoration(
+                  labelText: "Enter country",
+                ),
+              ),
+            ],
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text("Cancel"),
+            child: const Text("Cancel", style: TextStyle(color: Colors.red)),
           ),
           TextButton(
             onPressed: () {
               var data = {
                 "address": {
-                  "city": textController.text,
+                  "city": "",
                   "district": "",
                   "muncipality": "",
-                  "street": streetController.text,
-                  "location": ""
+                  "street": "",
+                  "location": textController.text,
+                  "country": streetController.text,
                 }
               };
               controller.updateProfile(data);

@@ -30,14 +30,14 @@ class _LogServicingFormState extends State<LogServicingForm> {
   final List<String> base64ReplaceImage = [];
 
   List<String> checkboxLabels = [
-    'brake_pads'.tr,
-    'battery_replaced'.tr,
-    'starter_motor'.tr,
-    'spark_plug'.tr,
-    'tires'.tr,
-    'wiper'.tr,
-    'airfilter'.tr,
-    'others'.tr,
+    'Brake Pads',
+    'Battery',
+    'Starter Motor',
+    'Spark Plugs',
+    'Tires',
+    'Wiper Blades',
+    'Air Filter',
+    'Others',
   ];
   final List<String> selectedItems = [];
 

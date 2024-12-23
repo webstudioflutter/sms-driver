@@ -381,7 +381,7 @@ class _ReportIssueState extends State<ReportIssue> {
             onTap: () {},
             child: buildStdQuickAccessItem(
               "assets/images/car-engine.png",
-              'engine'.tr,
+              'Engine Light',
               context,
             ),
           ),
@@ -389,7 +389,7 @@ class _ReportIssueState extends State<ReportIssue> {
             onTap: () {},
             child: buildStdQuickAccessItem(
               "assets/images/brake-disc.png",
-              'brake'.tr,
+              'Brake Issue',
               context,
             ),
           ),
@@ -397,7 +397,7 @@ class _ReportIssueState extends State<ReportIssue> {
             onTap: () {},
             child: buildStdQuickAccessItem(
               "assets/images/flat-tire.png",
-              'tire'.tr,
+              'Flat Tire',
               context,
             ),
           ),
@@ -405,7 +405,7 @@ class _ReportIssueState extends State<ReportIssue> {
             onTap: () async {},
             child: buildStdQuickAccessItem(
               "assets/images/battery.png",
-              'battery'.tr,
+              'Battery Issue',
               context,
             ),
           ),
@@ -413,7 +413,7 @@ class _ReportIssueState extends State<ReportIssue> {
             onTap: () {},
             child: buildStdQuickAccessItem(
               "assets/images/transmission.png",
-              'transmission'.tr,
+              'Gare',
               context,
             ),
           ),
@@ -421,7 +421,7 @@ class _ReportIssueState extends State<ReportIssue> {
             onTap: () {},
             child: buildStdQuickAccessItem(
               "assets/images/application.png",
-              'others'.tr,
+              'Others',
               context,
             ),
           ),

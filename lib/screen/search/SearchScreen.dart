@@ -18,27 +18,27 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final List<Map<String, dynamic>> features = [
     {
-      'label': 'fuel filling',
+      'label': 'fuel'.tr,
       'destination': FuelTrackingMain(),
       'icon': Assets.svgImages.fuel,
     },
     {
-      'label': 'Report Issue',
+      'label': 'report_issue'.tr,
       'destination': ReportIssue(),
       'icon': Assets.svgImages.report,
     },
     {
-      'label': 'Servicing',
+      'label': 'servicing'.tr,
       'destination': ServicingMain(),
       'icon': Assets.svgImages.servicing,
     },
     {
-      'label': 'Student List',
+      'label': 'student_list_title'.tr,
       'destination': StudentList(),
       'icon': Assets.svgImages.studentlist,
     },
     {
-      'label': 'Bill',
+      'label': 'Bill_title'.tr,
       'destination': BillMain(),
       'icon': Assets.svgImages.billupload,
     },

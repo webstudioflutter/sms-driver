@@ -57,13 +57,13 @@ class _ProfilePageState extends State<ProfilePage> {
             child: ListView.separated(
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Get.updateLocale(locale[index]['locale']);
-                      Get.back();
-                    },
+                return InkWell(
+                  onTap: () {
+                    Get.updateLocale(locale[index]['locale']);
+                    Get.back();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
                         Image.asset(

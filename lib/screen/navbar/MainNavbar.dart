@@ -62,26 +62,26 @@ class _MainNavbarState extends State<MainNavbar> {
           children: [
             _buildNavItem(
               Assets.svgImages.homecopy,
-              "Home",
+              "home".tr,
               0,
               Assets.svgImages.home2,
             ),
             _buildNavItem(
               Assets.svgImages.searchnormal,
-              "Search",
+              "search".tr,
               1,
               Assets.svgImages.searchnormal,
             ),
             const SizedBox(width: 20),
             _buildNavItem(
               Assets.svgImages.Component3,
-              "Notification",
+              "notification".tr,
               3,
               Assets.svgImages.notificationcopy,
             ),
             _buildNavItem(
               Assets.svgImages.user,
-              "Profile",
+              "profile".tr,
               4,
               Assets.svgImages.user2,
             ),

@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:driver_app/controller/postBillController.dart';
 import 'package:driver_app/core/utils/util.dart';
-import 'package:driver_app/screen/dashboard/home_page.dart';
+import 'package:driver_app/screen/navbar/MainNavbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -226,19 +226,20 @@ class _BillMethodState extends State<BillMethod> {
                             ),
                     ),
                   ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 50),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    OutlinedButton(
+                    ElevatedButton(
                       onPressed: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HomePage()));
+                                builder: (context) => MainNavbar()));
                       },
-                      style: OutlinedButton.styleFrom(
+                      style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.all(10),
+                        backgroundColor: Colors.red,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -249,7 +250,7 @@ class _BillMethodState extends State<BillMethod> {
                           textAlign: TextAlign.center,
                           'cancel_btn'.tr,
                           style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.w500),
                         ),
@@ -416,15 +417,15 @@ class _BillMethodState extends State<BillMethod> {
                 });
               },
               items: [
-                'accident_bill'.tr,
-                'part_bill'.tr,
-                'tire_bill'.tr,
-                'repair_bill'.tr,
-                'battery_bill'.tr,
-                'allowance_bill'.tr,
-                'parking_bill'.tr,
-                'violation_bill'.tr,
-                'other_bill'.tr,
+                'Accident Repair Bill',
+                'Spare Parts Bill',
+                'flat tire Bill',
+                'Repair Bill',
+                'Battery Bill',
+                'Allowances Bill',
+                'Parking Bill',
+                'Traffic Violation Bill',
+                'Others Bill',
               ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
