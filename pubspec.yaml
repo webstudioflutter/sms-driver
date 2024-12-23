@@ -57,6 +57,8 @@ dependencies:
   firebase_core: ^3.8.0
   socket_io_client: ^3.0.2
   load_switch: ^2.1.0
+  local_auth: ^2.3.0
+  flutter_screenutil: ^5.9.3
 
 dev_dependencies:
   flutter_test:

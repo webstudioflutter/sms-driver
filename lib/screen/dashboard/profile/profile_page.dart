@@ -7,6 +7,7 @@ import 'package:driver_app/core/color_constant.dart';
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/screen/dashboard/home_drawer.dart';
 import 'package:driver_app/screen/dashboard/profile/my_account.dart';
+import 'package:driver_app/screen/dashboard/profile/widgets/biometrics.dart';
 import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:driver_app/screen/login_and_logout/login.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -58,7 +60,9 @@ class _ProfilePageState extends State<ProfilePage> {
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 return InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    final selectedLocale = locale[index]['locale'] as Locale;
+                    await _saveLocale(selectedLocale);
                     Get.updateLocale(locale[index]['locale']);
                     Get.back();
                   },
@@ -89,6 +93,12 @@ class _ProfilePageState extends State<ProfilePage> {
         );
       },
     );
+  }
+
+  Future<void> _saveLocale(Locale locale) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('languageCode', locale.languageCode);
+    await prefs.setString('countryCode', locale.countryCode ?? '');
   }
 
   final ImagePicker _picker = ImagePicker();
@@ -241,40 +251,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       Divider(),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset('assets/svg_images/lock.svg'),
-                            const SizedBox(width: 10),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'face_id'.tr,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xff545454),
-                                  ),
-                                ),
-                                Text(
-                                  'face_id_hint'.tr,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Color(0xffababab),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(width: 5),
-                            const Spacer(),
-                            Switch(value: false, onChanged: (value) {})
-                          ],
-                        ),
-                      ),
+                      FaceIdToggle(),
                       Divider(),
                       InkWell(
                         onTap: () {

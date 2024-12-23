@@ -1,64 +1,63 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:driver_app/controller/NotificationController.dart';
 import 'package:driver_app/core/color_constant.dart';
 import 'package:driver_app/screen/SplashScreen/SplashScreen.dart';
 import 'package:driver_app/services/NotificationService.dart';
-import 'package:driver_app/services/socket_io_client.dart';
 import 'package:driver_app/translate/localLanguage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Locale? savedLocale;
   try {
-    // await Firebase.initializeApp(
-    //     options: DefaultFirebaseOptions.currentPlatform);
     await Firebase.initializeApp();
     await NotificationService.instance.initialize();
+    savedLocale = await _loadSavedLocale();
   } catch (e) {
     log("Firebase initialization error: $e");
   }
-  runApp(
-    // DevicePreview(
-    //   enabled: !kReleaseMode,
-    //   builder: (context) => const MyApp(), // Wrap your app
-    // ),
-    const MyApp(),
-  );
+  runApp(MyApp(savedLocale: savedLocale));
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {
+  final Locale? savedLocale;
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    socketSetup.initSocket();
-    notificationbloc.notificationdata();
-    Timer.periodic(Duration(seconds: 1000), (timer) {
-      notificationbloc.notificationdata();
-    });
-    super.initState();
-  }
+  const MyApp({super.key, this.savedLocale});
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      translations: LocalString(),
-      locale: const Locale('en', 'US'),
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
-          useMaterial3: true,
-          shadowColor: Color(0xff435512)),
-      home: SplashScreen(),
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      builder: (context, child) {
+        return GetMaterialApp(
+          translations: LocalString(),
+          locale: savedLocale ?? const Locale('en', 'US'),
+          fallbackLocale: const Locale('en', 'US'),
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
+            useMaterial3: true,
+            shadowColor: const Color(0xff435512),
+          ),
+          home: const SplashScreen(),
+        );
+      },
     );
   }
+}
+
+Future<Locale?> _loadSavedLocale() async {
+  final prefs = await SharedPreferences.getInstance();
+  final languageCode = prefs.getString('languageCode');
+  final countryCode = prefs.getString('countryCode');
+
+  if (languageCode != null) {
+    return Locale(languageCode, countryCode);
+  }
+  return null;
 }

@@ -6,9 +6,11 @@ import 'package:dio/dio.dart';
 import 'package:driver_app/Model/Authenticationmodel.dart';
 import 'package:driver_app/Repository/auth/Basecontroller.dart';
 import 'package:driver_app/core/color_constant.dart';
+import 'package:driver_app/screen/navbar/MainNavbar.dart';
 import 'package:driver_app/services/NotificationService.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationRepository {
@@ -27,6 +29,7 @@ class AuthenticationRepository {
         '$_appUrl/user/login',
         data: authData,
       );
+
       authResponse = AuthenticationModel.fromJson(response.data);
       if (authResponse!.result!.group == "DRIVER") {
         if (authResponse!.token != null) {
@@ -38,6 +41,8 @@ class AuthenticationRepository {
           await _saveTransportationId(authResponse!.result!.transporation?.id);
           await _saveTransportationName(
               authResponse!.result!.transporation!.name);
+
+          Get.offAll(() => const MainNavbar());
         } else {
           throw Exception("You are not Driver??");
         }

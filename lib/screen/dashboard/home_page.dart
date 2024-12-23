@@ -468,9 +468,7 @@ class _HomePageState extends State<HomePage> {
               const Icon(Icons.calendar_month),
               const SizedBox(width: 5),
               Text(
-                nextServiceDateString.isNotEmpty
-                    ? nextServiceDateString
-                    : "servicngerror".tr,
+                nextServiceDateString.isNotEmpty ? nextServiceDateString : "",
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -657,49 +655,6 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-
-                        // Container(
-                        //   margin: const EdgeInsets.symmetric(horizontal: 20),
-                        //   height: 50,
-                        //   decoration: BoxDecoration(
-                        //       color: Colors.white,
-                        //       borderRadius:
-                        //           const BorderRadius.all(Radius.circular(15)),
-                        //       border: Border.all(color: Colors.green)),
-                        //   child: TextFormField(
-                        //     autovalidateMode:
-                        //         AutovalidateMode.onUserInteraction,
-                        //     cursorErrorColor: Colors.red,
-                        //     keyboardType: TextInputType.phone,
-                        //     controller:
-                        //         routeController.readingOnStartController,
-                        //     textAlign: TextAlign.center,
-                        //     cursorColor: const Color(0xffcdeede),
-                        //     cursorHeight: 20,
-                        //     style: TextStyle(fontSize: 17),
-                        //     validator: (value) {
-                        //       if (value == null || value.trim().isEmpty) {
-                        //         return 'Please enter starting KM';
-                        //       }
-                        //       return null;
-                        //     },
-                        //     decoration: InputDecoration(
-                        //       hintText: 'XXX-XXX-XX',
-                        //       hintStyle: TextStyle(color: Colors.grey.shade200),
-                        //       contentPadding: const EdgeInsets.symmetric(
-                        //           horizontal: 10.0, vertical: 9),
-                        //       border: InputBorder.none,
-                        //       focusedBorder: InputBorder.none,
-                        //       enabledBorder: InputBorder.none,
-                        //       errorBorder: OutlineInputBorder(
-                        //         borderSide: BorderSide(
-                        //             color: Colors.red,
-                        //             width: 2), // Red error border
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-
                         SizedBox(
                             height: MediaQuery.sizeOf(context).height * 0.03),
                         GestureDetector(

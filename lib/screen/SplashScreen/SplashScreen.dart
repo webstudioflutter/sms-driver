@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:driver_app/Repository/auth/AuthenticationRepository.dart';
+import 'package:driver_app/screen/SplashScreen/language.dart';
 import 'package:driver_app/screen/login_and_logout/login.dart';
 import 'package:driver_app/screen/navbar/MainNavbar.dart';
 import 'package:flutter/material.dart';
@@ -105,16 +106,15 @@ class _SplashScreenState extends State<SplashScreen>
     // Navigate to the next screen after a delay
     Timer(const Duration(seconds: 3), () async {
       bool isAuthenticated = await authenticationRepository.isAuthenticated();
-      // bool firstTimeUSer = await authRepository.isFirstTimeUser();
+      bool firstTimeUSer = await authenticationRepository.isFirstTimeUser();
 
-      // if (firstTimeUSer == true) {
-      //   Navigator.of(context).pushReplacement(
-      //     MaterialPageRoute(
-      //       builder: (context) => const LanguageChoosePage(),
-      //     ),
-      //   );
-      // } else
-      if (isAuthenticated == true) {
+      if (firstTimeUSer == true) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const LanguageChoosePage(),
+          ),
+        );
+      } else if (isAuthenticated == true) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => MainNavbar(),

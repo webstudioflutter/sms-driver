@@ -149,6 +149,13 @@ class LocalString extends Translations {
           'experience': 'Years of Experience',
           'edit_contact': 'Edit Contact',
           'edit_address': 'Edit Address',
+          'email': 'Email Address',
+          'password': 'Password',
+          'login': 'Login',
+          'maptitle': 'Route Map',
+          'stoppagepoint': 'Mark Stop Point',
+          'endroute': 'End Route',
+          'yourlocation': 'Your Location',
         },
         'hi_IN': {
           'notification': 'अधिसूचना',
@@ -300,6 +307,13 @@ class LocalString extends Translations {
           'experience': 'वर्षों का अनुभव',
           'edit_contact': 'संपादित संपर्क',
           'edit_address': 'पता संपादित करें',
+          'email': 'इमेल',
+          'password': 'पासवर्ड',
+          'login': 'लगइन',
+          'maptitle': 'मार्ग मानचित्र',
+          'stoppagepoint': 'स्टॉप प्वाइंट चिह्नित करें',
+          'endroute': 'अंतिम मार्ग',
+          'yourlocation': 'आपका स्थान',
         },
         'nep_NPL': {
           'notification': 'सूचना',
@@ -315,7 +329,9 @@ class LocalString extends Translations {
 
           'fuellevel': 'इन्धन स्तर',
           'Quick_Access': 'द्रुत पहुँच',
-
+          'email': 'इमेल',
+          'password': 'पासवर्ड',
+          'login': 'लगइन',
           'attendance': 'उपस्थिति',
           'nextservicingdate': "अर्को सेवा मिति",
           'servicngerror': 'तपाईंले अर्को सेवा मिति राखेको छैन',
@@ -451,6 +467,11 @@ class LocalString extends Translations {
           'experience': 'वर्षौंको अनुभव',
           'edit_contact': 'सम्पर्क सम्पादन गर्नुहोस्',
           'edit_address': 'ठेगाना सम्पादन गर्नुहोस्',
+
+          'maptitle': 'रुट नक्सा',
+          'stoppagepoint': 'मार्क स्टप पोइन्ट',
+          'endroute': 'अन्त्य मार्ग',
+          'yourlocation': 'तपाईंको स्थान',
         },
         'arb_ARB': {
           'notification': 'إشعار',
@@ -598,6 +619,13 @@ class LocalString extends Translations {
           'experience': 'سنوات من الخبرة',
           'edit_contact': 'تحرير جهة الاتصال',
           'edit_address': 'تحرير العنوان',
+          'email': 'بريد إلكتروني',
+          'password': 'كلمة المرور',
+          'login': 'تسجيل الدخول',
+          'maptitle': 'خريطة الطريق',
+          'stoppagepoint': 'ضع علامة على نقطة التوقف',
+          'endroute': 'نهاية الطريق',
+          'yourlocation': 'موقعك'
         }
       };
 }

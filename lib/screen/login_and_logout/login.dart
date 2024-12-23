@@ -1,6 +1,11 @@
+import 'package:driver_app/Repository/auth/AuthenticationRepository.dart';
 import 'package:driver_app/controller/Auth/AuthenticationController.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DriverLoginScreen extends StatefulWidget {
   DriverLoginScreen({super.key});
@@ -11,6 +16,53 @@ class DriverLoginScreen extends StatefulWidget {
 
 class _DriverLoginScreenState extends State<DriverLoginScreen> {
   final controller = Get.put(LoginController());
+  bool isBiometricEnabled = false;
+  late final LocalAuthentication auth;
+  bool supportState = false;
+  @override
+  void initState() {
+    super.initState();
+    auth = LocalAuthentication();
+    auth.isDeviceSupported().then((bool isSupported) => setState(() {
+          supportState = isSupported;
+        }));
+    getBiometricSetting();
+  }
+
+  void getBiometricSetting() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    var biometricSetting = prefs.getBool('biomatric');
+
+    setState(() {
+      isBiometricEnabled = biometricSetting!;
+      print('Biometric Login: $isBiometricEnabled');
+    });
+  }
+
+  //authenticate biometric login
+  Future<void> _authenticate() async {
+    try {
+      bool authenticated = await auth.authenticate(
+          localizedReason: 'Scan your fingerprint to authenticate',
+          options: const AuthenticationOptions(
+              stickyAuth: true, biometricOnly: false));
+
+      if (authenticated) {
+        final _secureStorage = const FlutterSecureStorage();
+        var email = await _secureStorage.read(key: 'email');
+        var password = await _secureStorage.read(key: 'password');
+
+        final authData = {
+          "email": email,
+          "password": password,
+        };
+        await authenticationRepository.sendAuthInfo(authData);
+      }
+    } on PlatformException catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,24 +86,7 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
                 height: MediaQuery.of(context).size.height * 0.35,
               ),
             ),
-            const SizedBox(height: 10),
-            // const Text(
-            //   'School Bus Driver Login',
-            //   style: TextStyle(
-            //     fontSize: 28,
-            //     color: Colors.white,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            // ),
-            const SizedBox(height: 10),
-            // const Text(
-            //   'Already registered? Log in here',
-            //   style: TextStyle(
-            //     color: Color(0xeeffffff),
-            //     fontSize: 16,
-            //   ),
-            // ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 30),
             Expanded(
               child: Container(
                 padding: const EdgeInsets.all(16.0),
@@ -79,7 +114,7 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
-                            labelText: 'Email Address',
+                            labelText: 'email'.tr,
                             prefixIcon: const Icon(Icons.email),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -103,7 +138,7 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
                             controller: controller.passwordController,
                             obscureText: !controller.isPasswordVisible.value,
                             decoration: InputDecoration(
-                              labelText: 'Password',
+                              labelText: 'password'.tr,
                               prefixIcon: const Icon(Icons.lock),
                               suffixIcon: IconButton(
                                 icon: Icon(
@@ -146,13 +181,50 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
                                 ? const CircularProgressIndicator(
                                     color: Colors.white,
                                   )
-                                : const Text(
-                                    'Login',
+                                : Text(
+                                    'login'.tr,
                                     style: TextStyle(
                                         fontSize: 18, color: Colors.white),
                                   ),
                           ),
                         ),
+                        if (isBiometricEnabled)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child:
+                                Center(child: Text('or', style: TextStyle())),
+                          ),
+                        if (isBiometricEnabled)
+                          GestureDetector(
+                            onTap: () {
+                              _authenticate();
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.fingerprint,
+                                    size: 24,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Login in with biometrics',
+                                    style: TextStyle(fontSize: 12),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
                         const SizedBox(height: 20),
                       ],
                     ),

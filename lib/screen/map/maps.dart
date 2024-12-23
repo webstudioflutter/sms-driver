@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:driver_app/controller/transportcontroller.dart';
+import 'package:driver_app/controller/Home/RouteController.dart';
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/screen/dashboard/home_drawer.dart';
 import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 
 class MapTrackingPage extends StatefulWidget {
@@ -39,28 +39,28 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
-    Timer.periodic(
-      const Duration(seconds: 1), // Hits the API every 2 seconds
-      (Timer timer) async {
-        final _secureStorage = const FlutterSecureStorage();
-        String? transportId =
-            await _secureStorage.read(key: 'transportationId');
+    // _getCurrentLocation();
+    // Timer.periodic(
+    //   const Duration(seconds: 1), // Hits the API every 2 seconds
+    //   (Timer timer) async {
+    //     final _secureStorage = const FlutterSecureStorage();
+    //     String? transportId =
+    //         await _secureStorage.read(key: 'transportationId');
 
-        if (transportId != null) {
-          var data = {
-            "currentLocation": {
-              "latitude": userLocation!.latitude.toStringAsFixed(4),
-              "longitude": userLocation!.longitude.toStringAsFixed(4)
-            }
-          };
-          transportBloc.postlocation(transportId, data);
-        } else {
-          // Stop the timer if `driverId` is not found.
-          timer.cancel();
-        }
-      },
-    );
+    //     if (transportId != null) {
+    //       var data = {
+    //         "currentLocation": {
+    //           "latitude": userLocation!.latitude.toStringAsFixed(4),
+    //           "longitude": userLocation!.longitude.toStringAsFixed(4)
+    //         }
+    //       };
+    //       transportBloc.postlocation(transportId, data);
+    //     } else {
+    //       // Stop the timer if `driverId` is not found.
+    //       timer.cancel();
+    //     }
+    //   },
+    // );
   }
 
   Future<void> _getCurrentLocation() async {
@@ -121,6 +121,8 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final routeController = Get.put(Routecontroller());
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -147,35 +149,33 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
                     'https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png',
                 subdomains: ['a', 'b', 'c'],
               ),
-              // Route polyline
-              PolylineLayer(
-                polylines: [
-                  Polyline(
-                    points: points,
-                    strokeWidth: 5.0,
-                    color: const Color(0xff0f53ff),
-                  ),
-                ],
-              ),
-              // Markers
+              // PolylineLayer(
+              //   polylines: [
+              //     Polyline(
+              //       points: points,
+              //       strokeWidth: 5.0,
+              //       color: const Color(0xff0f53ff),
+              //     ),
+              //   ],
+              // ),
               MarkerLayer(
                 markers: [
-                  Marker(
-                    point: points.first, // Starting point
-                    child:
-                        const Icon(Icons.home, color: Colors.green, size: 40),
-                  ),
+                  // Marker(
+                  //   point: points.first, // Starting point
+                  //   child:
+                  //       const Icon(Icons.home, color: Colors.green, size: 40),
+                  // ),
                   if (userLocation != null)
                     Marker(
                       point: userLocation!, // User's location
-                      child: const Icon(Icons.person_pin_circle,
-                          color: Colors.blue, size: 40),
+                      child: Image.asset('assets/images/bus.png',
+                          width: 20, height: 20),
                     ),
-                  Marker(
-                    point: points.last, // End point
-                    child: const Icon(Icons.location_on,
-                        color: Colors.red, size: 40),
-                  ),
+                  // Marker(
+                  //   point: points.last, // End point
+                  //   child: const Icon(Icons.location_on,
+                  //       color: Colors.red, size: 40),
+                  // ),
                 ],
               ),
             ],
@@ -199,12 +199,12 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.person_pin_circle, color: Colors.blue),
+                  Image.asset('assets/images/bus.png', width: 20, height: 20),
                   const SizedBox(width: 10),
                   Text(
                     userLocation != null
-                        ? 'Your Location: (${userLocation!.latitude.toStringAsFixed(4)}, '
-                            '${userLocation!.longitude.toStringAsFixed(4)})'
+                        ? 'yourlocation: (${userLocation!.latitude.toStringAsFixed(4)},${userLocation!.longitude.toStringAsFixed(4)}) '
+                            .tr
                         : 'Fetching location...',
                     style: const TextStyle(fontSize: 14),
                   ),
@@ -242,8 +242,8 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
                             ),
                           ),
                         ),
-                        const Text(
-                          "Route Map",
+                        Text(
+                          "maptitle".tr,
                           style: TextStyle(
                             color: Color(0xff12422e),
                             fontSize: 16,
@@ -297,9 +297,9 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
                   ),
                   child: SizedBox(
                     width: 120,
-                    child: const Text(
+                    child: Text(
                       textAlign: TextAlign.center,
-                      'Mark Stop Point',
+                      'stoppagepoint'.tr,
                       style: TextStyle(
                           color: Color(0xfffefefe),
                           fontSize: 14,
@@ -308,7 +308,9 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _openModalBottomSheetForStartRoute(context);
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(16),
                     backgroundColor: const Color(0xffededed),
@@ -318,9 +320,9 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
                   ),
                   child: SizedBox(
                     width: 120,
-                    child: const Text(
+                    child: Text(
                       textAlign: TextAlign.center,
-                      'End Route',
+                      'endroute'.tr,
                       style: TextStyle(
                           color: Color(0xff7b7b7b),
                           fontSize: 14,
@@ -333,6 +335,161 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
           ),
         ],
       ),
+    );
+  }
+
+  void _openModalBottomSheetForStartRoute(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  height: 300,
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(25),
+                        topRight: Radius.circular(25),
+                      )),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Enter Today Ending KM",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Color(0xff60bf8f),
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(
+                            height: MediaQuery.sizeOf(context).height * 0.03),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            cursorColor: const Color(0xffcdeede),
+                            keyboardType: TextInputType.phone,
+                            controller:
+                                routeController.readingOnStartController,
+                            textAlign: TextAlign.center,
+                            cursorHeight: 20,
+                            style: TextStyle(fontSize: 20),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'kmnull'.tr;
+                              }
+                              // Check if the value is a valid number
+                              final number = double.tryParse(value);
+                              if (number == null) {
+                                return 'numbererror'.tr;
+                              }
+                              // Check for negative values
+                              if (number < 0) {
+                                return 'Negative values are not allowed';
+                              }
+                              // Optional: Check if the length is too long
+                              if (value.length > 10) {
+                                return 'numbererror'.tr;
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              hintText: 'XXX-XXX-XX',
+                              hintStyle: TextStyle(color: Colors.grey.shade200),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 15),
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: BorderSide
+                                    .none, // No border for the default state
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide:
+                                    BorderSide(color: Colors.green, width: 1),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide:
+                                    BorderSide(color: Colors.green, width: 2),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide:
+                                    BorderSide(color: Colors.red, width: 2),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide:
+                                    BorderSide(color: Colors.red, width: 2),
+                              ),
+                              errorStyle: TextStyle(
+                                color: Colors.red,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                            height: MediaQuery.sizeOf(context).height * 0.03),
+                        GestureDetector(
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              routeController.submitRouteData();
+                              Navigator.pop(context);
+                              routeController.readingOnStartController.clear();
+                            }
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18),
+                              color: const Color(0xff60bf8f),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'End Route',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: -30,
+                  left: 0,
+                  right: 0,
+                  child: SvgPicture.asset(
+                    'assets/svg_images/green-notification.svg',
+                    height: 55,
+                    width: 55,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

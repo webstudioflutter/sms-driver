@@ -37,8 +37,8 @@ class Routecontroller extends GetxController {
       final data = {
         "schoolId": "$schoolid", // Replace with dynamic value
         "date": DateTime.now().toIso8601String().split('T').first,
-        "readingOnStart": int.tryParse(readingOnStartController.text) ?? 0,
-        "readingOnStop": int.tryParse(readingOnStopController.text) ?? 0,
+        "readingOnStart": int.parse(readingOnStartController.text) ?? 0,
+        "readingOnStop": 0,
         "isPickedDrop": routeType.value,
         "driverInfo": {"_id": "${driverid}", "name": "${drivername}"},
         "vehicleInfo": {"_id": "${transId}", "name": "${tranname}"},
