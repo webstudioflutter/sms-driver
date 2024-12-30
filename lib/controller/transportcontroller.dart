@@ -7,29 +7,28 @@ import 'package:rxdart/rxdart.dart';
 
 class TransportBloc {
   final TransportRepository _transportRepository = TransportRepository();
-  final BehaviorSubject<Transportation> transportinfo =
-      BehaviorSubject<Transportation>();
+  final BehaviorSubject<TransportationModel> transportinfo =
+      BehaviorSubject<TransportationModel>();
 
-  Future<Transportation> postlocation(
+  Future<TransportationModel> postlocation(
     String? Id,
     Map<String, dynamic> data,
   ) async {
     try {
-      final responses = await _transportRepository.transportdata(
-        Id,
-        data,
-      );
-      if (responses.data != null) {
+      final responses = await _transportRepository.transportdata(Id, data);
+      if (responses.result != null) {
         transportinfo.sink.add(responses);
-      } else {}
+      } else {
+        transportinfo.sink.add(TransportationModel.withError('No data found'));
+      }
       return responses;
     } catch (e) {
       log(e.toString());
-      return Transportation.withError('$e');
+      return TransportationModel.withError('$e');
     }
   }
 
-  BehaviorSubject<Transportation> get transportInfoInfo => transportinfo;
+  BehaviorSubject<TransportationModel> get transportInfoInfo => transportinfo;
 }
 
 final transportBloc = TransportBloc();

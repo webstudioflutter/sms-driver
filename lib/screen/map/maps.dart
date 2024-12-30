@@ -52,8 +52,8 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
         if (transportId != null) {
           var data = {
             "liveLocation": {
-              "latitude": userLocation!.latitude.toStringAsFixed(4),
-              "longitude": userLocation!.longitude.toStringAsFixed(4)
+              "latitude": userLocation!.latitude,
+              "longitude": userLocation!.longitude
             }
           };
           transportBloc.postlocation(transportId, data);

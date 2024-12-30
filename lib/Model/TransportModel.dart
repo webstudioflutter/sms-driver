@@ -1,121 +1,138 @@
 // To parse this JSON data, do
 //
-//     final transportation = transportationFromJson(jsonString);
+//     final transportationModel = transportationModelFromJson(jsonString);
 
 import 'dart:convert';
 
-Transportation transportationFromJson(String str) =>
-    Transportation.fromJson(json.decode(str));
+TransportationModel transportationModelFromJson(String str) =>
+    TransportationModel.fromJson(json.decode(str));
 
-String transportationToJson(Transportation data) => json.encode(data.toJson());
+String transportationModelToJson(TransportationModel data) =>
+    json.encode(data.toJson());
 
-class Transportation {
-  String? message;
-  Data? data;
+class TransportationModel {
+  int? count;
+  List<Result>? result;
   String? error;
 
-  Transportation({
-    this.message,
-    this.data,
+  TransportationModel.withError(String errorValue) : error = errorValue;
+  TransportationModel({
+    this.count,
+    this.result,
   });
 
-  Transportation.withError(String errorValue) : error = errorValue;
-  factory Transportation.fromJson(Map<String, dynamic> json) => Transportation(
-        message: json["message"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+  factory TransportationModel.fromJson(Map<String, dynamic> json) =>
+      TransportationModel(
+        count: json["count"],
+        result: json["result"] == null
+            ? []
+            : List<Result>.from(json["result"]!.map((x) => Result.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "message": message,
-        "data": data?.toJson(),
+        "count": count,
+        "result": result == null
+            ? []
+            : List<dynamic>.from(result!.map((x) => x.toJson())),
       };
 }
 
-class Data {
-  Center? center;
-  Center? currentLocation;
+class Result {
+  VehicleDriver? vehicleDriver;
+  LiveLocation? liveLocation;
   bool? status;
-  DateTime? createdAt;
-  bool? isArchived;
   String? id;
   String? schoolId;
-  String? routeName;
-  String? transportationId;
-  List<Routepath>? routepath;
-  int? v;
-  DateTime? modifiedAt;
-  dynamic modifiedBy;
+  List<StoppageLocation>? transportationRoute;
+  String? vehicleType;
+  String? vehicleNumber;
+  int? vehicleCapacity;
+  String? vehicleConductor;
+  int? conductorNumber;
+  String? vehicleCode;
+  List<Shift>? shift;
+  List<StoppageLocation>? stoppageLocation;
 
-  Data({
-    this.center,
-    this.currentLocation,
+  Result({
+    this.vehicleDriver,
+    this.liveLocation,
     this.status,
-    this.createdAt,
-    this.isArchived,
     this.id,
     this.schoolId,
-    this.routeName,
-    this.transportationId,
-    this.routepath,
-    this.v,
-    this.modifiedAt,
-    this.modifiedBy,
+    this.transportationRoute,
+    this.vehicleType,
+    this.vehicleNumber,
+    this.vehicleCapacity,
+    this.vehicleConductor,
+    this.conductorNumber,
+    this.vehicleCode,
+    this.shift,
+    this.stoppageLocation,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        center: json["center"] == null ? null : Center.fromJson(json["center"]),
-        currentLocation: json["currentLocation"] == null
+  factory Result.fromJson(Map<String, dynamic> json) => Result(
+        vehicleDriver: json["vehicleDriver"] == null
             ? null
-            : Center.fromJson(json["currentLocation"]),
+            : VehicleDriver.fromJson(json["vehicleDriver"]),
+        liveLocation: json["liveLocation"] == null
+            ? null
+            : LiveLocation.fromJson(json["liveLocation"]),
         status: json["status"],
-        createdAt: json["createdAt"] == null
-            ? null
-            : DateTime.parse(json["createdAt"]),
-        isArchived: json["isArchived"],
         id: json["_id"],
         schoolId: json["schoolId"],
-        routeName: json["routeName"],
-        transportationId: json["transportationId"],
-        routepath: json["routepath"] == null
+        transportationRoute: json["transportationRoute"] == null
             ? []
-            : List<Routepath>.from(
-                json["routepath"]!.map((x) => Routepath.fromJson(x))),
-        v: json["__v"],
-        modifiedAt: json["modifiedAt"] == null
-            ? null
-            : DateTime.parse(json["modifiedAt"]),
-        modifiedBy: json["modifiedBy"],
+            : List<StoppageLocation>.from(json["transportationRoute"]!
+                .map((x) => StoppageLocation.fromJson(x))),
+        vehicleType: json["vehicleType"],
+        vehicleNumber: json["vehicleNumber"],
+        vehicleCapacity: json["vehicleCapacity"],
+        vehicleConductor: json["vehicleConductor"],
+        conductorNumber: json["conductorNumber"],
+        vehicleCode: json["vehicleCode"],
+        shift: json["shift"] == null
+            ? []
+            : List<Shift>.from(json["shift"]!.map((x) => Shift.fromJson(x))),
+        stoppageLocation: json["stoppageLocation"] == null
+            ? []
+            : List<StoppageLocation>.from(json["stoppageLocation"]!
+                .map((x) => StoppageLocation.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "center": center?.toJson(),
-        "currentLocation": currentLocation?.toJson(),
+        "vehicleDriver": vehicleDriver?.toJson(),
+        "liveLocation": liveLocation?.toJson(),
         "status": status,
-        "createdAt": createdAt?.toIso8601String(),
-        "isArchived": isArchived,
         "_id": id,
         "schoolId": schoolId,
-        "routeName": routeName,
-        "transportationId": transportationId,
-        "routepath": routepath == null
+        "transportationRoute": transportationRoute == null
             ? []
-            : List<dynamic>.from(routepath!.map((x) => x.toJson())),
-        "__v": v,
-        "modifiedAt": modifiedAt?.toIso8601String(),
-        "modifiedBy": modifiedBy,
+            : List<dynamic>.from(transportationRoute!.map((x) => x.toJson())),
+        "vehicleType": vehicleType,
+        "vehicleNumber": vehicleNumber,
+        "vehicleCapacity": vehicleCapacity,
+        "vehicleConductor": vehicleConductor,
+        "conductorNumber": conductorNumber,
+        "vehicleCode": vehicleCode,
+        "shift": shift == null
+            ? []
+            : List<dynamic>.from(shift!.map((x) => x.toJson())),
+        "stoppageLocation": stoppageLocation == null
+            ? []
+            : List<dynamic>.from(stoppageLocation!.map((x) => x.toJson())),
       };
 }
 
-class Center {
+class LiveLocation {
   double? latitude;
   double? longitude;
 
-  Center({
+  LiveLocation({
     this.latitude,
     this.longitude,
   });
 
-  factory Center.fromJson(Map<String, dynamic> json) => Center(
+  factory LiveLocation.fromJson(Map<String, dynamic> json) => LiveLocation(
         latitude: json["latitude"]?.toDouble(),
         longitude: json["longitude"]?.toDouble(),
       );
@@ -126,55 +143,120 @@ class Center {
       };
 }
 
-class Routepath {
+class Shift {
   String? id;
-  String? locationName;
-  List<LocationValue>? locationValues;
+  String? shiftName;
+  String? shiftStartTime;
+  String? shiftEndTime;
 
-  Routepath({
+  Shift({
     this.id,
-    this.locationName,
-    this.locationValues,
+    this.shiftName,
+    this.shiftStartTime,
+    this.shiftEndTime,
   });
 
-  factory Routepath.fromJson(Map<String, dynamic> json) => Routepath(
+  factory Shift.fromJson(Map<String, dynamic> json) => Shift(
         id: json["_id"],
-        locationName: json["locationName"],
-        locationValues: json["locationValues"] == null
-            ? []
-            : List<LocationValue>.from(
-                json["locationValues"]!.map((x) => LocationValue.fromJson(x))),
+        shiftName: json["shiftName"],
+        shiftStartTime: json["shiftStartTime"],
+        shiftEndTime: json["shiftEndTime"],
       );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
-        "locationName": locationName,
-        "locationValues": locationValues == null
-            ? []
-            : List<dynamic>.from(locationValues!.map((x) => x.toJson())),
+        "shiftName": shiftName,
+        "shiftStartTime": shiftStartTime,
+        "shiftEndTime": shiftEndTime,
       };
 }
 
-class LocationValue {
+class StoppageLocation {
+  StoppageLocationStoppageLocation? stoppageLocation;
   String? id;
-  double? latitude;
   double? longitude;
+  double? latitude;
+  String? routeLocation;
 
-  LocationValue({
+  StoppageLocation({
+    this.stoppageLocation,
     this.id,
-    this.latitude,
     this.longitude,
+    this.latitude,
+    this.routeLocation,
   });
 
-  factory LocationValue.fromJson(Map<String, dynamic> json) => LocationValue(
+  factory StoppageLocation.fromJson(Map<String, dynamic> json) =>
+      StoppageLocation(
+        stoppageLocation: json["stoppageLocation"] == null
+            ? null
+            : StoppageLocationStoppageLocation.fromJson(
+                json["stoppageLocation"]),
         id: json["_id"],
-        latitude: json["latitude"]?.toDouble(),
         longitude: json["longitude"]?.toDouble(),
+        latitude: json["latitude"]?.toDouble(),
+        routeLocation: json["routeLocation"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "stoppageLocation": stoppageLocation?.toJson(),
+        "_id": id,
+        "longitude": longitude,
+        "latitude": latitude,
+        "routeLocation": routeLocation,
+      };
+}
+
+class StoppageLocationStoppageLocation {
+  String? id;
+  String? busRoute;
+  int? busCharge;
+
+  StoppageLocationStoppageLocation({
+    this.id,
+    this.busRoute,
+    this.busCharge,
+  });
+
+  factory StoppageLocationStoppageLocation.fromJson(
+          Map<String, dynamic> json) =>
+      StoppageLocationStoppageLocation(
+        id: json["_id"],
+        busRoute: json["busRoute"],
+        busCharge: json["busCharge"],
       );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
-        "latitude": latitude,
-        "longitude": longitude,
+        "busRoute": busRoute,
+        "busCharge": busCharge,
+      };
+}
+
+class VehicleDriver {
+  String? id;
+  String? fullName;
+  String? lisenceNumber;
+  int? contactNumber;
+
+  VehicleDriver({
+    this.id,
+    this.fullName,
+    this.lisenceNumber,
+    this.contactNumber,
+  });
+
+  factory VehicleDriver.fromJson(Map<String, dynamic> json) => VehicleDriver(
+        id: json["_id"],
+        fullName: json["fullName"],
+        lisenceNumber: json["lisenceNumber"],
+        contactNumber: json["contactNumber"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "fullName": fullName,
+        "lisenceNumber": lisenceNumber,
+        "contactNumber": contactNumber,
       };
 }

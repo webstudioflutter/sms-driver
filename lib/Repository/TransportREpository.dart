@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TransportRepository {
-  Future<Transportation> transportdata(
+  Future<TransportationModel> transportdata(
       String? Id, Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();
     final _secureStorage = const FlutterSecureStorage();
@@ -32,18 +32,19 @@ class TransportRepository {
 
       if (response.statusCode == 200) {
         log("Success: ${response.body}");
-        return Transportation.fromJson(json.decode(response.body));
+        return TransportationModel.fromJson(json.decode(response.body));
       } else {
         log("Error response: ${response.statusCode} - ${response.body}");
-        return Transportation.withError("Error: ${response.statusCode}");
+        return TransportationModel.withError("Error: ${response.statusCode}");
       }
     } on DioError catch (dioError) {
       log('DioError: ${dioError.message}\nStacktrace: ${dioError.stackTrace}',
           name: 'ProfileRepository');
-      return Transportation.withError(baseController.handleError(dioError));
+      return TransportationModel.withError(
+          baseController.handleError(dioError));
     } catch (error, stacktrace) {
       log('Error: $error\nStacktrace: $stacktrace', name: 'ProfileRepository');
-      return Transportation.withError(baseController.handleError(error));
+      return TransportationModel.withError(baseController.handleError(error));
     }
 
     // try {

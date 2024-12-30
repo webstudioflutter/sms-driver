@@ -63,6 +63,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/logo.png"
+  min_sdk_android: 21
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -85,6 +92,7 @@ flutter:
   assets:
     - assets/images/
     - assets/svg_images/
+    - assets/icon/
     - assets/svg_images/drawer/
     - assets/Animation.json
     - assets/images/fakeprofile.jpg
