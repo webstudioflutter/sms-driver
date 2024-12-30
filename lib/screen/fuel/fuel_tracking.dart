@@ -96,14 +96,27 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
                   onPressed: _controller.isLoading.value
                       ? null
                       : () {
-                          _controller.submitFuelTrackingData();
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainNavbar(),
-                            ),
-                            (route) => false,
-                          );
+                          if (_controller.petrolPumpReadingImage.isEmpty ||
+                              _controller.odometerController.text.isEmpty ||
+                              _controller.fuelQuantity.value == 0 ||
+                              _controller.fuelRateController.text.isEmpty) {
+                            Get.snackbar(
+                              'Error',
+                              'Please upload image of petrol pump reading',
+                              backgroundColor: Colors.red.shade400,
+                              snackPosition: SnackPosition.TOP,
+                            );
+                            return;
+                          } else {
+                            _controller.submitFuelTrackingData();
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MainNavbar(),
+                              ),
+                              (route) => false,
+                            );
+                          }
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xffff6448),
@@ -151,20 +164,6 @@ class _FuelTrackingMainState extends State<FuelTrackingMain> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Row(
-        //   children: [
-        //     const Text(
-        //       'Quantity',
-        //       style: TextStyle(
-        //         color: Color(0xff545454),
-        //         fontSize: 16,
-        //         fontWeight: FontWeight.w500,
-        //       ),
-        //     ),
-        //     const SizedBox(width: 8),
-        //     Icon(Icons.local_gas_station),
-        //   ],
-        // ),
         Row(
           children: [
             Text(

@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:driver_app/Model/TransportModel.dart';
 import 'package:driver_app/Repository/auth/Basecontroller.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,12 +12,16 @@ class TransportRepository {
   Future<Transportation> transportdata(
       String? Id, Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();
+    final _secureStorage = const FlutterSecureStorage();
+
     var token = prefs.getString('token');
+    var id = await _secureStorage.read(key: 'transportationId');
+
     try {
       // Perform the PATCH request to update the profile field
       final response = await http.patch(
         Uri.parse(
-          'http://62.72.42.129:8090/api/transportation-route/67470057251a8b0de86178be',
+          'http://62.72.42.129:8090/api/transportation-route/$id',
         ),
         headers: {
           "Content-Type": "application/json",

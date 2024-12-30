@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
@@ -157,54 +156,61 @@ class _ReportIssueState extends State<ReportIssue> {
               await _secureStorage.read(key: 'transportationId');
           var transporationName =
               await _secureStorage.read(key: 'transporationName');
+          if (selectedIssues.isEmpty || selectedImagesBase64.isEmpty) {
+            Get.snackbar(
+              "Error",
+              "Please select issues and upload images",
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+            );
+            return;
+          } else {
+            var data = {
+              "schoolId": "${schoolId}",
+              "date": "${formattedDate}",
+              "issues": selectedIssues.toList(), // Selected issues
+              "issuesImages": selectedImagesBase64.toList(), // Encoded images
+              "driverInfo": {
+                "_id": "${driverId}",
+                "name": "${drivername}",
+              },
+              "vehicleInfo": {
+                "_id": "${transportationId}",
+                // "_id": "67189289a610cd23428ebc55",
+                // "name": "5580"
 
-          var data = {
-            "schoolId": "${schoolId}",
-            "date": "${formattedDate}",
-            "issues": selectedIssues.toList(), // Selected issues
-            "issuesImages": selectedImagesBase64.toList(), // Encoded images
-            "driverInfo": {
-              "_id": "${driverId}",
-              "name": "${drivername}",
-            },
-            "vehicleInfo": {
-              // "_id": "${transportationId}",
-              "_id": "67189289a610cd23428ebc55",
-              "name": "5580"
+                "name": "${transporationName}"
+              },
+              "issuesStatus": "PENDING",
+            };
 
-              // "name": "${transporationName}"
-            },
-            "issuesStatus": "PENDING",
-          };
+            controller.postvechileIssue(data);
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MainNavbar(),
+              ),
+              (route) => false,
+            );
+            // Optionally, show a success message
+            Get.snackbar(
+              "Success",
+              "Issue submitted successfully!",
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.green,
+              colorText: Colors.white,
+            );
+            setState(() {
+              selectedImages.clear(); // Clear selected images
+              selectedImagesBase64.clear(); // Clear Base64 strings
+              selectedIssues.clear(); // Clear selected issues
+              profileImage = null; // Reset profile image
+              _profileBase64 = null; // Reset single Base64
+            });
+          }
 
-          controller.postvechileIssue(data);
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MainNavbar(),
-            ),
-            (route) => false,
-          );
           // Clear all fields after submission
-          setState(() {
-            selectedImages.clear(); // Clear selected images
-            selectedImagesBase64.clear(); // Clear Base64 strings
-            selectedIssues.clear(); // Clear selected issues
-            profileImage = null; // Reset profile image
-            _profileBase64 = null; // Reset single Base64
-          });
-
-          log("Data submitted and cleared: $data");
-
-          // Optionally, show a success message
-          Get.snackbar(
-            "Success",
-            "Issue submitted successfully!",
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
-          );
-          print("Submitted data: $data");
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Color(0xffff6448),

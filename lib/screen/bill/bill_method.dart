@@ -30,7 +30,7 @@ class _BillMethodState extends State<BillMethod> {
   List<Map<String, dynamic>> uploadedFiles = [];
   var billImage = <String>[].obs;
   File? _profileImage;
-  String? _profileBase64;
+  String? profileBase64;
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _selectDate(BuildContext context) async {
@@ -69,12 +69,12 @@ class _BillMethodState extends State<BillMethod> {
 
           // Update state
           setState(() {
-            _profileBase64 = base64Image;
+            profileBase64 = base64Image;
             _profileImage = fixedImageFile;
           });
 
           print("Profile Image File: $_profileImage");
-          print("Base64 Image: $_profileBase64");
+          print("Base64 Image: $profileBase64");
         } else {
           print("Failed to decode the image.");
         }
@@ -106,45 +106,15 @@ class _BillMethodState extends State<BillMethod> {
         // Update the profile image and Base64 string
         setState(() {
           _profileImage = compressedImage;
-          _profileBase64 = base64Encode(result);
+          profileBase64 = base64Encode(result);
         });
 
-        print("Encoded and compressed image as Base64: $_profileBase64");
+        print("Encoded and compressed image as Base64: $profileBase64");
       }
     }
   }
 
-  void showSubmitDialog() {
-    if (billType.isEmpty ||
-        selectedDate.isEmpty ||
-        totalAmount <= 0 ||
-        billImage.isEmpty) {
-      Get.snackbar(
-        'Validation Error',
-        'Please fill all required fields.',
-        backgroundColor: Colors.red.shade400,
-        colorText: Colors.white,
-      );
-      return;
-    }
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: CircleAvatar(
-              radius: 30,
-              backgroundColor: Color(0x33008000),
-              child: Icon(
-                Icons.check_outlined,
-                color: Colors.green,
-                size: 30,
-              )),
-          content: Text('success_upload'.tr),
-        );
-      },
-    );
-  }
+  void showSubmitDialog() {}
 
   @override
   void initState() {
@@ -166,7 +136,7 @@ class _BillMethodState extends State<BillMethod> {
                 const SizedBox(height: 10),
                 _buildTotalAmountSection(),
                 const SizedBox(height: 15),
-                if (_profileBase64 == null || _profileBase64!.isEmpty)
+                if (profileBase64 == null || profileBase64!.isEmpty)
                   DottedBorder(
                     color: Theme.of(context).primaryColor,
                     strokeWidth: 1,
@@ -202,7 +172,7 @@ class _BillMethodState extends State<BillMethod> {
                       ),
                     ),
                   ),
-                if (_profileBase64 != null && _profileBase64!.isNotEmpty)
+                if (profileBase64 != null && profileBase64!.isNotEmpty)
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 100),
                     child: DottedBorder(
@@ -270,41 +240,69 @@ class _BillMethodState extends State<BillMethod> {
                             await _secureStorage.read(key: 'transportationId');
                         String? transporationName =
                             await _secureStorage.read(key: 'transporationName');
+                        if (billType.isEmpty ||
+                            selectedDate.isEmpty ||
+                            totalAmount <= 0 ||
+                            profileBase64 == null) {
+                          Get.snackbar(
+                            'Validation Error',
+                            'Please fill all required fields.',
+                            backgroundColor: Colors.red.shade400,
+                            colorText: Colors.white,
+                          );
+                          return;
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Color(0x33008000),
+                                    child: Icon(
+                                      Icons.check_outlined,
+                                      color: Colors.green,
+                                      size: 30,
+                                    )),
+                                content: Text('success_upload'.tr),
+                              );
+                            },
+                          );
+                          var data = {
+                            "schoolId": "${schoolname}",
+                            "date": selectedDate,
+                            "expenseType": "PICKED",
+                            "billType": "${billType}",
+                            "billTitle": "",
+                            "billAmount": "${amountcontroller.text}",
+                            "nextServiceDate": "",
+                            "partsUsed": [""],
+                            "oldPartsImages": [""],
+                            "billImage":
+                                "data:image/jpeg;base64,${profileBase64}",
+                            "newPartsImages": [""],
+                            "driverInfo": {
+                              "_id": "${driverId}",
+                              "name": "${drivername}"
+                            },
+                            "vehicleInfo": {
+                              "_id": "${transportationId}",
+                              "name": "${transporationName}"
+                            },
+                            "status": true
+                          };
 
-                        var data = {
-                          "schoolId": "${schoolname}",
-                          "date": selectedDate,
-                          "expenseType": "PICKED",
-                          "billType": "${billType}",
-                          "billTitle": "",
-                          "billAmount": "${amountcontroller.text}",
-                          "nextServiceDate": "",
-                          "partsUsed": [""],
-                          "oldPartsImages": [""],
-                          "billImage":
-                              "data:image/jpeg;base64,${_profileBase64}",
-                          "newPartsImages": [""],
-                          "driverInfo": {
-                            "_id": "${driverId}",
-                            "name": "${drivername}"
-                          },
-                          "vehicleInfo": {
-                            "_id": "${transportationId}",
-                            "name": "${transporationName}"
-                          },
-                          "status": true
-                        };
+                          await _controller.postGetBills(data);
+                        }
 
-                        await _controller.postGetBills(data);
-                        showSubmitDialog();
                         setState(() {
                           selectedDate = 'bill_date_hint'.tr;
                           billType = '';
                           amountcontroller.clear();
                           _profileImage = null;
-                          _profileBase64 = null;
+                          profileBase64 = null;
                         });
-                        _profileBase64 = null;
+                        profileBase64 = null;
                         amountcontroller.text.isBlank;
                       },
                       style: ElevatedButton.styleFrom(

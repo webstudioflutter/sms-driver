@@ -172,7 +172,7 @@ class _LogServicingFormState extends State<LogServicingForm> {
           FileUploadedWidget(
               svgname: "assets/svg_images/upload_image_receipt.svg",
               title: 'damagedPartImage'.tr,
-              files: servicingFiles,
+              files: damagedFiles,
               onSubmitImages: (base64ImagesList) {
                 setState(() {
                   // base64DamageImage.clear();

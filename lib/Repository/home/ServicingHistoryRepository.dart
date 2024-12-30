@@ -20,8 +20,8 @@ class ServicingHistoryRepository {
       key: 'transportationId',
     );
     try {
-      final response = await _dio
-          .get('$_appUrl/vehicle-expenses/vehicle/676295ff3a54d833ca691dd7');
+      final response =
+          await _dio.get('$_appUrl/vehicle-expenses/vehicle/$transportationId');
       log("transportationId${response}");
       final servicingHistory = ServicingHistoryModel.fromJson(response.data);
 

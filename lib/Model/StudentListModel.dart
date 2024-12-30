@@ -53,10 +53,8 @@ class Result {
   PickDropLocation? pickDropLocation;
   String? studentType;
   List<dynamic>? languages;
-  List<String>? documets;
   String? group;
   bool? status;
-  bool? isArchived;
   String? id;
   String? fullName;
   String? profileImage;
@@ -70,24 +68,11 @@ class Result {
   String? bloodGroup;
   String? schoolName;
   String? fatherName;
-  String? occupation;
   List<LanguageKnown>? languageKnown;
   String? motherName;
   String? lisenceNo;
-  List<ShiftElement>? teacherShift;
-  List<dynamic>? childrens;
-  List<EducationBackground>? educationBackground;
-  String? aboutMe;
-  List<Subject>? subject;
-  String? createdBy;
-  DateTime? createdAt;
-  int? v;
   String? libraryId;
   String? motherTongue;
-  String? session;
-  String? rollNo;
-  DateTime? modifiedAt;
-  String? modifiedBy;
 
   Result({
     this.address,
@@ -101,10 +86,8 @@ class Result {
     this.pickDropLocation,
     this.studentType,
     this.languages,
-    this.documets,
     this.group,
     this.status,
-    this.isArchived,
     this.id,
     this.fullName,
     this.profileImage,
@@ -118,24 +101,11 @@ class Result {
     this.bloodGroup,
     this.schoolName,
     this.fatherName,
-    this.occupation,
     this.languageKnown,
     this.motherName,
     this.lisenceNo,
-    this.teacherShift,
-    this.childrens,
-    this.educationBackground,
-    this.aboutMe,
-    this.subject,
-    this.createdBy,
-    this.createdAt,
-    this.v,
     this.libraryId,
     this.motherTongue,
-    this.session,
-    this.rollNo,
-    this.modifiedAt,
-    this.modifiedBy,
   });
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
@@ -165,12 +135,8 @@ class Result {
         languages: json["languages"] == null
             ? []
             : List<dynamic>.from(json["languages"]!.map((x) => x)),
-        documets: json["documets"] == null
-            ? []
-            : List<String>.from(json["documets"]!.map((x) => x)),
         group: json["group"],
         status: json["status"],
-        isArchived: json["isArchived"],
         id: json["_id"],
         fullName: json["fullName"],
         profileImage: json["profileImage"],
@@ -186,42 +152,14 @@ class Result {
         bloodGroup: json["bloodGroup"],
         schoolName: json["schoolName"],
         fatherName: json["fatherName"],
-        occupation: json["occupation"],
         languageKnown: json["languageKnown"] == null
             ? []
             : List<LanguageKnown>.from(
                 json["languageKnown"]!.map((x) => LanguageKnown.fromJson(x))),
         motherName: json["motherName"],
         lisenceNo: json["lisenceNo"],
-        teacherShift: json["teacherShift"] == null
-            ? []
-            : List<ShiftElement>.from(
-                json["teacherShift"]!.map((x) => ShiftElement.fromJson(x))),
-        childrens: json["childrens"] == null
-            ? []
-            : List<dynamic>.from(json["childrens"]!.map((x) => x)),
-        educationBackground: json["educationBackground"] == null
-            ? []
-            : List<EducationBackground>.from(json["educationBackground"]!
-                .map((x) => EducationBackground.fromJson(x))),
-        aboutMe: json["aboutMe"],
-        subject: json["subject"] == null
-            ? []
-            : List<Subject>.from(
-                json["subject"]!.map((x) => Subject.fromJson(x))),
-        createdBy: json["createdBy"],
-        createdAt: json["createdAt"] == null
-            ? null
-            : DateTime.parse(json["createdAt"]),
-        v: json["__v"],
         libraryId: json["libraryId"],
         motherTongue: json["motherTongue"],
-        session: json["session"],
-        rollNo: json["rollNo"],
-        modifiedAt: json["modifiedAt"] == null
-            ? null
-            : DateTime.parse(json["modifiedAt"]),
-        modifiedBy: json["modifiedBy"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -238,11 +176,8 @@ class Result {
         "languages": languages == null
             ? []
             : List<dynamic>.from(languages!.map((x) => x)),
-        "documets":
-            documets == null ? [] : List<dynamic>.from(documets!.map((x) => x)),
         "group": group,
         "status": status,
-        "isArchived": isArchived,
         "_id": id,
         "fullName": fullName,
         "profileImage": profileImage,
@@ -258,34 +193,13 @@ class Result {
         "bloodGroup": bloodGroup,
         "schoolName": schoolName,
         "fatherName": fatherName,
-        "occupation": occupation,
         "languageKnown": languageKnown == null
             ? []
             : List<dynamic>.from(languageKnown!.map((x) => x.toJson())),
         "motherName": motherName,
         "lisenceNo": lisenceNo,
-        "teacherShift": teacherShift == null
-            ? []
-            : List<dynamic>.from(teacherShift!.map((x) => x.toJson())),
-        "childrens": childrens == null
-            ? []
-            : List<dynamic>.from(childrens!.map((x) => x)),
-        "educationBackground": educationBackground == null
-            ? []
-            : List<dynamic>.from(educationBackground!.map((x) => x.toJson())),
-        "aboutMe": aboutMe,
-        "subject": subject == null
-            ? []
-            : List<dynamic>.from(subject!.map((x) => x.toJson())),
-        "createdBy": createdBy,
-        "createdAt": createdAt?.toIso8601String(),
-        "__v": v,
         "libraryId": libraryId,
         "motherTongue": motherTongue,
-        "session": session,
-        "rollNo": rollNo,
-        "modifiedAt": modifiedAt?.toIso8601String(),
-        "modifiedBy": modifiedBy,
       };
 }
 

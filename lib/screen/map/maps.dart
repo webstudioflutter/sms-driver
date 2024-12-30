@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:driver_app/controller/Home/RouteController.dart';
+import 'package:driver_app/controller/transportcontroller.dart';
 import 'package:driver_app/core/utils/util.dart';
 import 'package:driver_app/screen/dashboard/home_drawer.dart';
 import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -39,28 +41,28 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
   @override
   void initState() {
     super.initState();
-    // _getCurrentLocation();
-    // Timer.periodic(
-    //   const Duration(seconds: 1), // Hits the API every 2 seconds
-    //   (Timer timer) async {
-    //     final _secureStorage = const FlutterSecureStorage();
-    //     String? transportId =
-    //         await _secureStorage.read(key: 'transportationId');
+    _getCurrentLocation();
+    Timer.periodic(
+      const Duration(seconds: 1), // Hits the API every 2 seconds
+      (Timer timer) async {
+        final _secureStorage = const FlutterSecureStorage();
+        String? transportId =
+            await _secureStorage.read(key: 'transportationId');
 
-    //     if (transportId != null) {
-    //       var data = {
-    //         "currentLocation": {
-    //           "latitude": userLocation!.latitude.toStringAsFixed(4),
-    //           "longitude": userLocation!.longitude.toStringAsFixed(4)
-    //         }
-    //       };
-    //       transportBloc.postlocation(transportId, data);
-    //     } else {
-    //       // Stop the timer if `driverId` is not found.
-    //       timer.cancel();
-    //     }
-    //   },
-    // );
+        if (transportId != null) {
+          var data = {
+            "liveLocation": {
+              "latitude": userLocation!.latitude.toStringAsFixed(4),
+              "longitude": userLocation!.longitude.toStringAsFixed(4)
+            }
+          };
+          transportBloc.postlocation(transportId, data);
+        } else {
+          // Stop the timer if `driverId` is not found.
+          timer.cancel();
+        }
+      },
+    );
   }
 
   Future<void> _getCurrentLocation() async {
@@ -123,6 +125,8 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final routeController = Get.put(Routecontroller());
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final readingOnStartController = TextEditingController();
+  final readingOnStopController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -381,8 +385,7 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
                                 AutovalidateMode.onUserInteraction,
                             cursorColor: const Color(0xffcdeede),
                             keyboardType: TextInputType.phone,
-                            controller:
-                                routeController.readingOnStartController,
+                            controller: readingOnStopController,
                             textAlign: TextAlign.center,
                             cursorHeight: 20,
                             style: TextStyle(fontSize: 20),
@@ -447,11 +450,42 @@ class _MapTrackingPageState extends State<MapTrackingPage> {
                         SizedBox(
                             height: MediaQuery.sizeOf(context).height * 0.03),
                         GestureDetector(
-                          onTap: () {
+                          onTap: () async {
                             if (_formKey.currentState!.validate()) {
-                              routeController.submitRouteData();
+                              final _secureStorage =
+                                  const FlutterSecureStorage();
+
+                              var schoolid =
+                                  await _secureStorage.read(key: 'schoolId');
+                              var driverid =
+                                  await _secureStorage.read(key: 'driverId');
+                              var drivername =
+                                  await _secureStorage.read(key: 'drivername');
+                              var tranname = await _secureStorage.read(
+                                  key: 'transporationName');
+                              var transId = await _secureStorage.read(
+                                  key: 'transportationId');
+                              final data = {
+                                "schoolId":
+                                    "$schoolid", // Replace with dynamic value
+                                "date": DateTime.now()
+                                    .toIso8601String()
+                                    .split('T')
+                                    .first,
+                                "readingOnStop": readingOnStopController.text,
+                                "driverInfo": {
+                                  "_id": "${driverid}",
+                                  "name": "${drivername}"
+                                },
+                                "vehicleInfo": {
+                                  "_id": "${transId}",
+                                  "name": "${tranname}"
+                                },
+                              };
+                              routeController.patchroutedata(data);
                               Navigator.pop(context);
-                              routeController.readingOnStartController.clear();
+
+                              readingOnStopController.clear();
                             }
                           },
                           child: Container(

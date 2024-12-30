@@ -30,10 +30,6 @@ class TransportBloc {
   }
 
   BehaviorSubject<Transportation> get transportInfoInfo => transportinfo;
-
-  void dispose() {
-    transportinfo.close();
-  }
 }
 
 final transportBloc = TransportBloc();

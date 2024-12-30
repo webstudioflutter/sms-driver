@@ -15,6 +15,8 @@ import 'package:driver_app/screen/emergency/emergency_main.dart';
 import 'package:driver_app/screen/fuel/fuel_tracking.dart';
 import 'package:driver_app/screen/servicing/servicing_main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,7 +40,8 @@ class _HomePageState extends State<HomePage> {
 
   final ProfileController controller = Get.put(ProfileController());
   final routeController = Get.put(Routecontroller());
-
+  final readingOnStartController = TextEditingController();
+  final readingOnStopController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -591,34 +594,45 @@ class _HomePageState extends State<HomePage> {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             cursorColor: const Color(0xffcdeede),
-                            keyboardType: TextInputType.phone,
-                            controller:
-                                routeController.readingOnStartController,
+                            keyboardType:
+                                TextInputType.number, // Use number input type
+                            inputFormatters: [
+                              FilteringTextInputFormatter
+                                  .digitsOnly, // Restrict to digits only
+                            ],
+                            controller: readingOnStartController,
                             textAlign: TextAlign.center,
                             cursorHeight: 20,
-                            style: TextStyle(fontSize: 20),
+                            style: const TextStyle(fontSize: 20),
                             validator: (value) {
+                              // Check for empty or null value
                               if (value == null || value.trim().isEmpty) {
-                                return 'kmnull'.tr;
+                                return 'kmnull'.tr; // Error when input is empty
                               }
-                              // Check if the value is a valid number
-                              final number = double.tryParse(value);
+
+                              // Ensure the value is a valid number
+                              final number = double.tryParse(value.trim());
                               if (number == null) {
-                                return 'numbererror'.tr;
+                                return 'numbererror'
+                                    .tr; // Error when the input is not numeric
                               }
-                              // Check for negative values
+
+                              // Ensure the number is non-negative
                               if (number < 0) {
                                 return 'Negative values are not allowed';
                               }
-                              // Optional: Check if the length is too long
+
+                              // Optional: Check for length constraints
                               if (value.length > 10) {
-                                return 'numbererror'.tr;
+                                return 'numbererror'
+                                    .tr; // Error when the number is too long
                               }
-                              return null;
+
+                              return null; // Validation successful
                             },
                             decoration: InputDecoration(
                               hintText: 'XXX-XXX-XX',
-                              hintStyle: TextStyle(color: Colors.grey.shade200),
+                              hintStyle: TextStyle(color: Colors.grey.shade400),
                               contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 20.0, vertical: 15),
                               filled: true,
@@ -626,29 +640,29 @@ class _HomePageState extends State<HomePage> {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide
-                                    .none, // No border for the default state
+                                    .none, // Default state: no visible border
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                    BorderSide(color: Colors.green, width: 1),
+                                borderSide: const BorderSide(
+                                    color: Colors.green, width: 1),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                    BorderSide(color: Colors.green, width: 2),
+                                borderSide: const BorderSide(
+                                    color: Colors.green, width: 2),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                    BorderSide(color: Colors.red, width: 2),
+                                borderSide: const BorderSide(
+                                    color: Colors.red, width: 2),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                    BorderSide(color: Colors.red, width: 2),
+                                borderSide: const BorderSide(
+                                    color: Colors.red, width: 2),
                               ),
-                              errorStyle: TextStyle(
+                              errorStyle: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 14,
                               ),
@@ -718,12 +732,35 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      routeController.submitRouteType("PICKED");
-
-                      routeController.submitRouteData();
+                    onTap: () async {
+                      final _secureStorage = const FlutterSecureStorage();
+                      var schoolid = await _secureStorage.read(key: 'schoolId');
+                      var driverid = await _secureStorage.read(key: 'driverId');
+                      var drivername =
+                          await _secureStorage.read(key: 'drivername');
+                      var tranname =
+                          await _secureStorage.read(key: 'transporationName');
+                      var transId =
+                          await _secureStorage.read(key: 'transportationId');
+                      final data = {
+                        "schoolId": "$schoolid", // Replace with dynamic value
+                        "date":
+                            DateTime.now().toIso8601String().split('T').first,
+                        "readingOnStart": readingOnStartController.text,
+                        "readingOnStop": 0,
+                        "isPickedDrop": "PICKED",
+                        "driverInfo": {
+                          "_id": "${driverid}",
+                          "name": "${drivername}"
+                        },
+                        "vehicleInfo": {
+                          "_id": "${transId}",
+                          "name": "${tranname}"
+                        },
+                      };
+                      routeController.submitRouteData(data);
                       Navigator.pop(context);
-                      routeController.readingOnStartController.clear();
+                      readingOnStartController.clear();
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -744,11 +781,36 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      routeController.submitRouteType("DROPPED");
-                      routeController.submitRouteData();
+                    onTap: () async {
+                      final FlutterSecureStorage _secureStorage =
+                          const FlutterSecureStorage();
+                      var schoolid = await _secureStorage.read(key: 'schoolId');
+                      var driverid = await _secureStorage.read(key: 'driverId');
+                      var drivername =
+                          await _secureStorage.read(key: 'drivername');
+                      var tranname =
+                          await _secureStorage.read(key: 'transporationName');
+                      var transId =
+                          await _secureStorage.read(key: 'transportationId');
+                      final data = {
+                        "schoolId": "$schoolid", // Replace with dynamic value
+                        "date":
+                            DateTime.now().toIso8601String().split('T').first,
+                        "readingOnStart": readingOnStartController.text,
+                        "readingOnStop": 0,
+                        "isPickedDrop": "DROPPED",
+                        "driverInfo": {
+                          "_id": "${driverid}",
+                          "name": "${drivername}"
+                        },
+                        "vehicleInfo": {
+                          "_id": "${transId}",
+                          "name": "${tranname}"
+                        },
+                      };
+                      routeController.submitRouteData(data);
                       Navigator.pop(context);
-                      routeController.readingOnStartController.clear();
+                      readingOnStartController.clear();
                     },
                     child: Container(
                       decoration: BoxDecoration(

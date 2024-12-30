@@ -53,13 +53,13 @@ class ServicingController extends GetxController {
         "billType": "Servicing Bill",
         "billTitle": "Servicing Bill",
         "driverInfo": {"_id": "${driverid}", "name": "${drivername}"},
-        "vehicleInfo": {
-          "_id": '676295ff3a54d833ca691dd7',
-          "name": "${tranname}"
-        },
-        // "vehicleInfo": {"_id": "${transId}", "name": "${tranname}"},
+        // "vehicleInfo": {
+        //   "_id": '676295ff3a54d833ca691dd7',
+        //   "name": "${tranname}"
+        // },
+        "vehicleInfo": {"_id": "${transId}", "name": "${tranname}"},
         "partsUsed": partsUsed.toList(),
-        "billImage": billImage[0],
+        "billImage": billImage.toList(),
         "oldPartsImages": damagedPartImage.toList(),
         "newPartsImages": replacedPartImage.toList(),
         "status": true

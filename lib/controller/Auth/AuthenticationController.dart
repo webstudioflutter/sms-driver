@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:driver_app/Repository/auth/AuthenticationRepository.dart';
+import 'package:driver_app/core/color_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
@@ -38,6 +39,23 @@ class LoginController extends GetxController {
       };
 
       await authenticationRepository.sendAuthInfo(authData);
+      if (authResponse!.result != null) {
+        Get.snackbar(
+          "Login",
+          "Login successfully",
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: Colors.white,
+          backgroundColor: Colors.green,
+        );
+      } else {
+        Get.snackbar(
+          "Error",
+          "${authResponse!.error}",
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: Colors.white,
+          backgroundColor: Colors.red,
+        );
+      }
     } catch (e) {
       log("Error: $e");
       Get.snackbar(
