@@ -45,7 +45,7 @@ class _AttendanceState extends State<Attendance> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.getStudentList(); // Fetch data after the initial build
+      controller.getStudentList();
     });
     _checkAndResetAttendanceState();
   }
@@ -252,7 +252,7 @@ class _AttendanceState extends State<Attendance> {
                   var updatedata = {
                     "schoolId": "${schoolId}",
                     "date": "${formattedDate}",
-                    "transportationId": "67189289a610cd23428ebc55"
+                    "transportationId": "${transportationId}"
                   };
                   attandancebyprops.getbyprops(updatedata);
                   Navigator.push(
